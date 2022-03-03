@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="/static/images/X.ico">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/dist/bootstrap/bootstrap-4.4.1.min.css" crossorigin="anonymous">
+
+    <!-- lib CCS -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/GUI.css">
+
+    <!-- Custom css for MHC project -->
+    <link rel="stylesheet" href="/static/css/mhc.css">
+
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="/static/dist/fontawesome-free-5.12.0-web/css/all.css">
+
+    <title>{{ id }} view</title>
+</head>
+
+<body>
+
+
+    <!-- Toolbar -->
+    <div id="matrx-toolbar" class="row toolbar bg-dark">
+        <div class="col-sm">
+            <img src="/static/images/matrx_logo_light.svg" alt="MATRX" id="matrx_logo">
+            <button type="button" class="btn btn-dark" id="start_button" style="display:none;"><i
+                    class="fas fa-play text-light"></i></button>
+            <button type="button" class="btn btn-dark hidden" id="pause_button" style="display:none;"><i
+                    class="fas fa-pause text-light"></i></button>
+            <button type="button" class="btn btn-dark" id="stop_button" style="display:none;"><i
+                    class="fas fa-stop text-light"></i></button>
+            <div class="btn-group" style="display:none;">
+                <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"><i class="fas fa-users"></i></button>
+                <div id="agent_dropdown" class="dropdown-menu">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm" align="right">
+            <button type="button" class="btn btn-dark" id="chat_button" onclick="chatToggle()" data-toggle="collapse"
+                    data-target="#chat" aria-expanded="false" aria-controls="chat"><i
+                    class="fas fa-comments text-light"></i></button>
+            <button type="button" class="btn btn-dark" id="draw_button" onclick="drawToggle()"><i
+                    class="fas fa-pencil-alt text-light"></i></button>
+            <button type="button" class="btn btn-dark" id="erase_button" onclick="eraseToggle()"><i
+                    class="fas fa-eraser text-light"></i></button>
+        </div>
+    </div>
+
+    <div class="content-row bg-light infoBar">
+        <div class="infoPiece black">
+            Tijd: <span id="timer_value">0 seconden</span>
+        </div>
+        <div class="statistics_divider">|</div>
+        <div id="myPatients" class="infoPiece">
+            <span class="statistics_bar_black">Jouw patiënten:</span>
+            <span id="myIC">0</span> IC,
+            <span id="myWard">0</span> Ziekenboeg,
+            <span id="myHome">0</span> Huis
+        </div>
+        <div class="statistics_divider">|</div>
+        <div id="robotPatients" class="infoPiece">
+            <span class="statistics_bar_black">Patiënten robot:</span>
+            <span id="rIC">0</span> IC,
+            <span id="rWard">0</span> Ziekenboeg,
+            <span id="rHome">0</span> Huis
+        </div>
+        <div class="statistics_divider">|</div>
+        <div id="treatedPatients" class="infoPiece">
+            <span class="statistics_bar_black">Behandelde patiënten:</span>
+            <span><span id="cured">0</span> genezen</span>,
+            <span><span id="dead">0</span> overleden</span>
+        </div>
+        <div class="statistics_divider">|</div>
+        <div id="statusPatients" class="infoPiece">
+            <span class="statistics_bar_black">Huidige bedbezetting:</span><span class="statistic_spacer"></span>
+            <span id="waitingStatus">0</span>/<span id="waitingBeds"></span> Noodopvang<span
+                class="statistic_spacer"></span>
+            <span id="wardStatus">0</span>/<span id="wardBeds"></span> Ziekenboeg<span class="statistic_spacer"></span>
+            <span id="ICStatus">0</span>/<span id="ICBeds"></span> IC
+        </div>
+    </div>
+
+    <div class="row content-row">
+
+
+        <div id="patient-cards"></div>
+
+        <!-- Grid -->
+        <div class="grid-container" id="container">
+
+            <!-- container id is needed for the zoom/pan package -->
+            <div id="grid"></div>
+<!--
+            <div id="IC_dropzone" class="droppable" data-destination="IC">
+                <span>Stuur naar de IC</span>
+            </div>
+
+            <div id="ward_dropzone" class="droppable" data-destination="ziekenboeg">
+                <span>Stuur naar de ziekenboeg</span>
+            </div>
+
+            <div id="home_dropzone" class="droppable" data-destination="huis">
+                <span>Stuur naar huis</span>
+            </div>-->
+
+            <div id="patient_Data" class="patientData" style="display:none">
+                <span>This is a patient's data</span>
+            </div>
+        </div>
+
+        <!-- Chat -->
+        <div class="collapse" id="chat">
+            <div class="container-fluid">
+                <h5>Chats</h5>
+                <div class="row">
+                    <div class="col-md-auto" id="chatrooms_list">
+                        <div class="contact" id="new_chat_button" data-toggle="dropdown" aria-haspopup="true"
+                             aria-expanded="false">+
+                        </div>
+                        <div id="new_chat_dropdown" class="dropdown-menu"></div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div id="messages">
+                        </div>
+                        <!-- "God" is not an agent, only a view, and as such cannot send messages -->
+                        <!-- <input class="form-control" id="message_input" placeholder="Type a message">
+                        <button type="button" class="btn btn-primary" onclick="sendMessage()">Send</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Context menu -->
+    <div class="dropdown-menu" id="contextMenu" style="display:none">
+        <a class="dropdown-item" href="#">Action 1</a>
+        <a class="dropdown-item" href="#">Action 2</a>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, Bootstrap JS, then jquery UI  -->
+    <script src="/static/dist/jquery/jquery-3.4.1.min.js"></script>
+    <script src="/static/dist/popper/popper-1.16.0.js"></script>
+    <script src="/static/dist/bootstrap/bootstrap-4.4.1.min.js"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+            integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+            crossorigin="anonymous"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="/static/js/util.js"></script>
+    <script src="/static/js/toolbar.js"></script>
+    <script src="/static/js/context_menu.js"></script>
+    <!--    <script src="/dist/zoom-pan-master/public/bundle.min.js"></script>-->
+    <script type="text/javascript" src="/static/js/gen_grid.js"></script>
+    <script type="text/javascript" src="/static/js/loop.js"></script>
+    <script type="text/javascript" src="/static/js/mhc.js"></script>
+    <script type="text/javascript" src="/static/js/human_agent.js"></script>
+</body>
+<div class="dialogs" style="display: none;">
+    <div id="dialog-confirm" title="Nieuwe patiënt">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span></p>
+    </div>
+    <div id="dialog-second-confirm" title="Weet u dat zeker?">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span></p>
+    </div>
+
+    <div id="dialog-update" title="Update patiënt">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span></p>
+    </div>
+</div>
+</html>

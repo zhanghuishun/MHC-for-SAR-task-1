@@ -1,0 +1,575 @@
+#container {
+    width: 40%;
+    display: inline-block;
+}
+
+.grid-container {
+    position: relative;
+}
+
+#grid {
+    float: right;
+}
+
+html, .content-row {
+    overflow: hidden;
+}
+
+/* Patients */
+
+#patient-cards {
+    width: 60%;
+    padding-left: 1%;
+}
+
+.patientcard {
+    margin-left: 0.5%;
+    margin-top: 0.5%;
+    width: 32%;
+    height: 47% !important;
+    float: left;
+    z-index: 90;
+    max-height: 40vh !important;
+    overflow: hidden;
+}
+
+.patientcard .card-header {
+    margin-top: 0px;
+}
+
+.patientcard-placeholder {
+    border-radius: .25rem;
+    margin-left: 0.5%;
+    margin-top: 0.5%;
+    width: 32%;
+    height: 45%;
+    float: left;
+    background: #fff6d1;
+    border: 2px dashed #82817f;
+}
+
+#patient_identification .patient_photo {
+    width: 180%;
+    height: auto;
+    border-radius: 50%;
+    padding-right:10%;
+    padding-left:10%;
+    margin: 5px 0 0 5px;
+}
+
+#patient_identification h2.patient_name {
+    margin: 0;
+    padding-left: 25%;
+    text-transform: uppercase;
+    font-size: 16px !important;
+}
+
+#patient_identification .patient_identification_right img {
+    position: absolute;
+    bottom: -12px;
+    width: 50%;
+    height: auto;
+    border-radius: unset;
+    display: none;
+}
+
+.patient_card_inner_divider hr {
+    border-top: 4px solid black;
+    margin-top: 0.75rem;
+}
+
+.patient_property {
+    margin-bottom: 20px;
+    padding-right: 0;
+}
+
+.patient_property img {
+    width: 35px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.patient_extra_info_collapse .card-body {
+    padding-top: 0;
+}
+
+.patient_identification_right button {
+    display: block;
+    margin-top: 10px;
+}
+
+.patient_name_wrapper .patient_number {
+    margin-top: 5px;
+    padding-left:25%;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.patientcard  .patient_card_body {
+    overflow: hidden;
+    height: 100%;
+}
+
+/* dropzones for patients */
+
+#ward_dropzone {
+    position: absolute;
+    right: 10%;
+    bottom: 25%;
+    height: 20%;
+    width: 80%;
+    z-index: 99;
+    opacity: 0;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+#ward_dropzone span {
+    position: absolute;
+    top: 45%;
+    right: 25%;
+}
+
+#ward_dropzone:hover {
+    background: #ff000073;
+    opacity: 1;
+}
+
+#IC_dropzone {
+    position: absolute;
+    left: 5%;
+    bottom: 10%;
+    height: 15%;
+    width: 80%;
+    z-index: 99;
+    opacity: 0;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+#IC_dropzone span {
+    position: absolute;
+    top: 45%;
+    right: 30%;
+}
+
+#IC_dropzone:hover {
+    background: #ff000073;
+    opacity: 1;
+}
+
+#home_dropzone {
+    position: absolute;
+    left: 1%;
+    top: 1%;
+    height: 8%;
+    width: 80%;
+    z-index: 99;
+    opacity: 0;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+#home_dropzone span {
+    position: absolute;
+    top: 40%;
+    left: 10%;
+}
+
+#home_dropzone:hover {
+    background: #ff000073;
+    opacity: 1;
+}
+
+/* Visualize sickness of patients */
+.mhc-healthbar-border {
+    border: 2px solid grey;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.mhc-healthbar {
+    height: 8px;
+    background-color: #fd2d2d94;
+}
+
+.mhc-healthcircle-border {
+    margin-top: -15px;
+    display: block;
+    padding-left: 5px;
+}
+.mhc-healthcircle{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: red
+}
+/* statistics bar */
+.infoBar{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+.infoPiece{
+    padding: 2px;
+    margin: 4px 0;
+    color: grey;
+}
+.statistics_bar_black {
+    color: black;
+    padding: 2px;
+    margin: 4px 0;
+}
+.statistics_divider {
+    font-size: 30px;
+    color: darkgrey;
+    margin: -8px 7px 0 7px;
+    font-weight: 100;
+}
+#statusPatients {
+    color: black;
+}
+.statistic_spacer {
+    margin: 0 10px 0 0;
+}
+.black {
+    color: black;
+}
+
+/* The popup */
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    margin-left: 45%;
+    float: none;
+}
+
+.blurred{
+    opacity: 0.1;
+    filter: alpha(opacity = 10);}
+
+.popUp_photo{
+    width: 100% !important;
+    height: auto !important;
+}
+
+.questionnaireImage{
+    display: flex;
+    width: 100%;
+    padding-bottom: 50px;
+    position: relative;
+    align-self: center;
+    text-align: center;
+}
+
+.questionnaireTextarea{
+    display:block;
+    width: 100%;
+    height: 80px;
+}
+
+.questionnaireLabels{
+    display:block;
+}
+.questionnaire{
+    padding: 5%;
+    color: black;
+}
+
+.questionaireLikert{
+    padding: 5%;
+    color: black;
+    display:none;
+}
+
+.questionnaireSubmit{
+    width: 50%;
+    position: relative;
+    display: inline;
+    float: right;
+    height: 50px;
+}
+
+.patientData{
+    z-index: 10000;
+    width: 40%;
+    position: absolute;
+    left: -10%;
+    top: 5%;
+    background:white;
+}
+
+/* Decision support predictions */
+
+.mhc_show_explanations .patient_card_body {
+    width: 40%;
+    float:left
+}
+
+.mhc_show_explanations .dss_agent_predictions {
+    width: 60%;
+    float:left;
+}
+
+.dss_agent_foil_question {
+    display: inline-block;
+    padding: 100px 20px 0 20px;
+    width: 40%;
+    vertical-align: top;
+}
+.dss_agent_foil_explanation {
+    display: inline-block;
+    width: 50%;
+}
+
+.foil_explanation_bot {
+    width: 150px;
+    margin-right: 100px;
+}
+
+#dialog-confirm {
+    width: 100%;
+}
+
+#agent_predictions {
+    background-color: #deebf7;
+    border: 2px solid #416098;
+    padding: 25px;
+    margin-left: 50px;
+}
+
+.tdp_dss_robot {
+    float:right;
+}
+
+#agent_predictions_table td,
+#agent_predictions_table th {
+    border: 2px solid white;
+}
+
+#agent_predictions_table thead {
+    color: white;
+    background: black;
+}
+
+#agent_predictions tbody tr {
+    background: #e7e7e7;
+    color: black;
+}
+
+#agent_predictions tbody tr:nth-of-type(odd) {
+    background: #cbcbcb;
+}
+
+.mhc-healthcircle-patientCard {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.mhc-healthcircle-border-patientCard {
+    padding-top: 20%;
+    display: block;
+    padding-left: 30%;
+}
+
+
+#trial_completed_text {
+    position: absolute;
+    top: 30%;
+    height: 40%;
+    left: 0%;
+    width: 100%;
+    text-align: center;
+    background-color: green;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    color: white;
+    padding: 10%;
+    z-index: 10000;
+    font-size: 40px;
+}
+
+#trial_completed_text a {
+    color: #ffc107;
+}
+
+.popUpButton{
+    width: 25%;
+    height: 70px;
+    position: sticky;
+}
+
+.dialogRobotHome{
+    float: left;
+    display:none;
+    padding-left: 55%;
+    margin-top: -1%;
+}
+
+.dialogRobotWard{
+    float: left;
+    display:none;
+    padding-left: 30%;
+    margin-top: -1%;
+}
+
+.dialogRobotIC{
+    float: left;
+    display:none;
+    padding-left: 10%;
+    margin-top: -1%;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.not-visible {
+  visibility: hidden;
+}
+
+.infoPiece {
+    background: #f8f9fa!important;
+}
+
+.mhc_death_ring,
+.mhc_recovery_ring {
+    pointer-events:none;
+    height: 120%;
+    width: 120%;
+    z-index: 101;
+    position: absolute;
+    width: 250%;
+    height: 250%;
+    margin: -75% 0 0 -75%;
+}
+
+/* Agent triage decision preview in patient cards in overview */
+.agent_triage_decision_preview {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    padding-left: 20%;
+}
+
+.agent_decision_preview_text {
+    background-color: #416098;
+    display: inline-block;
+    width: 65%;
+    padding: 7px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 25px;
+}
+
+.agent_triage_decision_preview img {
+    height: auto;
+    width: 35%;
+    float: right;
+}
+
+
+.source_dialog {
+    z-index: 1000;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  vertical-align: -webkit-baseline-middle;
+  width: 40px;
+  height: 17px;
+  }
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 1px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(17px);
+  -ms-transform: translateX(17px);
+  transform: translateX(17px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 17px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.toggle-image{
+    display: inline-block;
+    width:25px !important;
+    margin-right: 0px !important;
+}
+
+#infoButton{
+    display: flex;
+    margin-top:20%;
+}
+
+#timer{
+    padding-top: 10%;
+}
+
+#toggle{
+    right: 20px;
+    top: 10%;
+    padding: 0;
+    max-width: 400px;
+    width: 100px;
+}
+
+.patientcard-robot {
+    background-color: #d0e7ef !important;
+}
+
+.patientcard-human {
+    background-color: white !important;
+}

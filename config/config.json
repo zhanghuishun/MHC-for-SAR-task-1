@@ -1,0 +1,20 @@
+{
+    "victims": {
+        "victim_planning": [
+          {"second": 2},
+          {"second": 13},
+          {"second": 17},
+    
+          {"second": 60},
+          {"second": 63},
+          {"second": 70},
+          {"second": 80},
+    
+          {"second": 105}
+        ],
+        "max_victims": 10,
+        "victims_file": "victim_generator/victim_data.csv",
+        "deceased_fade_after_ticks": 40,
+        "update_sickness_every_x_seconds": 6
+      }
+}

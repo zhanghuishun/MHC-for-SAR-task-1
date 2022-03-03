@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow: scroll;">
+<head>
+    <meta charset="UTF-8">
+    <title>Questionnaire</title>
+    <!-- Custom css for MHC project -->
+    <link rel="stylesheet" href="/static/css/mhc.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/dist/bootstrap/bootstrap-4.4.1.min.css" crossorigin="anonymous">
+</head>
+<body>
+
+<h2 style="margin: 100px 5%;">Het doel van triage is om ‘goed te doen voor zoveel mogelijk patiënten’ door de beschikbare zorg op een verstandige en eerlijke manier te verdelen. <br>Je krijgt nu een aantal screenshots te zien van de keuzes die je eerder hebt gemaakt.</h2>
+
+    {% for patient in patients %}
+
+    <div id="Questionnaire_{{patient['id']}}" class="questionnaire" patientID={{patient['id']}}>
+        <div>
+            <img src="{{patient['photo']}}" class="questionnaireImage"/>
+        </div>
+        <h4>Hierboven zie je een screenshot van een van de keuzes die tijdens het
+        experiment gemaakt zijn. Hieronder volgen een aantal vragen betreft de gemaakte keuze.</h4>
+        <content>
+        <label for="{{patient['id']}}_q1" class="questionnaireLabel">Kun je iets meer vertellen over wat je wel en niet in beschouwing hebt genomen bij die beslissing? </label>
+        <textarea id="{{patient['id']}}_q1" name="q1"class="questionnaireTextarea"></textarea><br>
+        <label for="{{patient['id']}}_q2" class="questionnaireLabel">Welke informatie heeft de doorslag gegeven bij je beslissing? </label>
+        <textarea id="{{patient['id']}}_q2" name="q2"class="questionnaireTextarea"></textarea><br>
+        <label for="{{patient['id']}}_q3" class="questionnaireLabel">Vond je het een moeilijke beslissing? Waarom wel / niet?</label>
+        <textarea id="{{patient['id']}}_q3" name="q3"class="questionnaireTextarea"></textarea><br>
+        <label for="{{patient['id']}}_q4" class="questionnaireLabel">Zou je ook met de informatie die je toen had dezelfde, of een andere beslissing willen nemen? Zo ja, welke? / waarom? </label>
+        <textarea id="{{patient['id']}}_q4" name="q4" class="questionnaireTextarea"></textarea><br>
+        <label for="{{patient['id']}}_q4a" class="questionnaireLabel">Zou je – met de kennis van nu - dezelfde, of een andere beslissing willen nemen? Zo ja, welke? / waarom? </label>
+        <textarea id="{{patient['id']}}_q4a" name="q4a"class="questionnaireTextarea"></textarea><br>
+
+
+        <div style="border-top: 1px solid grey;border-bottom: 1px solid grey;padding: 5px 0; margin-bottom:10px;">De volgende vraag is voor als je hebt samengewerkt met een agent/robot gedurende de vorige taak. Anders mag je deze vraag overslaan.</div>
+        <label for="{{patient['id']}}_q4b" class="questionnaireLabel">Vond je het advies van de agent in overeenstemming met het doel van de triage? Waarom wel / niet?</label>
+        <textarea id="{{patient['id']}}_q4b" name="q4b" class="questionnaireTextarea"></textarea><br>
+        </content>
+
+    </div>
+{% endfor %}
+{% if not isBaseline%}
+<div class="questionaireLikert" >
+    <h1>Experiment algemene vragen</h1>
+    <h3>Ik besefte tijdens de taak dat de AI het ook fout kon hebben in zowel advies als de extra informatie.</h3>
+    <div class="btn-group" id="Likert" data-toggle="buttons">
+   <label class="btn btn-default ">
+     <input type="radio" class="toggle" name="Likert" value="1">Helemaal eens
+   </label>
+   <label class="btn btn-default ">
+     <input type="radio" class="toggle" name="Likert" value="2"> Eens
+   </label>
+   <label class="btn btn-default ">
+     <input type="radio" class="toggle" name="Likert" value="3"> Neutraal
+   </label>
+   <label class="btn btn-default ">
+     <input type="radio" class="toggle" name="Likert" value="4"> Oneens
+   </label>
+   <label class="btn btn-default ">
+      <input type="radio" class="toggle" name="Likert" value="5"> Helemaal oneens
+   </label>
+
+</div>
+</div>
+{% endif %}
+<button id="Submit" class="questionnaireSubmit" onclick="sendAnswers()">Verstuur</button>
+
+</body>
+<!-- Optional JavaScript -->
+    <!-- jQuery first, Bootstrap JS, then jquery UI  -->
+    <script src="/static/dist/jquery/jquery-3.4.1.min.js"></script>
+    <script src="/static/dist/popper/popper-1.16.0.js"></script>
+    <script src="/static/dist/bootstrap/bootstrap-4.4.1.min.js"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+            integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/static/js/mhc.js"></script>
+    <script type="text/javascript" src="/static/js/questionnaire.js"></script>
+</html>
