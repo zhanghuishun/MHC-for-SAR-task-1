@@ -22,6 +22,7 @@
     <!-- Font Awesome icons -->
     <link rel="stylesheet" href="/static/dist/fontawesome-free-5.12.0-web/css/all.css">
 
+    <link rel="stylesheet" href="/static/css/basscss.css">
     <title>{{ id }} view</title>
 </head>
 
@@ -57,37 +58,32 @@
     </div>
 
     <div class="content-row bg-light infoBar">
-        <!-- <div class="infoPiece black">
-            Tijd: <span id="timer_value">0 seconden</span>
-        </div>
-        <div class="statistics_divider">|</div>
-        <div id="myPatients" class="infoPiece">
-            <span class="statistics_bar_black">Jouw patiënten:</span>
-            <span id="myIC">0</span> IC,
-            <span id="myWard">0</span> Ziekenboeg,
-            <span id="myHome">0</span> Huis
-        </div>
-        <div class="statistics_divider">|</div>
-        <div id="robotPatients" class="infoPiece">
-            <span class="statistics_bar_black">Patiënten robot:</span>
-            <span id="rIC">0</span> IC,
-            <span id="rWard">0</span> Ziekenboeg,
-            <span id="rHome">0</span> Huis
-        </div>
-        <div class="statistics_divider">|</div>
-        <div id="treatedPatients" class="infoPiece">
-            <span class="statistics_bar_black">Behandelde patiënten:</span>
-            <span><span id="cured">0</span> genezen</span>,
-            <span><span id="dead">0</span> overleden</span>
-        </div>
-        <div class="statistics_divider">|</div>
-        <div id="statusPatients" class="infoPiece">
-            <span class="statistics_bar_black">Huidige bedbezetting:</span><span class="statistic_spacer"></span>
-            <span id="waitingStatus">0</span>/<span id="waitingBeds"></span> Noodopvang<span
-                class="statistic_spacer"></span>
-            <span id="wardStatus">0</span>/<span id="wardBeds"></span> Ziekenboeg<span class="statistic_spacer"></span>
-            <span id="ICStatus">0</span>/<span id="ICBeds"></span> IC
-        </div> -->
+        <button class="btn btn-dark" id="moral_value_button" onclick="moralvalueToggle()" data-toggle="collapse"
+        data-target="#sideBar" aria-expanded="false" aria-controls="sideBar">Show Moral Value</button>
+        <div class="p3 clearfix bg-yellow maroon col-12 sidebarClass" id="sideBar">
+			<div class="col 6">
+				<h2 class="h4 mt1">Rank moral value priority from high to low</h2>
+				<ul class="p2 border maroon border-maroon js-sortable-copy-target sortable list flex flex-column list-reset" id="copy-list">
+				</ul>
+				<button class="ml4 button navy bg-gray" id="reset">Reset</button>
+				<button class="ml4 button navy bg-gray" id="submit">Submit</button>
+			</div>
+			<div class="col"> <!-- col-6 -->
+				<ul class="ml4 js-sortable-copy sortable list flex flex-column list-reset">
+					<li class="p1 mb1 yellow bg-maroon" style="position: relative; z-index: 10; float:left">Item 1</li>
+					<li>or</li>
+					<li class="p1 mb1 yellow bg-maroon" style="position: relative; z-index: 10; float:left">Item 2</li>
+					<li class="p1 mb1 yellow bg-maroon" style="position: relative; z-index: 10; float:left">Item 3</li>
+					<li>or</li>
+					<li class="p1 mb1 yellow bg-maroon" style="position: relative; z-index: 10; float:left">Item 4</li>
+					<li>or</li>
+					<li class="p1 mb1 yellow bg-maroon" style="position: relative; z-index: 10">Item 5</li>
+					<li class="p1 mb1 yellow bg-maroon" style="position: relative; z-index: 10">Item 6</li>
+					<li class="p1 mb1 yellow bg-maroon" style="position: relative; z-index: 10">Item 7</li>
+					<li class="p1 mb1 yellow bg-maroon" style="position: relative; z-index: 10">Item 8</li>
+				</ul>
+			</div>
+		</div>
     </div>
 
     <div class="row content-row">
