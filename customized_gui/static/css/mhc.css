@@ -573,3 +573,11 @@ input:checked + .slider:before {
 .patientcard-human {
     background-color: white !important;
 }
+
+.sidebarClass {
+    position: fixed;
+    right: -60%;
+    width: 40%;
+    z-index: 9999;
+    transition: width 1s;
+}
