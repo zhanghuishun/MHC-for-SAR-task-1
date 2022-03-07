@@ -36,21 +36,4 @@ function moralvalueToggle() {
     }
 }
 
-$(document).ready(function(){
-    $("#reset").click(function(){
-      $("#copy-list").empty();
-            });
-  });
-sortable('.js-sortable-copy', {
-forcePlaceholderSize: true,
-copy: true,
-      acceptFrom: false,
-placeholderClass: 'mb1 bg-navy border border-yellow',
-});
-sortable('.js-sortable-copy-target', {
-  forcePlaceholderSize: true,
-  acceptFrom: '.js-sortable-copy,.js-sortable-copy-target',
-  placeholderClass: 'mb1 border border-maroon',
-  maxItems: 5
-});
 

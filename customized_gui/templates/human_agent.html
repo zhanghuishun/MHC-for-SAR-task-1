@@ -59,7 +59,7 @@
 
     <div class="content-row bg-light infoBar">
         <button class="btn btn-dark" id="moral_value_button" onclick="moralvalueToggle()" data-toggle="collapse"
-        data-target="#sideBar" aria-expanded="false" aria-controls="sideBar">Show Moral Value</button>
+        data-target="#sideBar" aria-expanded="false" aria-controls="sideBar">Moral Value</button>
         <div class="p3 clearfix bg-yellow maroon col-12 sidebarClass" id="sideBar">
 			<div class="col 6">
 				<h2 class="h4 mt1">Rank moral value priority from high to low</h2>
@@ -163,6 +163,26 @@
     <script type="text/javascript" src="/static/js/loop.js"></script>
     <script type="text/javascript" src="/static/js/mhc.js"></script>
     <script type="text/javascript" src="/static/js/human_agent.js"></script>
+    <script  src="/static/js/html5sortable.js"></script>
+    <script>
+        $(document).ready(function(){
+  			$("#reset").click(function(){
+    			$("#copy-list").empty();
+  					});
+			});
+		sortable('.js-sortable-copy', {
+		  forcePlaceholderSize: true,
+		  copy: true,
+				acceptFrom: false,
+		  placeholderClass: 'mb1 bg-navy border border-yellow',
+		});
+		sortable('.js-sortable-copy-target', {
+			forcePlaceholderSize: true,
+			acceptFrom: '.js-sortable-copy,.js-sortable-copy-target',
+			placeholderClass: 'mb1 border border-maroon',
+			maxItems: 5
+	  });
+    </script>
 </body>
 <div class="dialogs" style="display: none;">
     <div id="dialog-confirm" title="Nieuwe patiënt">
