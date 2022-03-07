@@ -1046,9 +1046,9 @@ input[type=range] {
 .green { color: #2ecc40 }
 .olive { color: #3d9970 }
 .lime  { color: #01ff70 }
-
+.cyan  {color : #0795BB}
 .yellow  { color: #ffdc00 }
-.orange  { color: #ff851b }
+.orange  { color: #F4AD24 }
 .red     { color: #ff4136 }
 .fuchsia { color: #f012be }
 .purple  { color: #b10dc9 }
@@ -1066,9 +1066,9 @@ input[type=range] {
 .bg-green { background-color: #2ecc40 }
 .bg-olive { background-color: #3d9970 }
 .bg-lime  { background-color: #01ff70 }
-
+.bg-cyan  {background-color: #0795BB}
 .bg-yellow  { background-color: #ffdc00 }
-.bg-orange  { background-color: #ff851b }
+.bg-orange  { background-color: #F4AD24 }
 .bg-red     { background-color: #ff4136 }
 .bg-fuchsia { background-color: #f012be }
 .bg-purple  { background-color: #b10dc9 }
