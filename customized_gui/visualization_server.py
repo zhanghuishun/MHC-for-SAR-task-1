@@ -1,16 +1,17 @@
 import threading
 import logging
 from datetime import datetime
+from urllib import response
 
 import pyautogui
 import os
 import csv
-from flask import Flask, render_template, request, jsonify, send_from_directory, json
+from flask import Flask, render_template, request, jsonify, send_from_directory, json, Response
 from tempfile import NamedTemporaryFile
 import shutil
 import random
 import time
-
+from rescue_model import RescueModel
 '''
 This file holds the code for the MATRX RESTful api. 
 External scripts can send POST and/or GET requests to retrieve state, tick and other information, and send 
@@ -323,6 +324,19 @@ def external_media(filename):
     """
     return send_from_directory(ext_media_folder, filename, as_attachment=True)
 
+@app.route('/moralvalue', methods=['POST'])
+def moralvalue():
+    data = request.json
+    #pass moral values to RescueModel singleton
+    RescueModel(data)
+
+    r = "save moral value"
+    response = app.response_class(
+        response=json.dumps(r),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
 #########################################################################
 # Visualization Flask methods

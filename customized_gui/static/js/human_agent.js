@@ -35,5 +35,21 @@ function moralvalueToggle() {
         document.getElementById("moral_value_button").className = "btn btn-dark";
     }
 }
+//get values in copy list
+function submitMoralValue() {
+    var list = document.getElementById("copy-list").getElementsByTagName("li");
+    if(list.length < 5) alert("miss moral value");
+    else {
+        var dict = {};
+        dict['very_high'] = list[0].innerText;
+        dict['high'] = list[1].innerText;
+        dict['middle'] = list[2].innerText;
+        dict['low'] = list[3].innerText;
+        dict['very_low'] = list[4].innerText;  
+        var json_data = JSON.stringify(dict);
+        //mhc.js
+        post_mhc_message("moralvalue", json_data);
+    }
+}
 
 
