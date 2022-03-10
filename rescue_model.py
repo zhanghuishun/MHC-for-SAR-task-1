@@ -1,20 +1,16 @@
-class Singleton(object):
-    def __init__(self, cls):
-        self._cls = cls
-        self._instance = {}
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-    def __call__(self):
-        if self._cls not in self._instance:
-            self._instance[self._cls] = self._cls()
-        return self._instance[self._cls]
-
-
-@Singleton
-class RescueModel():
+#Python3
+class RescueModel(metaclass=Singleton):
     #{"very_high":"Older preferred","high":"Older preferred","middle":"Older preferred","low":"Older preferred","very_low":"Older preferred"}
     moralValues = None
-    def __init__(self, moralValues) -> None:
+    def __init__(self, moralValues):
         moralValues = moralValues
-    def init_rescue_score():
+    def init_rescue_score(self):
     #     if moralValues not None:
         return 1

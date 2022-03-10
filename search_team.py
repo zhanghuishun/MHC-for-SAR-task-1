@@ -84,6 +84,7 @@ class SearchTeam(AgentBrain):
 
             print(f"Spawning victim at tick {state['World']['nr_ticks']}. Victim "
                     f"{self.spawned_victims} of max {self.config['victims']['max_victims']}")
+            print("action: ",action)
         return action, action_kwargs  
             
     def get_next_victim(self):
@@ -96,7 +97,9 @@ class SearchTeam(AgentBrain):
         # set a default victim image
         img = "image/victim_unknown.png" #if 'image' not in victim_data or victim_data['image'] == '' else \
             #victim_data['image']
-        victim_rescue_score = RescueModel.init_rescue_score()
+        data = {"very_high":"Older preferred","high":"Older preferred","middle":"Older preferred","low":"Older preferred","very_low":"Older preferred"}
+        model = RescueModel(data)
+        victim_rescue_score = model.init_rescue_score()
         brain_args = {}
         # create the agent body with default properties and some custom victim properties
         body_args = {"possible_actions": defaults.AGENTBODY_POSSIBLE_ACTIONS,
