@@ -45,9 +45,9 @@ def create_builder(config_file='config.json'):
 
     # Add extra object
     builder.add_object(location=[1,0], is_traversable=True, name="entrance arrow1",
-                       img_name="images/arrow.png", visualize_size=0.8)
+                       img_name="arrow.png", visualize_size=0.8)
     builder.add_object(location=[2,0], is_traversable=True, name="entrance arrow2",
-                       img_name="images/arrow.png", visualize_size=0.8)
+                       img_name="arrow.png", visualize_size=0.8)
     # Add a human controllable agent with certain controls and a GIF
     # key_action_map = {
     #     'w': MoveNorth.__name__,

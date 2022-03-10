@@ -9,6 +9,7 @@ from matrx.agents import AgentBrain, SenseCapability, np
 from matrx.objects import AgentBody
 import matrx.defaults as defaults
 from rescue_model import RescueModel
+from victim_agent import Victim
 
 class SearchTeam(AgentBrain):
     def __init__(self, config):
@@ -59,7 +60,8 @@ class SearchTeam(AgentBrain):
 
                 # add a victim to the queue
                 body_args = self.get_next_victim()
-                action_kwargs = { "body_args": body_args}
+                brain_args = {}
+                action_kwargs = {"brain_args": brain_args, "body_args": body_args}
                 # action = AddvictimAgent.__name__
                 self.victim_spawn_queue.append(action_kwargs)
                 # print("victim planner adding a new victim to the spawn queue")
@@ -76,7 +78,6 @@ class SearchTeam(AgentBrain):
             elif not isinstance(victims, list):
                 victims = [victims]
             action_kwargs = self.victim_spawn_queue.pop(0)
-            print(action_kwargs)
             action = AddVictimAgent.__name__
             time = state['World']['nr_ticks'] * state['World']['tick_duration']
 
@@ -84,7 +85,7 @@ class SearchTeam(AgentBrain):
 
             print(f"Spawning victim at tick {state['World']['nr_ticks']}. Victim "
                     f"{self.spawned_victims} of max {self.config['victims']['max_victims']}")
-            print("action: ",action)
+        print(action_kwargs)
         return action, action_kwargs  
             
     def get_next_victim(self):
@@ -95,12 +96,11 @@ class SearchTeam(AgentBrain):
 
         victim_data = self.victim_data.iloc[victim_number]
         # set a default victim image
-        img = "image/victim_unknown.png" #if 'image' not in victim_data or victim_data['image'] == '' else \
+        img = "victim_unknown.png" #if 'image' not in victim_data or victim_data['image'] == '' else \
             #victim_data['image']
         data = {"very_high":"Older preferred","high":"Older preferred","middle":"Older preferred","low":"Older preferred","very_low":"Older preferred"}
         model = RescueModel(data)
         victim_rescue_score = model.init_rescue_score()
-        brain_args = {}
         # create the agent body with default properties and some custom victim properties
         body_args = {"possible_actions": defaults.AGENTBODY_POSSIBLE_ACTIONS,
                      "callback_create_context_menu_for_self": None,
@@ -115,7 +115,7 @@ class SearchTeam(AgentBrain):
                      "is_human_agent": False,
 
                      # custom properties for victim agent
-                     "location": victim_data['location'],
+                     "location": [int(victim_data['location_column']), int(victim_data['location_row'])],
                      "name": "victim",
                      "victim_name": victim_data['name'],
                      "number": self.generated_victims,
@@ -131,13 +131,13 @@ class SearchTeam(AgentBrain):
                      "age": int(victim_data['age']),
                      "distance": victim_data['distance'],
                      "difficulty": victim_data['difficulty'],
-                     "location": victim_data['location'],
+                     "location": [int(victim_data['location_column']), int(victim_data['location_row'])],
                      "vital_sign": victim_data['vital_sign'],
                      "victim_photo": img,
                      "victim_rescue_score": victim_rescue_score,
                      "rescued": False,
                     }
-        return brain_args, body_args
+        return body_args
 class AddVictimAgent(Action):
     """ An action that can add a victim agent to the gridworld """
 
@@ -158,13 +158,13 @@ class AddVictimAgent(Action):
 
     def mutate(self, grid_world, agent_id, **kwargs):
         # create the agent brain
-        agentbrain = SearchTeam(**kwargs['brain_args'])
+        agentbrain = Victim(**kwargs['brain_args'])
 
         # these properties can't be sent via the kwargs because the API can't JSON serialize these objects and would
         # throw an error
         obj_body_args = {
             "sense_capability": SenseCapability({"*": np.inf}),
-            "class_callable": SearchTeam,
+            "class_callable": Victim,
             "callback_agent_get_action": agentbrain._get_action,
             "callback_agent_set_action_result": agentbrain._set_action_result,
             "callback_agent_observe": agentbrain._fetch_state,
