@@ -21,8 +21,8 @@ def create_builder(config_file='config.json'):
 
     # Add the walls surrounding the redzone and the doors
     builder.add_room(top_left_location=[0, 0], width=29, height=29, name="Borders",
-                        doors_open=True, door_locations=[[2,0],[1,0]])
-
+                       doors_open=True, door_locations=[(1,0),(2,0)])
+    
     # Add the walls to our maze
     builder.add_line(start=[3, 10], end=[27, 10], name="Redzone wall")
     builder.add_line(start=[3, 19], end=[27, 19], name="Redzone wall")
@@ -45,9 +45,9 @@ def create_builder(config_file='config.json'):
 
     # Add extra object
     builder.add_object(location=[1,0], is_traversable=True, name="entrance arrow1",
-                       img_name="arrow.png", visualize_size=0.8)
+                      img_name="arrow.png", visualize_size=0.8)
     builder.add_object(location=[2,0], is_traversable=True, name="entrance arrow2",
-                       img_name="arrow.png", visualize_size=0.8)
+                      img_name="arrow.png", visualize_size=0.8)
     # Add a human controllable agent with certain controls and a GIF
     # key_action_map = {
     #     'w': MoveNorth.__name__,
