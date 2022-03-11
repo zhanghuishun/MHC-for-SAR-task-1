@@ -2,6 +2,7 @@ from matrx import WorldBuilder
 from matrx.actions.move_actions import *
 from matrx.agents import HumanAgentBrain
 from customized_gui import visualization_server
+from rescue_agent import RescueAgent
 from  search_team import SearchTeam
 from rescue_team_leader import RescueTeamLeader
 
@@ -73,8 +74,8 @@ def create_builder(config_file='config.json'):
     builder.add_human_agent(location=[0,0], is_traversable=True, is_movable=False,
                             agent=RescueTeamLeader(), name="rescue team leader", visualize_size=0)
     # add the rescue robot agent that save the victim according to the moral value elicitation
-    # builder.add_agent(location=[0, 0], is_traversable=True, is_movable=True, agent_brain=RescueRobot(),
-    #                   name="rescue robot", visualize_size=0)
+    builder.add_agent(location=[1, 0], is_traversable=True, is_movable=True, agent_brain=RescueAgent(config = config),
+                      name="rescue robot", visualize_size=0)
     return builder
 
 

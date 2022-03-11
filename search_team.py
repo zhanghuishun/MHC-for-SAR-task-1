@@ -85,7 +85,6 @@ class SearchTeam(AgentBrain):
 
             print(f"Spawning victim at tick {state['World']['nr_ticks']}. Victim "
                     f"{self.spawned_victims} of max {self.config['victims']['max_victims']}")
-        print(action_kwargs)
         return action, action_kwargs  
             
     def get_next_victim(self):
