@@ -18,6 +18,7 @@
         "update_sickness_every_x_seconds": 6
       },
     "rescue_robot":{
-      "ready_time_ticks" : 30
+      "ready_time_ticks" : 30,
+      "move_speed" : 2
     }
 }

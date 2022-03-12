@@ -110,7 +110,7 @@ class SearchTeam(AgentBrain):
                      "visualize_when_busy": defaults.AGENTBODY_VIS_COLOUR,
                      "visualize_depth": defaults.AGENTBODY_VIS_DEPTH,
                      "team": None,
-                     "is_movable": False,
+                     "is_movable": True,
                      "is_human_agent": False,
 
                      # custom properties for victim agent
@@ -118,7 +118,7 @@ class SearchTeam(AgentBrain):
                      "name": "victim",
                      "victim_name": victim_data['name'],
                      "number": self.generated_victims,
-                     "is_traversable": False,
+                     "is_traversable": True,
                      "img_name": img,
                      "customizable_properties": [
                                                  "is_traversable", "rescued", "img_name", "victim_photo",

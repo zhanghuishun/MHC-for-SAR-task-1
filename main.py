@@ -25,24 +25,24 @@ def create_builder(config_file='config.json'):
                        doors_open=True, door_locations=[(1,0),(2,0)])
     
     # Add the walls to our maze
-    builder.add_line(start=[3, 10], end=[27, 10], name="Redzone wall")
-    builder.add_line(start=[3, 19], end=[27, 19], name="Redzone wall")
-    builder.add_line(start=[10, 4], end=[10, 7], name="Redzone wall")
-    builder.add_line(start=[21, 22], end=[21, 25], name="Redzone wall")
-    builder.add_line(start=[10, 22], end=[10, 25], name="Redzone wall")
-    builder.add_line(start=[22, 23], end=[27, 23], name="Redzone wall")
-    builder.add_line(start=[11, 25], end=[16, 25], name="Redzone wall")
-    builder.add_line(start=[11, 22], end=[16, 22], name="Redzone wall")
-    builder.add_line(start=[21, 13], end=[21, 16], name="Redzone wall")
-    builder.add_line(start=[10, 13], end=[10, 16], name="Redzone wall")
-    builder.add_line(start=[22, 14], end=[27, 14], name="Redzone wall")
-    builder.add_line(start=[11, 16], end=[16, 16], name="Redzone wall")
-    builder.add_line(start=[11, 13], end=[16, 13], name="Redzone wall")
-    builder.add_line(start=[11, 7], end=[16, 7], name="Redzone wall")
-    builder.add_line(start=[11, 4], end=[16, 4], name="Redzone wall")
-    builder.add_line(start=[21, 4], end=[21, 7], name="Redzone wall")
-    builder.add_line(start=[22, 5], end=[27, 5], name="Redzone wall")
-    builder.add_line(start=[3, 1], end=[27, 1], name="Redzone wall")
+    builder.add_line(start=[3, 10], end=[27, 10], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[3, 19], end=[27, 19], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[10, 4], end=[10, 7], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[21, 22], end=[21, 25], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[10, 22], end=[10, 25], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[22, 23], end=[27, 23], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[11, 25], end=[16, 25], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[11, 22], end=[16, 22], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[21, 13], end=[21, 16], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[10, 13], end=[10, 16], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[22, 14], end=[27, 14], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[11, 16], end=[16, 16], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[11, 13], end=[16, 13], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[11, 7], end=[16, 7], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[11, 4], end=[16, 4], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[21, 4], end=[21, 7], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[22, 5], end=[27, 5], name="Redzone wall", is_traversable=False, is_movable=False)
+    builder.add_line(start=[3, 1], end=[27, 1], name="Redzone wall", is_traversable=False, is_movable=False)
 
     # Add extra object
     builder.add_object(location=[1,0], is_traversable=True, name="entrance arrow1",
@@ -74,8 +74,8 @@ def create_builder(config_file='config.json'):
     builder.add_human_agent(location=[0,0], is_traversable=True, is_movable=False,
                             agent=RescueTeamLeader(), name="rescue team leader", visualize_size=0)
     # add the rescue robot agent that save the victim according to the moral value elicitation
-    builder.add_agent(location=[1, 0], is_traversable=True, is_movable=True, agent_brain=RescueAgent(config = config),
-                      name="rescue robot", visualize_size=0)
+    builder.add_agent(location=[1, 1], is_traversable=False, is_movable=True, agent_brain=RescueAgent(config = config),
+                      name="rescue robot", visualize_size=1, img_name = "robot.png")
     return builder
 
 

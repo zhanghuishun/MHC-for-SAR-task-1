@@ -19,7 +19,6 @@ class RescueModel(metaclass=Singleton):
         percent = 0.35
         score = 0
         for moral_value in cls.moralValues.values():
-            print(moral_value)
             percent -= 0.05
             category = cls.moral_category_dict[moral_value]
             if category == "age":
