@@ -19,6 +19,10 @@
       },
     "rescue_robot":{
       "ready_time_ticks" : 30,
-      "move_speed" : 2
+      "move_speed" : 1
+    },
+    "entrance": {
+      "row" : 0,
+      "column" : 1
     }
 }

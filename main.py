@@ -74,8 +74,8 @@ def create_builder(config_file='config.json'):
     builder.add_human_agent(location=[0,0], is_traversable=True, is_movable=False,
                             agent=RescueTeamLeader(), name="rescue team leader", visualize_size=0)
     # add the rescue robot agent that save the victim according to the moral value elicitation
-    builder.add_agent(location=[1, 1], is_traversable=False, is_movable=True, agent_brain=RescueAgent(config = config),
-                      name="rescue robot", visualize_size=1, img_name = "robot.png")
+    builder.add_agent(location=[1, 0], is_traversable=False, is_movable=True, agent_brain=RescueAgent(config = config),
+                      name="rescue robot", visualize_size=1, img_name = "robot.png", loaded = False, move_speed = 2)
     return builder
 
 
