@@ -185,33 +185,32 @@ function setDropZones() {
 function extend_update(patients) {
     worldObjects = Object.keys(lv_state)
     for (var ind in patients) {
-
         // update the triage countdown
-        if (lv_state[patients[ind]].hasOwnProperty("countdown")) {
-            var countdown = Math.round(lv_state[patients[ind]]['countdown']);
-            if (countdown < 0) { countdown = 0};
-            var elem = $("#"+patients[ind]+"patientCardBody #timer .mhc-healthbar");
-            if (elem.length != 0) {
-                $("#"+patients[ind]+"patientCardBody #timer .countdown_text")[0].innerHTML = countdown + " sec";
-                elem[0].style.width = (countdown / lv_state[patients[ind]]['original_countdown'] * 100) + "%";
-                if(mhc_settings['tdp'] == 'tdp_dynamic_task_allocation')
-                 {
-                    if ($("#"+patients[ind]+"patientCardBody input")[0].checked)
-                        {$("#"+patients[ind]+"patientCardBody #infoButton").hide();
-                        $("#"+patients[ind]+"patientCardBody .agent_triage_decision_preview").show()
+        // if (lv_state[patients[ind]].hasOwnProperty("countdown")) {
+        //     var countdown = Math.round(lv_state[patients[ind]]['countdown']);
+        //     if (countdown < 0) { countdown = 0};
+        //     var elem = $("#"+patients[ind]+"patientCardBody #timer .mhc-healthbar");
+        //     if (elem.length != 0) {
+        //         $("#"+patients[ind]+"patientCardBody #timer .countdown_text")[0].innerHTML = countdown + " sec";
+        //         elem[0].style.width = (countdown / lv_state[patients[ind]]['original_countdown'] * 100) + "%";
+        //         if(mhc_settings['tdp'] == 'tdp_dynamic_task_allocation')
+        //          {
+        //             if ($("#"+patients[ind]+"patientCardBody input")[0].checked)
+        //                 {$("#"+patients[ind]+"patientCardBody #infoButton").hide();
+        //                 $("#"+patients[ind]+"patientCardBody .agent_triage_decision_preview").show()
 
-                        }
-                    else{
-                    $("#"+patients[ind]+"patientCardBody #infoButton").show()
-                    $("#"+patients[ind]+"patientCardBody .agent_triage_decision_preview").hide()
-                    }
-                    }
+        //                 }
+        //             else{
+        //             $("#"+patients[ind]+"patientCardBody #infoButton").show()
+        //             $("#"+patients[ind]+"patientCardBody .agent_triage_decision_preview").hide()
+        //             }
+        //             }
 
-            }
-        }
+        //     }
+        // }
 
         // remove any triaged patients that are still on screen
-        if (lv_state[patients[ind]]['triaged']){
+        if (lv_state[patients[ind]]['returned']){
             try{
             $("#" + patients[ind] + "patientCard").remove();} catch{}
             // remove item from patients_cards_open list
@@ -219,202 +218,6 @@ function extend_update(patients) {
                 return item !== patients[ind];
             })
         }
-
-        // The triage agent takes one or two ticks to generate a triage decision, so replace the triage decision preview
-        // placeholder of any uninitialized triage decision previews when the triage decision becomes available
-        if( (mhc_settings['tdp'] == 'tdp_supervised_autonomy' || mhc_settings['tdp'] == 'tdp_dynamic_task_allocation') &&
-            lv_state[patients[ind]]['agent_planned_triage_decision'] != null) {
-            var triage_preview = $("#" + patients[ind] + "_triage_preview");
-            if (triage_preview.length > 0) {
-                triage_preview[0].innerHTML = lv_state[patients[ind]]['agent_planned_triage_decision'];
-                triage_preview[0].style.display = "inline-block";
-            }
-        }
-
-        // sync the toggle with the backend
-        var assigned_to = lv_state[patients[ind]]['assigned_to'];
-        var toggle = $("#"+patients[ind]+"patientCardBody input")
-        var robot_assigned = (lv_state[patients[ind]]["assigned_to"]=='robot');
-        if (toggle.length > 0) {
-            toggle[0].checked = robot_assigned;
-            if (robot_assigned) {
-                $("#"+patients[ind]+"patientCardBody #infoButton").hide();
-                $("#"+patients[ind]+"patientCardBody #timer").show();
-                $("#"+patients[ind]+"patientCardBody .agent_triage_decision_preview").show();
-                $("#"+ patients[ind]+"patientCardBody").removeClass("patientcard-human");
-                $("#"+ patients[ind]+"patientCardBody").addClass("patientcard-robot");
-            } else {
-                $("#"+patients[ind]+"patientCardBody #infoButton").show();
-                $("#"+patients[ind]+"patientCardBody #timer").hide();
-                $("#"+patients[ind]+"patientCardBody .agent_triage_decision_preview").hide();
-                $("#"+ patients[ind]+"patientCardBody").removeClass("patientcard-robot");
-                $("#"+ patients[ind]+"patientCardBody").addClass("patientcard-human");
-            }
-        }
-
-
-        //Check if there are any recently deceased patients
-        if (lv_state[patients[ind]]["health"] < 0 && !deadPatients.includes(patients[ind])) {
-            deadPatients.push(patients[ind])
-            //if the dead patient was being triaged, close the pop up
-            if ($("#" + patients[ind] + "popUp").length>0)
-                {$("#dialog-confirm").dialog('close')}
-            data = {
-                "current_tick": current_tick,
-                "tps": tps,
-                "patient_id": patients[ind],
-                "tdp": mhc_settings['tdp'],
-                "start_timestamp": mhc_settings['start_timestamp']
-            }
-            //f=popupPatientStatus;
-            resp = post_mhc_message("updatePatient", data)
-
-        }
-        //for the patients that are still alive
-        else
-            {
-                //Check if there are any recently healed patients, add them to the correct list and close their pop up
-                //if open
-                if (lv_state[patients[ind]]["health"] >= 100 && !healedPatients.includes(patients[ind])) {
-                    healedPatients.push(patients[ind])
-                    newHealed=true;
-                    if ($("#" + patients[ind] + "popUp").length>0)
-                        {$("#dialog-confirm").dialog('close')}
-
-                    data = {
-                        "current_tick": current_tick,
-                        "tps": tps,
-                        "patient_id": patients[ind],
-                        "tdp": mhc_settings['tdp'],
-                        "start_timestamp": mhc_settings['start_timestamp']
-                    }
-                    //f=popupPatientStatus
-                    resp = post_mhc_message("updatePatient", data)
-                }
-                else
-                    {
-                    //Check if anybody has been sent home and meke the card disappear
-                    if (lv_state[patients[ind]]["is_traversable"] && lv_state[patients[ind]]["medical_care"]=="huis")
-                        {
-                            fade_out_effect($("#"+patients[ind])[0], 5);
-                        }
-                     else
-                     {
-                        $("#"+patients[ind]+"patientCardBody").find("#symptoms").find("span").text(lv_state[patients[ind]]["symptoms"])
-                        //try to get the toggle and change it if the patient had not been assigned yet, otherwise leave it to the user
-//                        try{
-//                            if($("#"+patients[ind]+"patientCardBody input")[0].getAttribute("set")!="robot"&&$("#"+patients[ind]+"patientCardBody input")[0].getAttribute("set")!='person'){
-//                                $("#"+patients[ind]+"patientCardBody input")[0].checked = (lv_state[patients[ind]]["assigned_to"]=='robot')
-//                                //only show the timer if assigned to the robot
-//                                if(! $("#"+patients[ind]+"patientCardBody input")[0].checked){
-//                                    $("#"+patientID+"patientCardBody #timer").hide();
-//                                }
-//                                else {$("#"+patientID+"patientCardBody #timer").show();
-//                                }
-//                                $("#"+patients[ind]+"patientCardBody input")[0].setAttribute("set", lv_state[patients[ind]]["assigned_to"])
-//                                }
-//                            } catch{}
-                    health=lv_state[patients[ind]]["health"]
-                    healthcircle=$("#"+patients[ind]+"patientCardBody").find("#healthCircle")
-                    //Update the cards with the correct healthcircle
-                    try{
-                        if(health<25)
-                            {
-                            healthcircle[0].style.backgroundColor = "red"
-                            }
-
-                        else
-                            {
-                            if(health<50)
-                                {healthcircle[0].style.backgroundColor = "orange"}
-
-                            else
-                                {
-                                    if(health<75)
-                                       {healthcircle[0].style.backgroundColor = "yellow"}
-                                    else
-                                    {healthcircle[0].style.backgroundColor = "green"}
-                                    }
-                                    }
-                                    }
-                            catch{}
-                            }
-
-
-
-        }
-    }
-    //Add the counters on top for the total number of available beds
-    if (TotalBeds.length == 0 && worldObjects.length > 0) {
-        TotalBeds = worldObjects.filter((object) => object.indexOf("Bed_top") >= 0);
-        for (bed in TotalBeds) {
-            if (lv_state[TotalBeds[bed]]["room"] == "eerste hulp") waitingBeds += 1;
-            if (lv_state[TotalBeds[bed]]["room"] == "IC") ICBeds += 1;
-            if (lv_state[TotalBeds[bed]]["room"] == "ziekenboeg") wardBeds += 1;
-
-        }
-        $("#waitingBeds").html(waitingBeds)
-        $("#ICBeds").html(ICBeds)
-        $("#wardBeds").html(wardBeds)
-        //setDropZones()
-    }
-    //check if the number of patients has changed - there are less patients than before, or somebody healed
-    if (oldPatients.filter(value => patients.includes(value)) != patients.length && worldObjects.length > 0 || newHealed)  {
-        missingPatients = oldPatients.filter(value => !patients.includes(value))
-        i = 0
-        newHealed=false;
-        if (missingPatients.length > 0 && i < missingPatients.length) {
-            $("#" + missingPatients[i] + "patientCard").remove()
-
-            i += 1
-        }
-        onScreenPatients = onScreenPatients.filter(value => value != missingPatients[0])
-        waiting = 0
-        ward = 0;
-        ic = 0;
-        //change the values of the counters/ make sure that only the relevant buttons are being shown in the pop ups
-        for (var ind in patients) {
-            if (lv_state[patients[ind]]["medical_care"] == "eerste hulp") waiting += 1
-            if (lv_state[patients[ind]]["medical_care"] == "ziekenboeg") ward += 1
-            if (lv_state[patients[ind]]["medical_care"] == "IC") ic += 1
-        }
-        //$("#myHome").html(home)
-        $("#myWard").html(ward)
-        if (ward == wardBeds) {
-            wardFull = true
-        } else {
-            wardFull = false
-            if (!blockedButtons) {
-                $("#send_to_ward").show()
-            }
-        }
-        $("#myIC").html(ic)
-        if (ic == ICBeds) {
-            ICFull = true
-        } else {
-            ICFull = false
-            if (!blockedButtons) {
-                $("#send_to_IC").show()
-            }
-        }
-        $("#waitingStatus").html(waiting)
-        $("#wardStatus").html(ward)
-        $("#ICStatus").html(ic)
-
-        //make the top flicker for dead of healed
-        var current_patients_cured = parseInt($("#cured").html());
-        if (healedPatients.length > current_patients_cured) {
-            fade_out_background($("#cured")[0].parentElement, 200, 0, 255, 0, 0.9);
-            fade_out_background($(".infoBar")[0], 200, 0, 255, 0, 0.9);
-        }
-        $("#cured").html(healedPatients.length)
-
-        var current_patients_died = parseInt($("#dead").html());
-        if (deadPatients.length > current_patients_died) {
-            fade_out_background($("#dead")[0].parentElement, 200, 255, 0, 0, 0.9);
-            fade_out_background($(".infoBar")[0], 200, 255, 0, 0, 0.9);
-        }
-        $("#dead").html(deadPatients.length)
 
     }
     //Check if a new patient has been added and add the patient card
@@ -492,8 +295,6 @@ function extend_update(patients) {
         oldPatients = patients;
 
     }
-    };
-
 }
 
 
@@ -1666,7 +1467,7 @@ function gen_patient_status_popUp(patientID, result, time, choice) {
  * Return a patient card filled with the data of the patient
  */
 function gen_patient_card_complete(patient_data) {
-    patientPhoto = '/fetch_external_media/' + patient_data["patient_photo"]
+    patientPhoto = '/fetch_external_media/' + patient_data["victim_photo"]
     //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
 
     patient_card_html = `
@@ -1678,49 +1479,12 @@ function gen_patient_card_complete(patient_data) {
             <div class="col-6">
                 <div class="patient_name_wrapper">
                     <div class="patient_number">Patient ${patient_data['number']}</div>
-                    <h2 class="patient_name">${patient_data['patient_name']}</h2>
+                    <h2 class="patient_name">${patient_data['victim_name']}</h2>
                  </div>
-                 <div class="mhc-healthcircle-border-patientCard"><div class="mhc-healthcircle-patientCard" id="healthCircle" style="background-color: orange;"></div>
         </div>
             </div>
-         <div class="col-3 ">
             `
-
-    //add the toggle
-    if((mhc_settings['tdp'] == 'tdp_dynamic_task_allocation') && patient_data['countdown'] > 0) {
-        patient_card_html += `
-
-            <div class="patient_property col-12" id="toggle">
-                <img src="/fetch_external_media/person.png" class="toggle-image">
-                <label class="switch">
-                    <input type="checkbox"  onclick=popupPatientDynamicTaskAllocation("${patient_data.obj_id}") set="None" checked>
-                    <span class="slider round"></span>
-                </label>
-                <img src="/fetch_external_media/robot.svg" class="toggle-image">
-            </div>
-            <!-- spacer to make room for the toggle -->
-            <div class="col-12" style="height:10px;"></div>
-            `;
-    }
-    // add the countdown for agent triage
-    if((mhc_settings['tdp'] == 'tdp_supervised_autonomy' || mhc_settings['tdp'] == 'tdp_dynamic_task_allocation') && patient_data['countdown'] > 0){
-        patient_card_html +=
-        `<div class="patient_property col-12" id="timer">
-            <div class="mhc-healthbar-border">
-                <div class="mhc-healthbar" style="width: 100%;"> </div>
-            </div>
-            <span class="countdown_text"></span>
-         </div>`;
-     }
-
     patient_card_html += `
-
-                <button class="btn btn-info collapsed" type="button"
-                        data-target="#collapse_${patient_data.obj_id}" aria-expanded="false"
-                        onclick=popupPatient("${patient_data.obj_id}"); aria-controls="collapse_${patient_data.obj_id}"
-                        id="infoButton">Trieer</button></div>
-        </div>
-
         <div class="patient_card_inner_divider"><hr></div>
 
         <div class="collapse patient_extra_info_collapse" id="collapse_${patient_data.obj_id}">
@@ -1731,22 +1495,13 @@ function gen_patient_card_complete(patient_data) {
 
         <div class="patient_properties container">
             <div class="row">
-                <div class="patient_property col-6" id="gender"><img src="/fetch_external_media/gender.svg" title="Geslacht"> <span>${patient_data["gender"]}</span></div>
-                <div class="patient_property col-6" id="symptoms"><img src="/fetch_external_media/symptoms.svg" title="Symptomen" ><span>${patient_data["symptoms"]}</span></div>
-                <div class="patient_property col-6" id="age"><img src="/fetch_external_media/calendar.svg" title="Leeftijd" ><span>${patient_data["age"]}</span></div>
-                <div class="patient_property col-6" id="fitness"><img src="/fetch_external_media/fitness2.png" title="Fitness" ><span>${patient_data["fitness"]}</span></div>
-                <div class="patient_property col-12" id="home_situation"><img src="/fetch_external_media/home_situation.svg" title="Buurgerlijke staat" ><span>${patient_data["home_situation"]}</span></div>
-                <div class="patient_property col-12" id="profession"><img src="/fetch_external_media/work.svg" title="Beroep" ><span>${patient_data["profession"]}</span></div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["distance"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty"]}</div>
+            <div class="patient_property col-12"><img src="/fetch_external_media/vitalsign.svg" title="vital sign">${patient_data["vital_sign"]}</div>
             </div>
         </div>`;
-
-
-    // For the supervised autonomy and dynamic allocation
-    // TODO: also add for TDP 2 for patients assigned to agent
-    if (mhc_settings['tdp'] == 'tdp_supervised_autonomy' || mhc_settings['tdp'] == 'tdp_dynamic_task_allocation') {
-//        console.log(patient_data)
-        patient_card_html += `<div class="agent_triage_decision_preview"><div class="agent_decision_preview_text">Naar: <span id="${patient_data['obj_id']}_triage_preview">${patient_data['agent_planned_triage_decision']}</span></div><img src="/fetch_external_media/robot_decision_preview.png"</div>`;
-    }
 
     patient_card_html += `</div>`;
     return patient_card_html;

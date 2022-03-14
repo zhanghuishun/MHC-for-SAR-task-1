@@ -92,7 +92,7 @@ class SearchTeam(AgentBrain):
 
         # get the data of this victim
         victim_number = self.spawned_victims + len(self.victim_spawn_queue)
-
+        self.generated_victims += 1
         victim_data = self.victim_data.iloc[victim_number]
         # set a default victim image
         img = "victim_unknown.png" #if 'image' not in victim_data or victim_data['image'] == '' else \
@@ -121,7 +121,7 @@ class SearchTeam(AgentBrain):
                      "is_traversable": True,
                      "img_name": img,
                      "customizable_properties": [
-                                                 "is_traversable", "rescued", "img_name", "victim_photo",
+                                                 "is_traversable", "rescued", "img_name", "victim_photo"
                                                  ],
 
                      # victim data
