@@ -16,11 +16,12 @@ class RescueAgent(AgentBrain):
         self.target_location = None
         self.rescue_sign = False
         self.entrance_loc = (config["entrance"]["column"], config["entrance"]["row"])
-
+        self.victim_loaded = None
     def filter_observations(self, state):
         # process messages
         for message in self.received_messages.copy(): #message is a str
-            if message == "robot_rescue_victim":
+            if message.content == "robot_rescue_victim":
+                self.victim_loaded = message.from_id
                 self.rescue_sign = True
                 self.received_messages.remove(message)
         
@@ -42,12 +43,13 @@ class RescueAgent(AgentBrain):
     
     def decide_on_action(self, state):
         action = None
+        action_kwargs = {}
+
         if self.state_tracker is None:
             # Initialize this agent's state tracker and navigator, has to be done here and not in the initialize
             # function, as that doesn'twork for agents created during the experiment.
             self.state_tracker = StateTracker(agent_id=self.agent_id)
             self.navigator = Navigator(self.agent_id, self.action_set, Navigator.A_STAR_ALGORITHM)
-
         # for navigator update state tracker
         self.state_tracker.update(state)
 
@@ -74,19 +76,27 @@ class RescueAgent(AgentBrain):
             self.navigator.add_waypoint(victim_location)
             if not self.navigator.is_done and len(self.navigator.get_all_waypoints()) > 0:
                 action = self.navigator.get_move_action(self.state_tracker)
+        
+
         if self.rescue_sign == True:
+            action_kwargs['victim_loaded_id'] = self.victim_loaded
             action = Rescue.__name__
             self.rescue_sign = False
+
+        
         # Return back to the entrance
-        if state[self.agent_id]["loaded"] == True:
+        if state[self.agent_id]["victim_loaded_id"] is not None:
             assert isinstance(self.entrance_loc, tuple)
             self.navigator.reset_full()
             self.navigator.add_waypoint(self.entrance_loc)
             if not self.navigator.is_done and len(self.navigator.get_all_waypoints()) > 0:
                 action = self.navigator.get_move_action(self.state_tracker)
+
+        
         # already back to the entrance and standby again
-        if state[self.agent_id]["location"] == self.entrance_loc and state[self.agent_id]["loaded"] == True:
+        if state[self.agent_id]["location"] == self.entrance_loc and state[self.agent_id]["victim_loaded_id"] is not None:
+            action_kwargs['victim_loaded_id'] = self.victim_loaded
             action = UnloadVictim.__name__
 
         # move back (how to move with victim?)
-        return action, {}
+        return action, action_kwargs
