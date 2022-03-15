@@ -95,8 +95,8 @@ class SearchTeam(AgentBrain):
         self.generated_victims += 1
         victim_data = self.victim_data.iloc[victim_number]
         # set a default victim image
-        img = "victim_unknown.png" #if 'image' not in victim_data or victim_data['image'] == '' else \
-            #victim_data['image']
+        img = "victims/victim_unknown.png" if 'image' not in victim_data or victim_data['image'] == '' else \
+            victim_data['image']
         data = {"very_high":"older preferred","high":"male preferred","middle":"high vital sign","low":"difficulty","very_low":"distance"}
         model = RescueModel(data)
         #victim_rescue_score = RescueModel.init_rescue_score(victim_data['gender'], int(victim_data['age']), victim_data['distance'], victim_data['difficulty'], victim_data['vital_sign'])

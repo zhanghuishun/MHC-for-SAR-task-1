@@ -53,7 +53,7 @@ class RescueAgent(AgentBrain):
         # for navigator update state tracker
         self.state_tracker.update(state)
 
-        if state['World']['nr_ticks'] >= self.ready_time_ticks and state[self.agent_id]["loaded"] == False and len(self.all_victims_id) > 0:
+        if state['World']['nr_ticks'] >= self.ready_time_ticks and state[self.agent_id]["victim_loaded_id"] == None and len(self.all_victims_id) > 0:
             # select the most priority victim by calculating rescue score
             most_priority_victim_id =self.all_victims_id[0]
             highest_rescue_score = -1
