@@ -25,157 +25,157 @@ $(document).ready(function() {
 //    patientCardUtilities()
 })
 
-function patientCardUtilities() {
-    $("#patient-cards").sortable({
-        placeholder: "patientcard-placeholder",
-        cursor: "move",
-        revert: true,
-        // started sorting, block revert
-        start: function(event, ui) {
-            //            console.log("start sort:, adding block-revert");
-            ui.item.addClass("block-revert");
-            var patient_id = ui.item.attr("data-agentID");
-            data = {
-                "current_tick": current_tick,
-                "tps": tps,
-                "agentID": patient_id,
-                "tdp": mhc_settings['tdp'],
-                "start_timestamp": mhc_settings['start_timestamp']
-            }
-            setTimeout(function() {
-                post_mhc_message("pickupPatient", data);
-            }, 30);
+// function patientCardUtilities() {
+//     $("#patient-cards").sortable({
+//         placeholder: "patientcard-placeholder",
+//         cursor: "move",
+//         revert: true,
+//         // started sorting, block revert
+//         start: function(event, ui) {
+//             //            console.log("start sort:, adding block-revert");
+//             ui.item.addClass("block-revert");
+//             var patient_id = ui.item.attr("data-agentID");
+//             data = {
+//                 "current_tick": current_tick,
+//                 "tps": tps,
+//                 "agentID": patient_id,
+//                 "tdp": mhc_settings['tdp'],
+//                 "start_timestamp": mhc_settings['start_timestamp']
+//             }
+//             setTimeout(function() {
+//                 post_mhc_message("pickupPatient", data);
+//             }, 30);
 
-        },
-        // moved out, activate revert
-        out: function(event, ui) {
-            //            console.log("out:, removing block-revert");
-            ui.item.removeClass("block-revert");
-        },
-        // moved into sorting list, block double revert
-        over: function(event, ui) {
-            //            console.log("in:, adding block-revert");
-            ui.item.addClass("block-revert");
-        }
-    });
+//         },
+//         // moved out, activate revert
+//         out: function(event, ui) {
+//             //            console.log("out:, removing block-revert");
+//             ui.item.removeClass("block-revert");
+//         },
+//         // moved into sorting list, block double revert
+//         over: function(event, ui) {
+//             //            console.log("in:, adding block-revert");
+//             ui.item.addClass("block-revert");
+//         }
+//     });
 
-    // we also want to drag patient cards to drop zones
-    $(".patientcard").draggable({
-        connectToSortable: "#patient-cards",
-        revert: function() {
-            console.log("checking revert");
-            // send a message to the MHC visualizer to make a screenshot
+//     // we also want to drag patient cards to drop zones
+//     $(".patientcard").draggable({
+//         connectToSortable: "#patient-cards",
+//         revert: function() {
+//             console.log("checking revert");
+//             // send a message to the MHC visualizer to make a screenshot
 
-            // prevent double revert animation when moving within sorting
-            if ($(this).hasClass('block-revert')) {
-                console.log("revert blocked")
-                $(this).removeClass('block-revert');
-                var patient_id = this.attr("data-agentID");
-                data = {
-                    "agentID": patient_id,
-                    "tdp": mhc_settings['tdp'],
-                    "start_timestamp": mhc_settings['start_timestamp']
-                }
-                // not used anymore
-                post_mhc_message("returnPatient", data);
-                return false;
-            }
+//             // prevent double revert animation when moving within sorting
+//             if ($(this).hasClass('block-revert')) {
+//                 console.log("revert blocked")
+//                 $(this).removeClass('block-revert');
+//                 var patient_id = this.attr("data-agentID");
+//                 data = {
+//                     "agentID": patient_id,
+//                     "tdp": mhc_settings['tdp'],
+//                     "start_timestamp": mhc_settings['start_timestamp']
+//                 }
+//                 // not used anymore
+//                 post_mhc_message("returnPatient", data);
+//                 return false;
+//             }
 
-            // revert to the original position
-            if ($(this).hasClass('drag-revert') && !leftButtonDown) {
-                console.log("reverting");
-                var patient_id = this.attr("data-agentID");
-                data = {
-                    "agentID": patient_id,
-                    "tdp": mhc_settings['tdp'],
-                    "start_timestamp": mhc_settings['start_timestamp']
-                }
-                // not used anymore
-                post_mhc_message("returnPatient", data);
-                return true;
-            }
-        },
-        scroll: false,
-        scrollSensitivity: 400
-    });
+//             // revert to the original position
+//             if ($(this).hasClass('drag-revert') && !leftButtonDown) {
+//                 console.log("reverting");
+//                 var patient_id = this.attr("data-agentID");
+//                 data = {
+//                     "agentID": patient_id,
+//                     "tdp": mhc_settings['tdp'],
+//                     "start_timestamp": mhc_settings['start_timestamp']
+//                 }
+//                 // not used anymore
+//                 post_mhc_message("returnPatient", data);
+//                 return true;
+//             }
+//         },
+//         scroll: false,
+//         scrollSensitivity: 400
+//     });
 
-    // keep track of the left mouse button state
-    var leftButtonDown;
-    $(document).mousedown(function(e) {
-        if (e.which === 1) leftButtonDown = true;
-    });
-    $(document).mouseup(function(e) {
-        if (e.which === 1) leftButtonDown = false;
-    });
+//     // keep track of the left mouse button state
+//     var leftButtonDown;
+//     $(document).mousedown(function(e) {
+//         if (e.which === 1) leftButtonDown = true;
+//     });
+//     $(document).mouseup(function(e) {
+//         if (e.which === 1) leftButtonDown = false;
+//     });
 
-    // specify drop zones for the patient cards
-    $(".droppable").droppable({
-        tolerance: "pointer",
-        drop: function(event, ui) {
-            // make sure the user intended to drop it here
-            if (leftButtonDown) return false;
+//     // specify drop zones for the patient cards
+//     $(".droppable").droppable({
+//         tolerance: "pointer",
+//         drop: function(event, ui) {
+//             // make sure the user intended to drop it here
+//             if (leftButtonDown) return false;
 
-            // get the patient and target location
-            var patient = ui.draggable.find('.patient_name').text();
-            var patient_id = ui.draggable.attr("data-agentID");
-            var target = $(this).attr("data-destination");
-            if ((target == "IC" && !ICFull) || (target == "ziekenboeg" && !wardFull))
-                if (confirm('Weet je zeker dat je ' + patient + ' naar ' + target + ' wilt sturen?')) {
-                    // do stuff with our patient, e.g. send the input to MATRX
-                    console.log("User wants to send", ui.draggable.find('.patient_name').text(), ' with ID ' + patient_id + " to ", target)
+//             // get the patient and target location
+//             var patient = ui.draggable.find('.patient_name').text();
+//             var patient_id = ui.draggable.attr("data-agentID");
+//             var target = $(this).attr("data-destination");
+//             if ((target == "IC" && !ICFull) || (target == "ziekenboeg" && !wardFull))
+//                 if (confirm('Weet je zeker dat je ' + patient + ' naar ' + target + ' wilt sturen?')) {
+//                     // do stuff with our patient, e.g. send the input to MATRX
+//                     console.log("User wants to send", ui.draggable.find('.patient_name').text(), ' with ID ' + patient_id + " to ", target)
 
-                    // stop reverting
-                    ui.draggable.removeClass('drag-revert');
+//                     // stop reverting
+//                     ui.draggable.removeClass('drag-revert');
 
-                    // remove the patient card
-                    ui.draggable.fadeOut(300, function() {
-                        $(this).remove();
-                    });
-                    sendPatientToDestination(target, lv_agent_id, patient_id)
+//                     // remove the patient card
+//                     ui.draggable.fadeOut(300, function() {
+//                         $(this).remove();
+//                     });
+//                     sendPatientToDestination(target, lv_agent_id, patient_id)
 
-                }
-        }
-    });
-}
+//                 }
+//         }
+//     });
+// }
 
 
 
-function sendPatientToDestination(target, lv_agent_id, patient_id) {
-    // send a message to MATRX with the results of the triage decision
-    type = "send_message"
-    data = {
-        "content": {
-            "type": "triage_decision",
-            "decision": target,
-            "triaged_by": "human"
-        },
-        "sender": lv_agent_id,
-        "receiver": patient_id
-    }
-    send_matrx_message(type, data);
-}
+// function sendPatientToDestination(target, lv_agent_id, patient_id) {
+//     // send a message to MATRX with the results of the triage decision
+//     type = "send_message"
+//     data = {
+//         "content": {
+//             "type": "triage_decision",
+//             "decision": target,
+//             "triaged_by": "human"
+//         },
+//         "sender": lv_agent_id,
+//         "receiver": patient_id
+//     }
+//     send_matrx_message(type, data);
+// }
 
-function reassignPatient(target, lv_agent_id,patient_id){
-    type = "send_message"
-    data = {
-        "content": {
-            "type": "reassign",
-            "assigned_to": target
-        },
-        "sender": lv_agent_id,
-        "receiver": patient_id
-    }
-    send_matrx_message(type, data);
-    }
+// function reassignPatient(target, lv_agent_id,patient_id){
+//     type = "send_message"
+//     data = {
+//         "content": {
+//             "type": "reassign",
+//             "assigned_to": target
+//         },
+//         "sender": lv_agent_id,
+//         "receiver": patient_id
+//     }
+//     send_matrx_message(type, data);
+//     }
 
-function setDropZones() {
-    $("#home_dropzone").css('left', $("#home_sign_219").position().left - 50);
-    $("#home_dropzone").css('top', $("#home_sign_219").position().top);
-    $("#ward_dropzone").css('left', $("#ward_sign_217").position().left - 40);
-    $("#ward_dropzone").css('top', $("#ward_sign_217").position().top);
-    $("#IC_dropzone").css('left', $("#IC_sign_218").position().left - 50);
-    $("#IC_dropzone").css('top', $("#IC_sign_218").position().top);
-}
+// function setDropZones() {
+//     $("#home_dropzone").css('left', $("#home_sign_219").position().left - 50);
+//     $("#home_dropzone").css('top', $("#home_sign_219").position().top);
+//     $("#ward_dropzone").css('left', $("#ward_sign_217").position().left - 40);
+//     $("#ward_dropzone").css('top', $("#ward_sign_217").position().top);
+//     $("#IC_dropzone").css('left', $("#IC_sign_218").position().left - 50);
+//     $("#IC_dropzone").css('top', $("#IC_sign_218").position().top);
+// }
 
 
 /*
@@ -208,17 +208,7 @@ function extend_update(patients) {
 
         //     }
         // }
-
         // remove any triaged patients that are still on screen
-        if (lv_state[patients[ind]]['returned']){
-            try{
-            $("#" + patients[ind] + "patientCard").remove();} catch{}
-            // remove item from patients_cards_open list
-            patient_cards_open = patient_cards_open.filter(function(item) {
-                return item !== patients[ind];
-            })
-        }
-
     }
     //Check if a new patient has been added and add the patient card
     if (patients.filter(value => oldPatients.includes(value)) != patients.length && worldObjects.length > 0 && patients.length > 0) {
@@ -240,7 +230,7 @@ function extend_update(patients) {
                 opacity = 0.9
                 // newBody.css('background-color', 'rgba(0, 0, 255, 0.9)');
                 fade_out_background(newBody[0].parentElement, 100, 236, 236, 138, opacity);
-                patientCardUtilities()
+                //patientCardUtilities()
                 open = false;
                 //Show the info next to the patient if they have left the waiting room
                 $("#" + patientID).hover(function() {
@@ -256,41 +246,41 @@ function extend_update(patients) {
                 )
                 onScreenPatients.push(patientID)
             }
-            waiting = 0;
-            ward = 0;
-            ic = 0;
-            //show the correct info in the counters + pop up buttons
-            for (var ind in patients) {
-                if (lv_state[patients[ind]]["medical_care"] == "eerste hulp") waiting += 1
-                if (lv_state[patients[ind]]["medical_care"] == "ziekenboeg") ward += 1
-                if (lv_state[patients[ind]]["medical_care"] == "IC") ic += 1
-            }
-            $("#myWard").html(ward)
-            $("#myIC").html(ic)
-            if (ward == wardBeds) {
-                wardFull = true
-            } else {
-                wardFull = false
-                if (!blockedButtons) {
-                    $("#send_to_ward").removeClass("not-visible")
-                    $("#send_to_ward").addClass("visible")
-                }
-            }
-            $("#myIC").html(ic)
-            if (ic == ICBeds) {
-                ICFull = true
-            } else {
-                ICFull = false
-                if (!blockedButtons) {
-                    $("#send_to_IC").removeClass("not-visible")
-                    $("#send_to_IC").addClass("visible")
-                }
-            }
-            $("#waitingStatus").html(waiting)
-            $("#wardStatus").html(ward)
-            $("#ICStatus").html(ic)
-            $("#cured").html(healedPatients.length)
-            $("#dead").html(deadPatients.length)
+            // waiting = 0;
+            // ward = 0;
+            // ic = 0;
+            // //show the correct info in the counters + pop up buttons
+            // for (var ind in patients) {
+            //     if (lv_state[patients[ind]]["medical_care"] == "eerste hulp") waiting += 1
+            //     if (lv_state[patients[ind]]["medical_care"] == "ziekenboeg") ward += 1
+            //     if (lv_state[patients[ind]]["medical_care"] == "IC") ic += 1
+            // }
+            // $("#myWard").html(ward)
+            // $("#myIC").html(ic)
+            // if (ward == wardBeds) {
+            //     wardFull = true
+            // } else {
+            //     wardFull = false
+            //     if (!blockedButtons) {
+            //         $("#send_to_ward").removeClass("not-visible")
+            //         $("#send_to_ward").addClass("visible")
+            //     }
+            // }
+            // $("#myIC").html(ic)
+            // if (ic == ICBeds) {
+            //     ICFull = true
+            // } else {
+            //     ICFull = false
+            //     if (!blockedButtons) {
+            //         $("#send_to_IC").removeClass("not-visible")
+            //         $("#send_to_IC").addClass("visible")
+            //     }
+            // }
+            // $("#waitingStatus").html(waiting)
+            // $("#wardStatus").html(ward)
+            // $("#ICStatus").html(ic)
+            // $("#cured").html(healedPatients.length)
+            // $("#dead").html(deadPatients.length)
         }
         oldPatients = patients;
 

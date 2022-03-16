@@ -70,7 +70,6 @@ patient_keys = [];
  * @param new_tick: whether this is the first draw after a new tick/update
  */
 function draw(state, world_settings, new_messages, accessible_chatrooms, new_tick) {
-    console.log(state)
     // whether to (re)populate the dropdown menu with links to all agents
     populate_god_agent_menu = false;
     pop_new_chat_dropdown = false
@@ -251,6 +250,8 @@ function draw(state, world_settings, new_messages, accessible_chatrooms, new_tic
     saved_prev_obj_keys.forEach(function(objID) {
         console.log("Removing element:", objID);
         remove_element(objID);
+        try{
+            $("#" + objID + "patientCard").remove();} catch(error){console.log(error);}
     });
 
     // (re)populate the dropdown menu with links to all agents
@@ -269,7 +270,6 @@ function draw(state, world_settings, new_messages, accessible_chatrooms, new_tic
     // MHC edit
     if (lv_agent_type == "human-agent") {
         // fix everything for the popups etc
-        console.log("step into mhc.js");
         extend_update(patient_keys);
 
         // update the timer
