@@ -841,10 +841,9 @@ function post_mhc_message(type, data, f) {
         dataType: 'json',
         data: JSON.stringify(data),
         success: function(response) {
-
-            //            if (f != 'undefined') {
-            //                f(response)
-            //            }
+                       if (f != 'undefined') {
+                           f(response)
+                       }
 
         }
     });

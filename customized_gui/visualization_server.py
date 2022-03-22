@@ -324,13 +324,13 @@ def external_media(filename):
     """
     return send_from_directory(ext_media_folder, filename, as_attachment=True)
 
-@app.route('/moralvalue', methods=['POST'])
-def moralvalue():
+@app.route('/set_moral_value', methods=['POST'])
+def set_moral_value():
     data = request.json
     #pass moral values to RescueModel singleton
     RescueModel(data)
 
-    r = "save moral value"
+    r = RescueModel.get_prior_victim()
     response = app.response_class(
         response=json.dumps(r),
         status=200,

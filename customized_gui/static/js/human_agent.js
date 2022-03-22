@@ -49,7 +49,9 @@ function submitMoralValue() {
         moral_dict['very_low'] = list[4].innerText;  
         var json_data = JSON.stringify(moral_dict);
         //mhc.js
-        post_mhc_message("moralvalue", json_data);
+        post_mhc_message("set_moral_value", json_data, function(result){
+            localStorage.setItem("prior_victim", JSON.stringify(result));
+        });
     }
 }
 
@@ -65,12 +67,16 @@ function close(){
 
 //change statement
 function changeStatement() {
+    prior_victim = JSON.parse(localStorage.getItem("prior_victim"));
     var statement = document.getElementById("statement");
     var expl_type = localStorage.getItem("expl_type");
     console.log(expl_type);
     if (expl_type == "consequential"){
-        statement.innerHTML = "consequential";
-
+        if(prior_victim == "equal"){
+            statement.innerHTML = "Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue victimA";
+        }else{
+            statement.innerHTML = "Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue " + prior_victim + ".";
+        }
     }
     if (expl_type == "combination"){
         statement.innerHTML = "combination";

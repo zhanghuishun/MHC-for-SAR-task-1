@@ -16,6 +16,19 @@ class RescueModel(metaclass=Singleton):
         assert type(moralValues) == str
         cls.moralValues = ast.literal_eval(moralValues)
     @classmethod
+    def get_prior_victim(cls):
+        if(len(cls.moralValues) < 5):
+            raise RuntimeError("moral value error")
+        else:
+            victimA_score = cls.init_rescue_score("female", 65, "short", "hard", "middle")
+            victimB_score = cls.init_rescue_score("male", 44, "middle", "easy", "low")
+            if victimA_score > victimB_score:
+                return "victimA"
+            elif victimA_score < victimB_score:
+                return "victimB"
+            else:
+                return "equal"
+    @classmethod
     #score range from -1 to 1
     def init_rescue_score(cls, gender, age, distance, difficulty, vital_sign):
         #percent from high to low: 30 25 20 15 10
