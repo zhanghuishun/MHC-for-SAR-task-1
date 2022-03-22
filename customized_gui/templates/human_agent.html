@@ -61,7 +61,7 @@
     <div class="content-row bg-light infoBar">
         <button class="btn btn-dark" id="moral_value_button" onclick="moralvalueToggle()" data-toggle="collapse"
         data-target="#sideBar" aria-expanded="false" aria-controls="sideBar">Moral Value</button>
-        <button class="btn btn-dark" id="explanation_button" onclick="show()">Explanation</button>
+        <button class="btn btn-dark" id="explanation_button" onclick="show(); changeStatement()">Explanation</button>
         <div class="p3 clearfix bg-cyan white col-12 sidebarClass collapse" id="sideBar">
 			<div class="col 6">
 				<h2 class="h4 mt1">Drag the moral value to the blank below and rank by the priority from high to low</h2>
@@ -98,7 +98,7 @@
                   <img src="/static/images/victimB.png">
                   <a class="close" href="javascript:close();">&times;</a>
               </div>
-              <div class="statement">
+              <div class="statement" id="statement">
                   default
               </div>
             </div>

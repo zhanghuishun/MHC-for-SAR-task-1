@@ -1,3 +1,4 @@
+import ast
 class Singleton(type):
     _instances = {}
     def __call__(cls, *args, **kwargs):
@@ -12,13 +13,20 @@ class RescueModel(metaclass=Singleton):
     moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high vital sign": "vital_sign", "low vital sign": "vital_sign", "difficulty": "difficulty", "distance": "distance"}
     @classmethod
     def __init__(cls, moralValues):
-        cls.moralValues = moralValues
+        assert type(moralValues) == str
+        cls.moralValues = ast.literal_eval(moralValues)
     @classmethod
+    #score range from -1 to 1
     def init_rescue_score(cls, gender, age, distance, difficulty, vital_sign):
         #percent from high to low: 30 25 20 15 10
         percent = 0.35
         score = 0
-        for moral_value in cls.moralValues.values():
+
+        assert type(cls.moralValues) == dict
+        if(len(cls.moralValues) < 5):
+                raise RuntimeError("moral value error")
+    
+        for moral_value in cls.moralValues.values():            
             percent -= 0.05
             category = cls.moral_category_dict[moral_value]
             if category == "age":

@@ -58,7 +58,12 @@
             <div id="grid"></div>
 
         </div>
-
+        <select id="explanation-select">
+            <option value="consequential" selected>consequential</option>
+            <option value="combination">combination</option>
+            <option value="without">without</option>
+        </select>
+        <button onclick="storeExplType()">store</button>
         <!-- Chat -->
         <div class="collapse" id="chat">
             <div class="container-fluid">
@@ -105,6 +110,7 @@
     <!--    <script src="/dist/zoom-pan-master/public/bundle.min.js"></script>-->
     <script type="text/javascript" src="/static/js/gen_grid.js"></script>
     <script type="text/javascript" src="/static/js/loop.js"></script>
+    <script type="text/javascript" src="/static/js/god.js"></script>
 </body>
 <div class="dialogs" style="display:none;">
     <div id="dialog-confirm"  title="Nieuwe patiënt" >
