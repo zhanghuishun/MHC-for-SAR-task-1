@@ -1,0 +1,46 @@
+.dialog {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+}
+
+.content {
+	width: 650px;
+	height: 600px;
+	margin: 100px auto;
+	background-color: #fefefe;
+	border-radius: 10px;
+	box-shadow: 0 0 5px 5px darkgray;
+}
+.picture{
+	width: 650px;
+	height: 300px;
+	text-align: center;
+    display: inline;
+}
+.picture img {
+    width: 300px;
+    height: 300px;
+}
+.statement{
+	width: 650px;
+	height: 300px;
+	font-size: 20px;
+	margin-top: 10px;
+	text-align: center;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	margin-right: 15px;
+	font-size: 40px;
+	font-weight: bold;
+	text-decoration: none;
+}

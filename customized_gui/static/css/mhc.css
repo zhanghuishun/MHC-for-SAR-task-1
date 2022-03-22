@@ -578,6 +578,6 @@ input:checked + .slider:before {
     position: fixed;
     right: -60%;
     width: 40%;
-    z-index: 9999;
+    z-index: 500;
     transition: width 1s;
 }

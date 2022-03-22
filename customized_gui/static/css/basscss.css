@@ -148,7 +148,10 @@ p, dl, ol, ul {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-
+li {
+  float: left;
+  position: relative; z-index: 10; width: 320px;
+}
 pre, code, samp {
   font-family: 'Source Code Pro', Consolas, monospace;
   font-size: inherit;
@@ -161,8 +164,8 @@ pre {
 }
 
 hr {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 3px;
+  margin-bottom: 3px;
 }
 
 blockquote {
@@ -188,6 +191,7 @@ h6, .h6 { font-size: .75rem }
 .list-reset {
   list-style: none;
   padding-left: 0;
+  width: 400px;
 }
 
 .inline       { display: inline }

@@ -23,7 +23,6 @@ class Victim(AgentBrain):
     
     def decide_on_action(self, state):
         action = None
-        robot_loc = state[{"name" : "rescue robot"}]["location"]
         if self.state_tracker is None:
             # Initialize this agent's state tracker and navigator, has to be done here and not in the initialize
             # function, as that doesn'twork for agents created during the experiment.

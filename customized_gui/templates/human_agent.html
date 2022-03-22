@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="/static/dist/fontawesome-free-5.12.0-web/css/all.css">
 
     <link rel="stylesheet" href="/static/css/basscss.css">
+    <link rel="stylesheet" href="/static/css/dialog.css">
     <title>{{ id }} view</title>
 </head>
 
@@ -60,6 +61,7 @@
     <div class="content-row bg-light infoBar">
         <button class="btn btn-dark" id="moral_value_button" onclick="moralvalueToggle()" data-toggle="collapse"
         data-target="#sideBar" aria-expanded="false" aria-controls="sideBar">Moral Value</button>
+        <button class="btn btn-dark" id="explanation_button" onclick="show()">Explanation</button>
         <div class="p3 clearfix bg-cyan white col-12 sidebarClass collapse" id="sideBar">
 			<div class="col 6">
 				<h2 class="h4 mt1">Drag the moral value to the blank below and rank by the priority from high to low</h2>
@@ -71,29 +73,37 @@
                 </form>
 			</div>
 			<div class="col"> <!-- col-6 -->
-				<ul class="ml4 js-sortable-copy sortable list flex flex-column list-reset">
-					<li class="p1 mb1 white bg-orange" style="position: relative; z-index: 10">older preferred</li>
+				<ul class="ml4 js-sortable-copy sortable list flex flex-column list-reset" style="display:table; text-align: center">
+                    <li class="p1 mb1 white bg-orange">older preferred</li>
 					<li>or</li>
-					<li class="p1 mb1 white bg-orange" style="position: relative; z-index: 10">younger preferred</li>
-
-					<li class="p1 mb1 white bg-orange" style="position: relative; z-index: 10">male preferred</li>
+					<li class="p1 mb1 white bg-orange" >younger preferred</li>
+					<li class="p1 mb1 white bg-orange">male preferred</li>
 					<li>or</li>
-					<li class="p1 mb1 white bg-orange" style="position: relative; z-index: 10">female preferred</li>
-					
-					<li class="p1 mb1 white bg-orange" style="position: relative; z-index: 10">high vital sign</li>
+					<li class="p1 mb1 white bg-orange">female preferred</li>
+					<li class="p1 mb1 white bg-orange">high vital sign</li>
                     <li>or</li>
-					<li class="p1 mb1 white bg-orange" style="position: relative; z-index: 10">low vital sign</li>
-
-					<li class="p1 mb1 white bg-orange" style="position: relative; z-index: 10">difficulty</li>
-					<li class="p1 mb1 white bg-orange" style="position: relative; z-index: 10">distance</li>
+					<li class="p1 mb1 white bg-orange">low vital sign</li>
+					<li class="p1 mb1 white bg-orange">difficulty</li>
+					<li class="p1 mb1 white bg-orange">distance</li>
 				</ul>
 			</div>
 		</div>
     </div>
-
     <div class="row content-row">
 
-
+        <div class="dialog">
+            <div class="content">
+              <div class="picture">
+                  <img src="/static/images/victimA.png">
+                  <img src="/static/images/victimB.png">
+                  <a class="close" href="javascript:close();">&times;</a>
+              </div>
+              <div class="statement">
+                  default
+              </div>
+            </div>
+          
+          </div>
         <div id="patient-cards"></div>
 
         <!-- Grid -->
