@@ -62,7 +62,7 @@ class RescueAgent(AgentBrain):
                     temp_score = self.victim_rescue_score[victim_id]
                 else:
                     temp_victim = state[victim_id]
-                    temp_score = RescueModel.init_rescue_score(temp_victim["gender"],temp_victim["age"],
+                    temp_score = RescueModel.get_rescue_score(list(RescueModel.moralValues.values()), temp_victim["gender"],temp_victim["age"],
                                     temp_victim["distance"],temp_victim["difficulty"],temp_victim["vital_sign"])
                     self.victim_rescue_score[victim_id] = temp_score
                 

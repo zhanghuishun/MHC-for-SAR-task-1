@@ -50,7 +50,9 @@ function submitMoralValue() {
         var json_data = JSON.stringify(moral_dict);
         //mhc.js
         post_mhc_message("set_moral_value", json_data, function(result){
-            localStorage.setItem("prior_victim", JSON.stringify(result));
+            localStorage.setItem("prior_victim", JSON.stringify(result["prior_victim"]));
+            localStorage.setItem("value1", JSON.stringify(result["permutations"]["value1"]));
+            localStorage.setItem("value2", JSON.stringify(result["permutations"]["value2"]));
         });
     }
 }
@@ -68,18 +70,22 @@ function close(){
 //change statement
 function changeStatement() {
     prior_victim = JSON.parse(localStorage.getItem("prior_victim"));
+    the_other_victim = prior_victim=="victimA"?"victimB":"victimA";
+    value1 = JSON.parse(localStorage.getItem("value1"));
+    value2 = JSON.parse(localStorage.getItem("value2"));
     var statement = document.getElementById("statement");
     var expl_type = localStorage.getItem("expl_type");
     console.log(expl_type);
     if (expl_type == "consequential"){
         if(prior_victim == "equal"){
-            statement.innerHTML = "Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue victimA";
+            statement.innerHTML = "Robot: Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue victimA";
         }else{
-            statement.innerHTML = "Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue " + prior_victim + ".";
+            statement.innerHTML = "Robot: Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue " + prior_victim + ".";
         }
     }
     if (expl_type == "combination"){
-        statement.innerHTML = "combination";
+        statement.innerHTML = "Robot: Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue " + prior_victim + ".";
+        statement.innerHTML += "And if you prioritized " + value1 + " over " + value2 + ", my decision would have been rescuing " + the_other_victim + " rather than " + prior_victim + ".";
     }
     if (expl_type == "without"){
         statement.innerHTML = "";

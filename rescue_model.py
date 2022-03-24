@@ -20,8 +20,9 @@ class RescueModel(metaclass=Singleton):
         if(len(cls.moralValues) < 5):
             raise RuntimeError("moral value error")
         else:
-            victimA_score = cls.init_rescue_score("female", 65, "short", "hard", "middle")
-            victimB_score = cls.init_rescue_score("male", 44, "middle", "easy", "low")
+            moral_value_list = list(cls.moralValues.values())
+            victimA_score = cls.get_rescue_score(moral_value_list, "female", 65, "short", "hard", "middle")
+            victimB_score = cls.get_rescue_score(moral_value_list, "male", 44, "middle", "easy", "low")
             if victimA_score > victimB_score:
                 return "victimA"
             elif victimA_score < victimB_score:
@@ -29,17 +30,36 @@ class RescueModel(metaclass=Singleton):
             else:
                 return "equal"
     @classmethod
+    # return two permutated characteristics that can make robot to rescue the other victim
+    def get_permutations(cls):
+        prior_victim = cls.get_prior_victim()
+        moral_values = list(cls.moralValues.values())
+        # permutate from high to low
+        for i in range(len(moral_values)-1, 0, -1):
+            temp_values = moral_values
+            for j in range(i, 0, -1):
+                temp_values[i], temp_values[j] = temp_values[j], temp_values[i]
+                victimA_score = cls.get_rescue_score(temp_values, "female", 65, "short", "hard", "middle")
+                victimB_score = cls.get_rescue_score(temp_values, "male", 44, "middle", "easy", "low")
+                print(i,j)
+                print(victimA_score, victimB_score)
+                if (victimA_score > victimB_score and prior_victim == "victimB") or \
+                        (victimA_score < victimB_score and prior_victim == "victimA"):
+                    return {"value1": moral_values[j], "value2": moral_values[i]}
+
+        return {"value1": "error", "value2": "error"}
+    @classmethod
     #score range from -1 to 1
-    def init_rescue_score(cls, gender, age, distance, difficulty, vital_sign):
+    def get_rescue_score(cls, moralvalues, gender, age, distance, difficulty, vital_sign):
         #percent from high to low: 30 25 20 15 10
         percent = 0.35
         score = 0
 
-        assert type(cls.moralValues) == dict
-        if(len(cls.moralValues) < 5):
+        assert type(moralvalues) == list
+        if(len(moralvalues) < 5):
                 raise RuntimeError("moral value error")
     
-        for moral_value in cls.moralValues.values():            
+        for moral_value in moralvalues:            
             percent -= 0.05
             category = cls.moral_category_dict[moral_value]
             if category == "age":
