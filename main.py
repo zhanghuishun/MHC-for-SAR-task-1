@@ -18,7 +18,7 @@ def create_builder(config_file='config.json'):
     print("Loaded config file:", config_path)
     # Create our builder, here we specify the world size and a nice background image
     builder = WorldBuilder(shape=world_size, run_matrx_api=True, run_matrx_visualizer=False,
-                           visualization_bg_img="", tick_duration=0.1)
+                           visualization_bg_img="", tick_duration=0.5)
 
     # Add the walls surrounding the redzone and the doors
     builder.add_room(top_left_location=[0, 0], width=29, height=29, name="Borders",

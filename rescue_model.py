@@ -112,7 +112,7 @@ class RescueModel(metaclass=Singleton):
             return -1
     @classmethod
     def difficulty_score(cls, difficulty):
-        if difficulty == "low":
+        if difficulty == "easy":
             return 1
         elif difficulty == "middle":
             return 0
