@@ -1485,9 +1485,9 @@ function gen_patient_card_complete(patient_data) {
         <div class="patient_properties container">
             <div class="row">
             <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["distance"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
             <div class="patient_property col-6"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
             <div class="patient_property col-12"><img src="/fetch_external_media/vitalsign.svg" title="vital sign">${patient_data["vital_sign"]}</div>
             </div>
         </div>`;
@@ -1526,9 +1526,9 @@ function gen_patient_card_for_explanation(patient_data) {
         <div class="patient_properties container">
             <div class="row">
             <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["distance"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
             <div class="patient_property col-6"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
             <div class="patient_property col-12"><img src="/fetch_external_media/vitalsign.svg" title="vital sign">${patient_data["vital_sign"]}</div>
             </div>
         </div>`;

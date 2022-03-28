@@ -1,11 +1,11 @@
-index;name;gender;age;distance;difficulty;location;vital_sign;image
-0;Emma;Woman;56;short;easy;[23, 6];high;victims/Emma.png
+index;name;gender;age;difficulty_to_reach;difficulty_to_rescue;location;vital_sign;image
+0;Emma;Woman;56;low;low;[23, 6];high;victims/Emma.png
 1;Dominique;Man;81;middle;middle;[23, 13];low;victims/Dominique.png
-2;Vera;Woman;72;short;middle;[12, 6];high;victims/Vera.png
-3;Jorrit;Man;18;middle;easy;[22, 15];middle;victims/Jorrit.png
-4;Hielke;Man;32;long;hard;[22, 22];low;victims/Hielke.png
-5;Martin;Man;26;short;easy;[22, 4];high;victims/Martin.png
-6;Corrie;Woman;33;middle;easy;[12, 15];high;victims/Corrie.png
-7;Tiemen;Man;39;long;easy;[23, 12];middle;victims/Tiemen.png
-8;Ludo;Man;17;long;middle;[23, 24];low;victims/Ludo.png
-9;Nienke;Woman;77;middle;hard;[23, 15];middle;victims/Nienke.png
+2;Vera;Woman;72;low;middle;[12, 6];high;victims/Vera.png
+3;Jorrit;Man;18;middle;low;[22, 15];middle;victims/Jorrit.png
+4;Hielke;Man;32;high;high;[22, 22];low;victims/Hielke.png
+5;Martin;Man;26;low;low;[22, 4];high;victims/Martin.png
+6;Corrie;Woman;33;middle;low;[12, 15];high;victims/Corrie.png
+7;Tiemen;Man;39;high;low;[23, 12];middle;victims/Tiemen.png
+8;Ludo;Man;17;high;middle;[23, 24];low;victims/Ludo.png
+9;Nienke;Woman;77;middle;high;[23, 15];middle;victims/Nienke.png

@@ -12,7 +12,7 @@ class Singleton(type):
 class RescueModel(metaclass=Singleton):
     #{"very_high":"older preferred","high":"male preferred","middle":"high vital sign","low":"difficulty","very_low":"distance"}
     moralValues = dict()
-    moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high vital sign": "vital_sign", "low vital sign": "vital_sign", "difficulty": "difficulty", "distance": "distance"}
+    moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high vital sign": "vital_sign", "low vital sign": "vital_sign", "difficulty to rescue": "difficulty to rescue", "difficulty to reach": "difficulty to reach"}
     victims_data_file = os.path.join(os.path.realpath("victim_generator/victim_data_for_explanation.csv"))
     victim_data = pd.read_csv(victims_data_file, sep=';')
     
