@@ -50,9 +50,12 @@ function submitMoralValue() {
         var json_data = JSON.stringify(moral_dict);
         //mhc.js
         post_mhc_message("set_moral_value", json_data, function(result){
-            localStorage.setItem("prior_victim", JSON.stringify(result["prior_victim"]));
-            localStorage.setItem("value1", JSON.stringify(result["permutations"]["value1"]));
-            localStorage.setItem("value2", JSON.stringify(result["permutations"]["value2"]));
+            localStorage.setItem("prior_victim", JSON.stringify(result["info"]["prior_victim"]));
+            localStorage.setItem("victimA", result["info"]["victimA"]);
+            localStorage.setItem("victimB", result["info"]["victimB"]);
+
+            localStorage.setItem("value1", JSON.stringify(result["info"]["value1"]));
+            localStorage.setItem("value2", JSON.stringify(result["info"]["value2"]));
         });
     }
 }
@@ -69,6 +72,12 @@ function close(){
 
 //change statement
 function changeStatement() {
+    //change pic of victims
+    cards = document.getElementById("cards");
+    cards.innerHTML = ""
+    cards.innerHTML += gen_patient_card_for_explanation(localStorage.getItem("victimA"));
+    cards.innerHTML += gen_patient_card_for_explanation(localStorage.getItem("victimB"));
+    //change explanations
     prior_victim = JSON.parse(localStorage.getItem("prior_victim"));
     the_other_victim = prior_victim=="victimA"?"victimB":"victimA";
     value1 = JSON.parse(localStorage.getItem("value1"));

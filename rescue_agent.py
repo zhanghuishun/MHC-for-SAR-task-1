@@ -62,8 +62,7 @@ class RescueAgent(AgentBrain):
                     temp_score = self.victim_rescue_score[victim_id]
                 else:
                     temp_victim = state[victim_id]
-                    temp_score = RescueModel.get_rescue_score(list(RescueModel.moralValues.values()), temp_victim["gender"],temp_victim["age"],
-                                    temp_victim["distance"],temp_victim["difficulty"],temp_victim["vital_sign"])
+                    temp_score = RescueModel.get_rescue_score(list(RescueModel.moralValues.values()), temp_victim)
                     self.victim_rescue_score[victim_id] = temp_score
                 
                 if temp_score > highest_rescue_score:

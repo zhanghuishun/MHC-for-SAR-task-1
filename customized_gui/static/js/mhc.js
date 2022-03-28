@@ -1496,7 +1496,46 @@ function gen_patient_card_complete(patient_data) {
     return patient_card_html;
 }
 
+function gen_patient_card_for_explanation(patient_data) {
+    patient_data = JSON.parse(patient_data)
+    patientPhoto = '/fetch_external_media/' + patient_data["victim_photo"]
+    //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
 
+    patient_card_html = `
+    <div id="${patient_data.obj_id}patientCardBody" class="patient_card_body">
+        <div id="patient_identification" class="row">
+            <div class="col-3">
+                <img src=${patientPhoto} class="patient_photo">
+            </div>
+            <div class="col-6">
+                <div class="patient_name_wrapper">
+                    <h2 class="patient_name">${patient_data['name']}</h2>
+                 </div>
+        </div>
+            </div>
+            `
+    patient_card_html += `
+        <div class="patient_card_inner_divider"><hr></div>
+
+        <div class="collapse patient_extra_info_collapse" id="collapse_${patient_data.obj_id}">
+            <div class="card-body">
+                ${patient_data['patient_introduction_text']}
+            </div>
+        </div>
+
+        <div class="patient_properties container">
+            <div class="row">
+            <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["distance"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
+            <div class="patient_property col-6"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty"]}</div>
+            <div class="patient_property col-12"><img src="/fetch_external_media/vitalsign.svg" title="vital sign">${patient_data["vital_sign"]}</div>
+            </div>
+        </div>`;
+
+    patient_card_html += `</div>`;
+    return patient_card_html;
+}
 
 /*
  * Parse the settings object

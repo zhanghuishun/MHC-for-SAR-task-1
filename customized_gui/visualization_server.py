@@ -330,13 +330,11 @@ def set_moral_value():
     #pass moral values to RescueModel singleton
     RescueModel(data)
 
-    prior_victim = RescueModel.get_prior_victim()
-    permutations = RescueModel.get_permutations()
-
+    info = RescueModel.get_explanation_info()
+    print(info)
     response = app.response_class(
         response=json.dumps({
-            "prior_victim": prior_victim,
-            "permutations": permutations
+            "info": info
         }),
         status=200,
         mimetype='application/json'
