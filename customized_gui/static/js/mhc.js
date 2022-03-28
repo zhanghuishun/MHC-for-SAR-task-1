@@ -1498,7 +1498,7 @@ function gen_patient_card_complete(patient_data) {
 
 function gen_patient_card_for_explanation(patient_data) {
     patient_data = JSON.parse(patient_data)
-    patientPhoto = '/fetch_external_media/' + patient_data["victim_photo"]
+    patientPhoto = '/fetch_external_media/' + patient_data["image"]
     //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
 
     patient_card_html = `
