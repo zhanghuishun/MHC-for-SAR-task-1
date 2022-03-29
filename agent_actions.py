@@ -1,6 +1,5 @@
 from matrx.actions import Action, ActionResult
 
-
 class BeRescued(Action):
     """ victim is rescued by the robot """
 
@@ -12,7 +11,8 @@ class BeRescued(Action):
         return RecueResult(RecueResult.ACTION_SUCCEEDED, True)
 
     def mutate(self, grid_world, agent_id, **kwargs):
-        #grid_world.registered_agents[agent_id].change_property('visualize_opacity', 0)
+        grid_world.registered_agents[agent_id].change_property('img_name', "victims/victim_unknown.png")
+        grid_world.registered_agents[agent_id].change_property('visualize_opacity', 0)
         grid_world.registered_agents[agent_id].change_property('rescued', True)
         return RecueResult(RecueResult.ACTION_SUCCEEDED, True)
 
@@ -32,8 +32,7 @@ class Rescue(Action):
         return RecueResult(RecueResult.ACTION_SUCCEEDED, True)
 
     def mutate(self, grid_world, agent_id, **kwargs):
-
-        #grid_world.registered_agents[agent_id].change_property('img_name', "robot_loaded.png")
+        grid_world.registered_agents[agent_id].change_property('img_name', "robot_rescuing.png")
         grid_world.registered_agents[agent_id].change_property('victim_loaded_id', kwargs['victim_loaded_id'])
         return RecueResult(RecueResult.ACTION_SUCCEEDED, True)
 
@@ -51,4 +50,5 @@ class UnloadVictim(Action):
         victim_loaded_id = kwargs['victim_loaded_id']
         grid_world.remove_from_grid(victim_loaded_id)
         grid_world.registered_agents[agent_id].change_property('victim_loaded_id', None)
+        grid_world.registered_agents[agent_id].change_property('img_name', "robot.png")
         return ActionResult(ActionResult.ACTION_SUCCEEDED, True)

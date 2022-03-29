@@ -106,7 +106,7 @@ class SearchTeam(AgentBrain):
                      "visualize_size": defaults.AGENTBODY_VIS_SIZE,
                      "visualize_shape": defaults.AGENTBODY_VIS_SHAPE,
                      "visualize_colour": defaults.AGENTBODY_VIS_COLOUR,
-                     "visualize_opacity": defaults.AGENTBODY_VIS_COLOUR,
+                     "visualize_opacity": defaults.AGENTBODY_VIS_OPACITY,
                      "visualize_when_busy": defaults.AGENTBODY_VIS_COLOUR,
                      "visualize_depth": defaults.AGENTBODY_VIS_DEPTH,
                      "team": None,

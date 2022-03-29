@@ -85,13 +85,6 @@ function changeStatement() {
     var statement = document.getElementById("statement");
     var expl_type = localStorage.getItem("expl_type");
     console.log(expl_type);
-    if (expl_type == "consequential"){
-        if(prior_victim == "equal"){
-            statement.innerHTML = "Robot: Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue victimA";
-        }else{
-            statement.innerHTML = "Robot: Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue " + prior_victim + ".";
-        }
-    }
     if (expl_type == "combination"){
         statement.innerHTML = "Robot: Based on your value elicitation, if I have to decide between rescuing  victimA or victimB, I will rescue " + prior_victim + ".";
         statement.innerHTML += "And if you prioritized " + value1 + " over " + value2 + ", my decision would have been rescuing " + the_other_victim + " rather than " + prior_victim + ".";
