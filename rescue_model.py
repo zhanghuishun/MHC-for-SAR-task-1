@@ -12,7 +12,7 @@ class Singleton(type):
 class RescueModel(metaclass=Singleton):
     #{"very_high":"older preferred","high":"male preferred","middle":"high vital sign","low":"difficulty","very_low":"distance"}
     moralValues = dict()
-    moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high vital sign": "vital_sign", "low vital sign": "vital_sign", "difficulty to rescue": "difficulty to rescue", "difficulty to reach": "difficulty to reach"}
+    moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high vital sign": "vital sign", "low vital sign": "vital sign", "difficulty to rescue": "difficulty to rescue", "difficulty to reach": "difficulty to reach"}
     victims_data_file = os.path.join(os.path.realpath("victim_generator/victim_data_for_explanation.csv"))
     victim_data = pd.read_csv(victims_data_file, sep=';')
     
@@ -68,7 +68,6 @@ class RescueModel(metaclass=Singleton):
         assert type(moralvalues) == list
         if(len(moralvalues) < 5):
                 raise RuntimeError("moral value error")
-    
         for moral_value in moralvalues:            
             percent -= 0.05
             category = cls.moral_category_dict[moral_value]
@@ -76,11 +75,11 @@ class RescueModel(metaclass=Singleton):
                 score += (percent * cls.age_score(moral_value, victim["age"]))
             elif category == "gender":
                 score += (percent * cls.gender_score(moral_value, victim["gender"]))
-            elif category == "distance":
-                score += (percent * cls.distance_score(victim["distance"]))
-            elif category == "difficulty":
-                score += (percent * cls.difficulty_score(victim["difficulty"]))
-            elif category == "vital_sign":
+            elif category == "difficulty to reach":
+                score += (percent * cls.distance_score(victim["difficulty_to_reach"]))
+            elif category == "difficulty to rescue":
+                score += (percent * cls.difficulty_score(victim["difficulty_to_rescue"]))
+            elif category == "vital sign":
                 score += (percent * cls.vital_sign_score(moral_value, victim["vital_sign"]))
 
         return score
@@ -114,7 +113,7 @@ class RescueModel(metaclass=Singleton):
 
     @classmethod
     def distance_score(cls, distance):
-        if distance == "short":
+        if distance == "low":
             return 1
         elif distance == "middle":
             return 0
@@ -122,7 +121,7 @@ class RescueModel(metaclass=Singleton):
             return -1
     @classmethod
     def difficulty_score(cls, difficulty):
-        if difficulty == "easy":
+        if difficulty == "low":
             return 1
         elif difficulty == "middle":
             return 0
