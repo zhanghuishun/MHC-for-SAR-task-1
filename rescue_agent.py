@@ -1,9 +1,11 @@
+import imp
 from tkinter.tix import Tree
 from matrx.agents.agent_utils.navigator import Navigator
 from matrx.agents.agent_utils.state_tracker import StateTracker
 from matrx.agents import AgentBrain
 from rescue_model import RescueModel
-from agent_actions import Rescue, UnloadVictim
+from agent_actions import Rescue, UnloadVictim, Reach
+from myUtils import Utils
 class RescueAgent(AgentBrain):
 
     def __init__(self, config):
@@ -15,6 +17,7 @@ class RescueAgent(AgentBrain):
         self.state_tracker = None
         self.target_location = None
         self.rescue_sign = False
+        self.reach_sign = False
         self.entrance_loc = (config["entrance"]["column"], config["entrance"]["row"])
         self.victim_loaded = None
     def filter_observations(self, state):
@@ -24,6 +27,10 @@ class RescueAgent(AgentBrain):
                 self.victim_loaded = message.from_id
                 self.rescue_sign = True
                 self.received_messages.remove(message)
+            if message.content == "robot_reach_victim":
+                self.reach_sign = True
+                self.received_messages.remove(message)
+            
         
         # select all victims
         victims = state[{"is_victim": True, 'rescued': False}]
@@ -76,13 +83,17 @@ class RescueAgent(AgentBrain):
             if not self.navigator.is_done and len(self.navigator.get_all_waypoints()) > 0:
                 action = self.navigator.get_move_action(self.state_tracker)
         
-
+        if self.reach_sign == True:
+            action = Reach.__name__
+            self.reach_sign = False
+        
         if self.rescue_sign == True:
             action_kwargs['victim_loaded_id'] = self.victim_loaded
+            action_kwargs['action_duration'] = Utils.get_rescue_ticks(state[self.victim_loaded]['difficulty_to_rescue'])
             action = Rescue.__name__
             self.rescue_sign = False
+            return action, action_kwargs
 
-        
         # Return back to the entrance
         if state[self.agent_id]["victim_loaded_id"] is not None:
             assert isinstance(self.entrance_loc, tuple)
