@@ -21,6 +21,9 @@ class RescueModel(metaclass=Singleton):
         assert type(moralValues) == str
         cls.moralValues = ast.literal_eval(moralValues)
     @classmethod
+    def set_moral_values(cls, moralValues):
+        cls.moralValues = ast.literal_eval(moralValues) 
+    @classmethod
     def get_prior_victim(cls, victimA, victimB):
         if(len(cls.moralValues) < 5):
             raise RuntimeError("moral value error")
@@ -54,7 +57,6 @@ class RescueModel(metaclass=Singleton):
                         victimB_score = cls.get_rescue_score(temp_values, victimB)
                         if (victimA_score > victimB_score and prior_victim == "victimB") or \
                                 (victimA_score < victimB_score and prior_victim == "victimA"):
-                            print({"prior_victim": prior_victim,"victimA": victimA.to_json(),"victimB": victimB.to_json(),"value1": moral_values[j], "value2": moral_values[i]})
                             return {"prior_victim": prior_victim,"victimA": victimA.to_json(),"victimB": victimB.to_json(),"value1": moral_values[j], "value2": moral_values[i]}
 
         return {"value1": "error", "value2": "error"}

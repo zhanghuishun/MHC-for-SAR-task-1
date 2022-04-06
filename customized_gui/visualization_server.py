@@ -328,10 +328,9 @@ def external_media(filename):
 def set_moral_value():
     data = request.json
     #pass moral values to RescueModel singleton
-    RescueModel(data)
+    RescueModel.set_moral_values(data)
 
     info = RescueModel.get_explanation_info()
-    print(info)
     response = app.response_class(
         response=json.dumps({
             "info": info

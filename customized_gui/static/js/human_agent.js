@@ -53,6 +53,11 @@ function submitMoralValue() {
         var json_data = JSON.stringify(moral_dict);
         //mhc.js
         post_mhc_message("set_moral_value", json_data, function(result){
+            localStorage.removeItem("prior_victim");
+            localStorage.removeItem("victimA");
+            localStorage.removeItem("victimB");
+            localStorage.removeItem("value1");
+            localStorage.removeItem("value2");
             localStorage.setItem("prior_victim", JSON.stringify(result["info"]["prior_victim"]));
             localStorage.setItem("victimA", result["info"]["victimA"]);
             localStorage.setItem("victimB", result["info"]["victimB"]);
