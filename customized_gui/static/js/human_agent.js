@@ -61,15 +61,22 @@ function submitMoralValue() {
 }
 
 //close and show dialog
-function show(){
+function showDialog(){
     var show = $(".dialog").css("display");
     $(".dialog").css("display",show =="none"?"block":"none");
 }
-function close(){
+function closeDialog(){
     var show = $(".dialog").css("display");
     $(".dialog").css("display",show =="none"?"block":"none");
 }
-
+function showMoralValues(){
+    var show = $("#moral_values_select").css("display");
+    $("#moral_values_select").css("display",show =="none"?"block":"none");
+}
+function closeMoralValues(){
+    var show = $("#moral_values_select").css("display");
+    $("#moral_values_select").css("display",show =="none"?"block":"none");
+}
 //change statement
 function changeStatement() {
     //change pic of victims

@@ -150,7 +150,10 @@ p, dl, ol, ul {
 }
 li {
   float: left;
-  position: relative; z-index: 10; width: 320px;
+  position: relative; z-index: 10; width: 200px;
+}
+.or {
+  width: 20px;
 }
 pre, code, samp {
   font-family: 'Source Code Pro', Consolas, monospace;
@@ -191,7 +194,7 @@ h6, .h6 { font-size: .75rem }
 .list-reset {
   list-style: none;
   padding-left: 0;
-  width: 400px;
+  width: 500px;
 }
 
 .inline       { display: inline }
@@ -596,7 +599,7 @@ h6, .h6 { font-size: .75rem }
 .flex { display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex }
 
 .flex-column  { -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; -ms-flex-direction: column; flex-direction: column }
-.flex-wrap    { -webkit-flex-wrap: wrap; -ms-flex-wrap: wrap; flex-wrap: wrap }
+.flex-wrap    { -webkit-flex-wrap: wrap; -ms-flex-wrap: wrap; flex-wrap: wrap; column-gap: 5px}
 
 .flex-center   { -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center }
 .flex-baseline { -webkit-box-align: baseline; -webkit-align-items: baseline; -ms-flex-align: baseline; align-items: baseline }
