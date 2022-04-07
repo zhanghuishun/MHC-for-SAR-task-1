@@ -10,9 +10,5 @@ function storeExplType() {
     }
 }
 function clearLocalStorage() {
-    localStorage.removeItem("prior_victim");
-    localStorage.removeItem("victimA");
-    localStorage.removeItem("victimB");            
-    localStorage.removeItem("value1");
-    localStorage.removeItem("value2");
+    localStorage.clear();
 }

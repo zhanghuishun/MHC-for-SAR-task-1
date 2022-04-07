@@ -109,3 +109,14 @@ function changeStatement() {
     }
 
 }
+
+window.addEventListener('storage', function(e){
+    if(e.newValue == "without"){
+        var explanation_button = this.document.getElementById("explanation_button");
+        explanation_button.style.display = 'none';
+    }
+    else if(e.newValue == "combination"){
+        var explanation_button = this.document.getElementById("explanation_button");
+        explanation_button.style.display = 'block';
+    }
+});
