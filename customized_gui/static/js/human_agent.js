@@ -98,8 +98,8 @@ function changeStatement() {
     //change pic of victims
     cards = document.getElementById("cards");
     cards.innerHTML = ""
-    cards.innerHTML += gen_patient_card_for_explanation(localStorage.getItem("victimA"));
-    cards.innerHTML += gen_patient_card_for_explanation(localStorage.getItem("victimB"));
+    cards.innerHTML += gen_patient_card_for_explanation(localStorage.getItem("victimA"), "victim A");
+    cards.innerHTML += gen_patient_card_for_explanation(localStorage.getItem("victimB"), "victim B");
     //change explanations
     prior_victim = JSON.parse(localStorage.getItem("prior_victim"));
     the_other_victim = prior_victim=="victimA"?"victimB":"victimA";

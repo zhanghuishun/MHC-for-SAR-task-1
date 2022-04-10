@@ -910,7 +910,7 @@ function gen_patient_card_complete(patient_data) {
     return patient_card_html;
 }
 
-function gen_patient_card_for_explanation(patient_data) {
+function gen_patient_card_for_explanation(patient_data, number) {
     patient_data = JSON.parse(patient_data)
     patientPhoto = '/fetch_external_media/' + patient_data["image"]
     //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
@@ -925,7 +925,7 @@ function gen_patient_card_for_explanation(patient_data) {
             </div>
             <div class="col-6">
                 <div class="patient_name_wrapper">
-                    <h2 class="patient_name">${patient_data['name']}</h2>
+                    <h2 class="patient_name">${number}</h2>
                  </div>
         </div>
             </div>
