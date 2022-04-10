@@ -97,9 +97,6 @@ class SearchTeam(AgentBrain):
         # set a default victim image
         img = "victims/victim_unknown.png" if 'image' not in victim_data or victim_data['image'] == '' else \
             victim_data['image']
-        #data = {"very_high":"older preferred","high":"male preferred","middle":"high vital sign","low":"difficulty","very_low":"distance"}
-        #model = RescueModel(data)
-        #victim_rescue_score = RescueModel.init_rescue_score(victim_data['gender'], int(victim_data['age']), victim_data['distance'], victim_data['difficulty'], victim_data['vital_sign'])
         # create the agent body with default properties and some custom victim properties
         body_args = {"possible_actions": defaults.AGENTBODY_POSSIBLE_ACTIONS,
                      "callback_create_context_menu_for_self": None,
@@ -131,7 +128,7 @@ class SearchTeam(AgentBrain):
                      "difficulty_to_reach": victim_data['difficulty_to_reach'],
                      "difficulty_to_rescue": victim_data['difficulty_to_rescue'],
                      "location": [int(victim_data['location_column']), int(victim_data['location_row'])],
-                     "vital_sign": victim_data['vital_sign'],
+                     "level_of_injury": victim_data['level_of_injury'],
                      "victim_photo": img,
                      #"victim_rescue_score": victim_rescue_score,
                      "rescued": False,

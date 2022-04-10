@@ -24,7 +24,7 @@ victim_data = []
 genders = ["Man", "Woman"]
 difficulties_to_reach = ["low", "middle", "high"]
 difficulties_to_rescue = ["low", "middle", "high"]
-vital_signs = ["low", "middle", "high"]
+injuries = ["low", "middle", "high"]
 #0-11 short distance 12-23 middle 24-35 long
 locations = [[11,5],[11,6],[12,5],[12,6],[22,3],[22,4],[23,3],[23,4],[22,6],[22,7],[23,6],[23,7],
                 [11,14],[11,15],[12,14],[12,15],[22,12],[22,13],[23,12],[23,13],[22,15],[22,16],[23,15],[23,16],
@@ -32,11 +32,11 @@ locations = [[11,5],[11,6],[12,5],[12,6],[22,3],[22,4],[23,3],[23,4],[22,6],[22,
         
 #Generate data for n victims
 for n in range(n_victims):
-    # generate gender, distance, difficulty, vital_sign and age of victim
+    # generate gender, distance, difficulty, level of injury and age of victim
     gender = random.choice(genders)
     difficulty_to_reach = random.choice(difficulties_to_reach)
     difficulty_to_rescue = random.choice(difficulties_to_rescue)
-    vital_sign = random.choice(vital_signs)
+    injury = random.choice(injuries)
     age = random.randrange(min_age, max_age)    
 
     #generate location according to distance
@@ -61,10 +61,10 @@ for n in range(n_victims):
         name = random.choice(names_male)
     else:
         name = random.choice(names_female)
-    victim_data.append([n, name, gender, age, difficulty_to_reach, difficulty_to_rescue, location, vital_sign])
+    victim_data.append([n, name, gender, age, difficulty_to_reach, difficulty_to_rescue, location, injuries])
 
 victim_data = pd.DataFrame(victim_data, columns=["index", "name", "gender", "age", "difficulty_to_reach", "difficulty_to_rescue", "location",
-                                                   "vital_sign"])
+                                                   "level_of_injury"])
 victim_data.to_csv("victim_generator/victim_data.csv", index=False, sep=";")
 
 print("Written output to 'victim_data.csv'")

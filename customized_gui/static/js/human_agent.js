@@ -45,6 +45,10 @@ function submitMoralValue() {
         //change "your moral value"
         your_moral_value.innerHTML = "Your moral values:";
         for(let i = 0; i < list.length; i++){
+            //check level of injury
+            if(list[i].innerText == "low level of injury") {localStorage.setItem("level_of_injury","low");}
+            if(list[i].innerText == "high level of injury") {localStorage.setItem("level_of_injury","high");}
+            //add values to selected moral values
             your_moral_value.innerHTML += "<div class=\"image-frame\"> <img src=\"/static/images/"+list[i].innerText+".png\">"
         }
         //your_moral_value.innerHTML = list[0].innerText+">"+list[1].innerText+">"+list[2].innerText+">"+list[3].innerText+">"+list[4].innerText

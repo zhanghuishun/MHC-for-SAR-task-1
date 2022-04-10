@@ -10,9 +10,9 @@ class Singleton(type):
 
 #Python3
 class RescueModel(metaclass=Singleton):
-    #{"very_high":"older preferred","high":"male preferred","middle":"high vital sign","low":"difficulty","very_low":"distance"}
+    #{"very_high":"older preferred","high":"male preferred","middle":"high level of injury","low":"difficulty","very_low":"distance"}
     moralValues = dict()
-    moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high vital sign": "vital sign", "low vital sign": "vital sign", "difficulty to rescue": "difficulty to rescue", "difficulty to reach": "difficulty to reach"}
+    moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high level of injury": "level of injury", "low level of injury": "level of injury", "difficulty to rescue": "difficulty to rescue", "difficulty to reach": "difficulty to reach"}
     victims_data_file = os.path.join(os.path.realpath("victim_generator/victim_data_for_explanation.csv"))
     victim_data = pd.read_csv(victims_data_file, sep=';')
     
@@ -81,9 +81,8 @@ class RescueModel(metaclass=Singleton):
                 score += (percent * cls.distance_score(victim["difficulty_to_reach"]))
             elif category == "difficulty to rescue":
                 score += (percent * cls.difficulty_score(victim["difficulty_to_rescue"]))
-            elif category == "vital sign":
-                score += (percent * cls.vital_sign_score(moral_value, victim["vital_sign"]))
-
+            elif category == "level of injury":
+                score += (percent * cls.level_of_injury_score(moral_value, victim["level_of_injury"]))
         return score
     @classmethod
     def gender_score(cls, gender_moral_value, gender):
@@ -130,13 +129,13 @@ class RescueModel(metaclass=Singleton):
         else:
             return -1
     @classmethod
-    def vital_sign_score(cls, vital_sign_moral_value, vital_sign):
-        vital_sign_score = 0
-        if vital_sign == "low":
-            vital_sign_score = -1
-        elif vital_sign == "middle":
-            vital_sign_score = 0
+    def level_of_injury_score(cls, level_of_injury_moral_value, level_of_injury):
+        level_of_injury_score = 0
+        if level_of_injury == "low":
+            level_of_injury_score = -1
+        elif level_of_injury == "middle":
+            level_of_injury_score = 0
         else:
-            vital_sign_score = 1
-        return vital_sign_score if vital_sign_moral_value == "high vital sign" else 0-vital_sign_score
+            level_of_injury_score = 1
+        return level_of_injury_score if level_of_injury_moral_value == "high level of injury" else 0-level_of_injury_score
     

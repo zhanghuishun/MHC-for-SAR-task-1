@@ -863,594 +863,6 @@ function send_matrx_message(type, data) {
     })
 }
 
-/*
- * Generate the HTML template for the patient triage decision popup, and fill it with patient data
- */
-function gen_patient_popup(patientID) {
-    currPatient = lv_state[patientID];
-
-    // Each TDP has slightly different information in the popup
-
-    // baseline info
-    if (mhc_settings['tdp'] == 'baseline'  || mhc_settings['tdp'] == 'tdp_dynamic_task_allocation') {
-        return gen_patient_popup_baseline(currPatient);
-
-    // TDP decision support with potential bias for exp 1
-    } else if (mhc_settings['tdp'] == 'tdp_decision_support_potential_bias') {
-        return gen_patient_popup_dss_bias(currPatient);
-
-    // TDP decision support with explanations for exp 2 & 3
-    } else if (mhc_settings['tdp'] == 'tdp_decision_support_explained') {
-        return gen_patient_popup_dss_explained(currPatient);
-
-
-    } else if (mhc_settings['tdp'] == 'tdp_supervised_autonomy') {
-        return gen_patient_popup_autonomy(currPatient);
-    }
-}
-
-
-
-/*
- * Generate the patient popup with all required info for the baseline
- */
-function gen_patient_popup_baseline(currPatient) {
-    patient_data = `
-    <div id="${patientID}popUp" class="patient_card_body">
-        <div id="patient_identification" class="row">
-            <div class="col-3">
-                <img src="/fetch_external_media/${currPatient['patient_photo']}" class="patient_photo popUp_photo">
-            </div>
-            <div class="col-9">
-                <div class="patient_name_wrapper">
-                    <div class="patient_number">Patient ${currPatient['number']}</div>
-                    <h2 class="patient_name">${currPatient['patient_name']}</h2>
-                </div>
-                <div class="patient_properties container">
-                    <div class="row">
-                        <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="Geslacht">${currPatient["gender"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/symptoms.svg" title="Symptomen">${currPatient["symptoms"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/calendar.svg" title="Leeftijd">${currPatient["age"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/fitness2.png" title="Fitheid">${currPatient["fitness"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/home_situation.svg" title="Thuis situatie">${currPatient["home_situation"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/work.svg" title="Baan">${currPatient["profession"]}</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="patient_card_inner_divider"><hr></div>
-
-        <div class="card-body">
-           ${currPatient['patient_introduction_text']}
-        </div>
-        <div class="row">
-                <div id="Timer">Tijd : 7s</div>
-        </div>
-    </div>`;
-    return patient_data;
-}
-
-
-
-/*
- * Generate the patient popup with all required info for the TDP decision support with potential bias (experiment 2 & 3)
- */
-function gen_patient_popup_dss_bias(currPatient) {
-
-    // fetch the correct agent suggestion for experiment 1: decision support with (un)biased suggestions
-    var care_suggestion = currPatient['care_suggestion_unbiased'];
-    if (mhc_dss_biased_suggestion) {
-        care_suggestion = currPatient['care_suggestion_biased'];
-    }
-
-    patient_data = `
-    <div id="${patientID}popUp" class="patient_card_body">
-        <div id="patient_identification" class="row">
-            <div class="col-3">
-                <img src="/fetch_external_media/${currPatient['patient_photo']}" class="patient_photo popUp_photo">
-            </div>
-            <div class="col-9">
-                <div class="patient_name_wrapper">
-                    <div class="patient_number">Patient ${currPatient['number']}</div>
-                    <h2 class="patient_name">${currPatient['patient_name']}</h2>
-                </div>
-                <div class="patient_properties container">
-                    <div class="row">
-                        <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="Geslacht">${currPatient["gender"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/symptoms.svg" title="Symptomen">${currPatient["symptoms"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/calendar.svg" title="Leeftijd">${currPatient["age"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/fitness2.png" title="Fitheid">${currPatient["fitness"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/home_situation.svg" title="Thuis situatie">${currPatient["home_situation"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/work.svg" title="Baan">${currPatient["profession"]}</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="patient_card_inner_divider"><hr></div>
-
-        <div class="card-body">
-           ${currPatient['patient_introduction_text']}
-        </div>
-        <div class="row">
-                <div id="Timer">Tijd : 7s</div>
-        </div>
-    </div>
-
-    <div class="dss_agent_predictions">
-        <div id="agent_predictions">
-            <table id="agent_predictions_table" class="table table-bordered table-striped">
-                <thead>
-                    <tr><th></th><th>Op de IC</th><th>In de ziekenboeg</th><th>Thuis</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Overlevingskans</td><td>${(currPatient['survival_IC']*100).toFixed(0)}% </td><td>${(currPatient['survival_ziekenboeg']*100).toFixed(0)}% </td><td>${(currPatient['survival_huis']*100).toFixed(0)}% </td></tr>
-                    <tr><td>Verwachte opnameduur</td><td>${sickness_updates_to_hours(currPatient['opnameduur_IC'])}</td><td>${sickness_updates_to_hours(currPatient['opnameduur_ziekenboeg'])}</td><td>${sickness_updates_to_hours(currPatient['opnameduur_huis'])}</td></tr>
-                    <tr><td>Verwachte resterende levensjaren</td><td style="text-align:center" colspan=3>${currPatient['remaining_life_years']} jaar</td></tr>
-
-                </tbody>
-            </table>
-            <b>Advies: Stuur naar <span id="care_suggestion">${care_suggestion}</span></b>
-        </div>
-
-        <img class="tdp_dss_robot" src="/fetch_external_media/dss_robot.png">
-        <img class="dialogRobotHome" src="/fetch_external_media/dss_robot.png">
-        <img class="dialogRobotWard" src="/fetch_external_media/dss_robot.png">
-        <img class="dialogRobotIC" src="/fetch_external_media/dss_robot.png">
-    </div>`;
-
-    return patient_data;
-}
-
-
-
-/*
- * Generate the patient popup with all required info for the TDP decision support with explanatiosn (experiment 2 & 3)
- */
-function gen_patient_popup_dss_explained(currPatient) {
-
-    patient_data = `
-    <div id="${patientID}popUp" class="patient_card_body">
-        <div id="patient_identification" class="row">
-            <div class="col-3">
-                <img src="/fetch_external_media/${currPatient['patient_photo']}" class="patient_photo popUp_photo">
-            </div>
-            <div class="col-9">
-                <div class="patient_name_wrapper">
-                    <div class="patient_number">Patient ${currPatient['number']}</div>
-                    <h2 class="patient_name">${currPatient['patient_name']}</h2>
-                </div>
-                <div class="patient_properties container">
-                    <div class="row">
-                        <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="Geslacht">${currPatient["gender"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/symptoms.svg" title="Symptomen">${currPatient["symptoms"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/calendar.svg" title="Leeftijd">${currPatient["age"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/fitness2.png" title="Fitheid">${currPatient["fitness"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/home_situation.svg" title="Thuis situatie">${currPatient["home_situation"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/work.svg" title="Baan">${currPatient["profession"]}</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="patient_card_inner_divider"><hr></div>
-
-        <div class="card-body">
-           ${currPatient['patient_introduction_text']}
-        </div>
-        <div class="row">
-                <div id="Timer">Tijd : 7s</div>
-        </div>
-    </div>
-
-    <div class="dss_agent_predictions">
-        <div id="agent_predictions">
-            <table id="agent_predictions_table" class="table table-bordered table-striped">
-                <thead>
-                    <tr><th></th><th>Op de IC</th><th>In de ziekenboeg</th><th>Thuis</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Overlevingskans</td><td>${(currPatient['survival_IC']*100).toFixed(0)}% </td><td>${(currPatient['survival_ziekenboeg']*100).toFixed(0)}% </td><td>${(currPatient['survival_huis']*100).toFixed(0)}% </td></tr>
-                    <tr><td>Verwachte opnameduur</td><td>${sickness_updates_to_hours(currPatient['opnameduur_IC'])}</td><td>${sickness_updates_to_hours(currPatient['opnameduur_ziekenboeg'])}</td><td>${sickness_updates_to_hours(currPatient['opnameduur_huis'])}</td></tr>
-                    <tr><td>Verwachte resterende levensjaren</td><td style="text-align:center" colspan=3>${currPatient['remaining_life_years']} jaar</td></tr>
-
-                </tbody>
-            </table>
-            <b>Advies: Stuur naar <span id="care_suggestion">${currPatient['care_suggestion']}</span></b>
-            <br><br>
-
-            ${currPatient['confidence_explanation']}
-            <br><br>
-            ${currPatient['advice_explanation']}
-        </div>
-
-        <img class="tdp_dss_robot" src="/fetch_external_media/dss_robot.png">
-        <img class="dialogRobotHome" style="width: auto;height: 100px;" src="/fetch_external_media/dss_robot.png">
-        <img class="dialogRobotWard" style="width: auto;height: 100px;" src="/fetch_external_media/dss_robot.png">
-        <img class="dialogRobotIC" style="width: auto;height: 100px;" src="/fetch_external_media/dss_robot.png">
-    </div>`;
-
-    return patient_data;
-}
-
-
-
-/*
- * Generate the patient popup with all required info for the TDP dynamic task allocation (experiment 2 & 3)
- */
-function popupPatientDynamicTaskAllocation(patientID) {
-    // check if we are displaying a decision support triage window or a regular one
-    var classes = "source_dialog mhc_show_explanations";
-    var width = "94%";
-    var maxHeight = 950;
-
-    var assign_to_agent = $("#"+patientID+"patientCardBody input")[0].checked;
-
-    // assigning from the the human to the robot
-    if (assign_to_agent) {
-        var buttons_unblocked = {
-            "Wijs aan robot toe": function() {
-                // assign the patient to the robot
-                reassignPatient("robot", lv_agent_id, patientID)
-                $(this).dialog('close');
-            },
-            "Annuleren": function() {
-                // the patient was still assigned to the human, so closing the window is enough
-                $(this).dialog('close');
-            },
-        }
-
-        var buttons_blocked = {
-            "Annuleren": function() {
-                // the patient was still assigned to the human, so closing the window is enough
-                $(this).dialog('close');
-            },
-        }
-
-        $("#dialog-confirm").html(gen_patient_popup_dynamic(lv_state[patientID], assign_patient_to="robot"));
-        $("#dialog-confirm").dialog({
-            resizable: true,
-            position: {
-                my: "center top",
-                at: "center top+10%",
-                of: window
-            },
-            zIndex: 1000,
-            maxHeight: maxHeight,
-            classes: {
-                "ui-dialog": classes
-            },
-            width: width,
-            modal: true,
-            open: function(event, ui) {
-                $(".ui-dialog-titlebar-close").hide();
-            },
-            buttons: (lv_state[patientID]['can_be_triaged_by_agent']) ? buttons_unblocked : buttons_blocked,
-        });
-
-    // assign from robot to person
-    } else {
-        // first assign the patient to the test subject (no timer), so the test subject has enough time to consider the choice
-        reassignPatient("person", lv_agent_id, patientID)
-
-        // open de popup en vraag om confirmation
-        $("#dialog-confirm").html(gen_patient_popup_dynamic(lv_state[patientID], assign_patient_to="person"));
-        $("#dialog-confirm").dialog({
-            resizable: true,
-            position: {
-                my: "center top",
-                at: "center top+10%",
-                of: window
-            },
-            zIndex: 1000,
-            maxHeight: maxHeight,
-            classes: {
-                "ui-dialog": classes
-            },
-            width: width,
-            modal: true,
-            open: function(event, ui) {
-                $(".ui-dialog-titlebar-close").hide();
-            },
-            buttons: {
-                "Wijs aan mij toe": function() {
-                    // the patient is already assigned to the test subject, so closing is enough
-                    $(this).dialog('close');
-                },
-                "Annuleren": function() {
-                    // assign back to the robot
-                    reassignPatient("robot", lv_agent_id, patientID)
-                    $(this).dialog('close');
-                },
-            }
-        });
-    }
-    return;
-}
-
-
-/*
- * Generate the patient popup content with all required info for the TDP dynamic task allocation (experiment 2 & 3)
- */
-function gen_patient_popup_dynamic(currPatient, assign_patient_to) {
-
-    patient_data = `
-    <div id="${patientID}popUp" class="patient_card_body">
-        <div id="patient_identification" class="row">
-            <div class="col-3">
-                <img src="/fetch_external_media/${currPatient['patient_photo']}" class="patient_photo popUp_photo">
-            </div>
-            <div class="col-9">
-                <div class="patient_name_wrapper">
-                    <div class="patient_number">Patient ${currPatient['number']}</div>
-                    <h2 class="patient_name">${currPatient['patient_name']}</h2>
-                </div>
-                <div class="patient_properties container">
-                    <div class="row">
-                        <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="Geslacht">${currPatient["gender"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/symptoms.svg" title="Symptomen">${currPatient["symptoms"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/calendar.svg" title="Leeftijd">${currPatient["age"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/fitness2.png" title="Fitheid">${currPatient["fitness"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/home_situation.svg" title="Thuis situatie">${currPatient["home_situation"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/work.svg" title="Baan">${currPatient["profession"]}</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="patient_card_inner_divider"><hr></div>
-
-        <div class="card-body">
-           ${currPatient['patient_introduction_text']}
-        </div>
-    </div>
-
-    <div class="dss_agent_predictions">
-        <div id="agent_predictions">`;
-
-
-    // sort influences from big (positive) influence to small (negative)
-    var influences = currPatient['agent_triage_decision_influences'];
-    var sortable = [];
-    for (var infl in influences) {
-        sortable.push([infl, influences[infl]['reason'], influences[infl]['influence']]);
-    }
-    sortable.sort(function(a, b) {
-        if (Math.abs(a[2]) > Math.abs(b[2])) return -1;
-        if (Math.abs(a[2]) < Math.abs(b[2])) return 1;
-    });
-
-
-    // mens mag altijd patiënten overnemen die naar huis worden gestuurd
-    if (currPatient['can_be_triaged_by_agent'] && currPatient['agent_planned_triage_decision'] == 'huis') {
-        patient_data += `Deze patiënt kan <b>wel</b> door de computer worden opgepakt omdat omdat deze naar huis gestuurd zou moeten worden en er is dus geen sprake is van een tekort aan bedden.`;
-        patient_data += `<br><br><b>Deze patiënt moet naar huis wegens de door u opgestelde prioriteiten. De volgende zijn hierin de 3 belangrijkste in dit besluit:</b><br>`;
-
-        // show max 3 attributes
-        var max = (sortable.length < 3) ? sortable.length : 3;
-        for (i = 1; i < max + 1; i++) {
-            try{patient_data += `&nbsp;&nbsp;${i}. ${sortable[i-1][1]}<br>`;}
-            catch{}
-        }
-
-        // make the question whether to assign or not
-        var assign_to = (assign_patient_to == "person") ? "jezelf" : "de robot";
-        patient_data += `<br><br><b>Weet je zeker dat je deze patiënt aan ${assign_to} wilt toewijzen?</b>`;
-
-
-    // geen onzekerheid, zowel mens als agent kunnen hem doen
-    } else if (currPatient['can_be_triaged_by_agent']) {
-        patient_data += `Deze patiënt kan <b>wel</b> door de computer worden opgepakt omdat er <b>geen sprake lijkt te zijn van een dilemma</b>.<br><br> De patiënt moet naar de ${currPatient['agent_planned_triage_decision']} gestuurd worden en er zijn voldoende bedden beschikbaar voor zowel deze patiënt als alle anderen nu in de wachtkamer die ook naar de ${currPatient['agent_planned_triage_decision']} gestuurd moeten worden.`;
-        patient_data += `<br><br><b>Deze patiënt moet naar de ${currPatient['agent_planned_triage_decision']} wegens de door u opgestelde prioriteiten. De volgende zijn hierin de 3 belangrijkste in dit besluit:</b><br>`;
-
-        // show max 3 attributes
-        var max = (sortable.length < 3) ? sortable.length : 3;
-        for (i = 1; i < max + 1; i++) {
-            try{patient_data += `&nbsp;&nbsp;${i}. ${sortable[i-1][1]}<br>`;}
-            catch{}
-        }
-
-        // make the question whether to assign or not
-        var assign_to = (assign_patient_to == "person") ? "jezelf" : "de robot";
-        patient_data += `<br><br><b>Weet je zeker dat je deze patiënt aan ${assign_to} wilt toewijzen?</b>`;
-    }
-
-    // wel onzekerheid, mens moet hem verplicht doen want agent kan hem niet doen
-    else {
-
-        console.log(patient, sortable)
-        var care_contending_string = "";
-        currPatient['care_contending_patients'].forEach(function(patient) {
-            if (care_contending_string != "") {
-                care_contending_string += ", "
-            }
-            care_contending_string += patient
-        })
-
-        patient_data += `Deze patiënt kan <b>niet</b> door de computer worden opgepakt omdat er sprake lijkt te zijn van <b>een dilemma</b>. <br><br>De patiënt moet naar de ${currPatient['agent_planned_triage_decision']} gestuurd worden maar er zijn maar ${$("#ICBeds").text()} bedden beschikbaar voor zowel deze patiënt als de ${currPatient['care_contending_patients'].length} anderen patiënten nu in de wachtkamer die ook naar de ${currPatient['agent_planned_triage_decision']} gestuurd moeten worden.`;
-        patient_data += `<br><br>Deze ${currPatient['care_contending_patients'].length} andere patiënten zijn ${care_contending_string}.<br><br>`;
-        patient_data += `<b>Deze patiënt moet naar de ${currPatient['agent_planned_triage_decision']} wegens de door u opgestelde prioriteiten. De volgende zijn hierin de 3 belangrijkste in dit besluit:</b><br>`;
-
-        // show max 3 attributes for the exaplanation
-        var max = (sortable.length < 3) ? sortable.length : 3;
-        for (i = 1; i < max + 1; i++) {
-            try{patient_data += `&nbsp;&nbsp;${i}. ${sortable[i-1][1]}<br>`;}
-            catch{}
-        }
-
-    }
-
-
-    // make the question whether to assign or not
-    patient_data += `</div></div><img class="tdp_dss_robot" src="/fetch_external_media/dss_robot.png">`;
-
-
-    return patient_data;
-}
-
-
-/*
- * Generate the patient popup with all required info for the TDP supervised autonomy (experiment 2 & 3)
- */
-function gen_patient_popup_autonomy(currPatient) {
-
-    patient_data = `
-    <div id="${patientID}popUp" class="patient_card_body">
-        <div id="patient_identification" class="row">
-            <div class="col-3">
-                <img src="/fetch_external_media/${currPatient['patient_photo']}" class="patient_photo popUp_photo">
-            </div>
-            <div class="col-9">
-                <div class="patient_name_wrapper">
-                    <div class="patient_number">Patient ${currPatient['number']}</div>
-                    <h2 class="patient_name">${currPatient['patient_name']}</h2>
-                </div>
-                <div class="patient_properties container">
-                    <div class="row">
-                        <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="Geslacht">${currPatient["gender"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/symptoms.svg" title="Symptomen">${currPatient["symptoms"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/calendar.svg" title="Leeftijd">${currPatient["age"]}</div>
-                        <div class="patient_property col-6"><img src="/fetch_external_media/fitness2.png" title="Fitheid">${currPatient["fitness"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/home_situation.svg" title="Thuis situatie">${currPatient["home_situation"]}</div>
-                        <div class="patient_property col-12"><img src="/fetch_external_media/work.svg" title="Baan">${currPatient["profession"]}</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="patient_card_inner_divider"><hr></div>
-
-        <div class="card-body">
-           ${currPatient['patient_introduction_text']}
-        </div>
-    </div>
-
-    <div class="dss_agent_predictions">
-        <div id="agent_predictions">
-            <b>Deze patient wordt gestuurd naar: ${currPatient['agent_planned_triage_decision']}. <br><br>Op onderstaande manier droegen de verschillende eigenschappen bij aan de prioriteitsbepaling voor de benodigde zorg (hoe hoger de prioriteit des te eerder een patient toegewezen wordt aan de IC):</b>
-            <br>`;
-
-    // sort influences from big (positive) influence to small (negative)
-    var influences = currPatient['agent_triage_decision_influences'];
-    var sortable = [];
-    for (var infl in influences) {
-        sortable.push([infl, influences[infl]['reason'], influences[infl]['influence']]);
-    }
-    sortable.sort(function(a, b) {
-        if (a[2] > b[2]) return -1;
-        if (a[2] < b[2]) return 1;
-    });
-
-    var pos_attributes = [];
-    var neg_attributes = [];
-    var neutr_attributes = [];
-
-    // show all influences
-    sortable.forEach(function(item) {
-        if (item[2] > 0) {
-            pos_attributes.push(item);
-        } else if (item[2] < 0 ) {
-            neg_attributes.push(item);
-        } else {
-            neutr_attributes.push(item);
-        }
-    })
-
-    // positive attributes
-    if (pos_attributes.length > 0) {
-        patient_data += "<br>De volgende zorgde voor een hoge prioriteit:<br>"
-        var i = 1;
-        pos_attributes.forEach(function(pos_item) {
-            patient_data += `&nbsp;&nbsp;${i++}. ${pos_item[1]}<br>`;
-        })
-    }
-
-    // negative attributes
-    if (neg_attributes.length > 0) {
-        patient_data += "<br>De volgende verlaagde juist de prioriteit:<br>"
-        var i = 1;
-        neg_attributes.forEach(function(neg_item) {
-            patient_data += `&nbsp;&nbsp;${i++}. ${neg_item[1]}<br>`;
-        })
-    }
-
-    // neutral attributes
-    if (neutr_attributes.length > 0) {
-        patient_data += "<br>Deze hadden geen effect op de prioriteit:<br>"
-        var i = 1;
-        neutr_attributes.forEach(function(neutr_item) {
-            patient_data += `&nbsp;&nbsp;${i++}. ${neutr_item[1]}<br>`;
-        })
-    }
-
-    patient_data += `</div>
-
-        <img class="tdp_dss_robot" src="/fetch_external_media/dss_robot.png">
-    </div>`;
-
-    return patient_data;
-}
-
-
-
-// convert sickness updates (of the sickness model) to ticks (defined in config), to hours (1 tick = 0.5h)
-function sickness_updates_to_hours(s_updates) {
-//    console.log("Mhc settings:", mhc_settings);
-
-    // calc how many ticks are between each sickness udpate
-//    var s_per_sickness_update = mhc_settings['config']['patients']['update_sickness_every_x_seconds'];
-//    var ticks_per_s = s_per_sickness_update / mhc_settings['config']['world']['tick_duration'];
-//    var ticks = s_updates * ticks_per_s
-
-    var ticks = s_updates;
-    var hours = ticks / 2;
-
-    // longer than 24 hours is calculated to a day
-    if (hours >= 24) {
-        return (hours / 24).toFixed(1) + " dagen";
-
-    // less than 24 hours, display in hours
-    } else {
-        return hours.toFixed(1)  + " uren"
-    }
-}
-
-
-function gen_patient_status_popUp(patientID, result, time, choice) {
-    currPatient = lv_state[patientID]
-    patient_data = `
-    <div id="${currPatient.obj_id}patientCardBody" class="patient_card_body">
-        <div id="patient_identification" class="row">
-            <div class="col-3">
-                <img src="/fetch_external_media/${currPatient['patient_photo']}" class="patient_photo popUp_photo">
-            </div>
-            <div class="col-7">
-                <div class="patient_name_wrapper">
-                    <div class="patient_number">Patient ${currPatient['number']}</div>
-                    <h2 class="patient_name">${currPatient['patient_name']}</h2>
-                </div>
-            </div>
-            <div class="col-2 patient_identification_right">
-                <img src="/fetch_external_media/exit_complete.png">
-            </div>
-        </div>
-
-        <div class="patient_card_inner_divider"><hr></div>
-
-        <div class="card-body">
-            U koos voor medische zorg ${choice} na ${time} minuten wachten in de noodopvang,
-            waardoor de persoon volledig ${result} is.
-        </div>
-    </div>`;
-
-    return patient_data
-}
 
 /*
  * Return a patient card filled with the data of the patient
@@ -1458,7 +870,9 @@ function gen_patient_status_popUp(patientID, result, time, choice) {
 function gen_patient_card_complete(patient_data) {
     patientPhoto = '/fetch_external_media/' + patient_data["victim_photo"]
     //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
-
+    difficulty_to_reach_color = get_difficulty_color(patient_data["difficulty_to_reach"])
+    difficulty_to_rescue_color = get_difficulty_color(patient_data["difficulty_to_rescue"])
+    level_of_injury_color = get_level_of_injury_color(patient_data["level_of_injury"])
     patient_card_html = `
     <div id="${patient_data.obj_id}patientCardBody" class="patient_card_body">
         <div id="patient_identification" class="row">
@@ -1467,7 +881,7 @@ function gen_patient_card_complete(patient_data) {
             </div>
             <div class="col-6">
                 <div class="patient_name_wrapper">
-                    <div class="patient_number">Patient ${patient_data['number']}</div>
+                    <div class="patient_number">Victim ${patient_data['number']}</div>
                     <h2 class="patient_name">${patient_data['victim_name']}</h2>
                  </div>
         </div>
@@ -1485,10 +899,10 @@ function gen_patient_card_complete(patient_data) {
         <div class="patient_properties container">
             <div class="row">
             <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
+            <div class="patient_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
             <div class="patient_property col-6"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
-            <div class="patient_property col-12"><img src="/fetch_external_media/vitalsign.svg" title="vital sign">${patient_data["vital_sign"]}</div>
+            <div class="patient_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
+            <div class="patient_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${patient_data["level_of_injury"]}</div>
             </div>
         </div>`;
 
@@ -1500,7 +914,9 @@ function gen_patient_card_for_explanation(patient_data) {
     patient_data = JSON.parse(patient_data)
     patientPhoto = '/fetch_external_media/' + patient_data["image"]
     //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
-
+    difficulty_to_reach_color = get_difficulty_color(patient_data["difficulty_to_reach"])
+    difficulty_to_rescue_color = get_difficulty_color(patient_data["difficulty_to_rescue"])
+    level_of_injury_color = get_injury_color(patient_data["level_of_injury"])
     patient_card_html = `
     <div id="${patient_data.obj_id}patientCardBody" class="patient_card_body">
         <div id="patient_identification" class="row">
@@ -1526,10 +942,10 @@ function gen_patient_card_for_explanation(patient_data) {
         <div class="patient_properties container">
             <div class="row">
             <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
+            <div class="patient_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
             <div class="patient_property col-6"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
-            <div class="patient_property col-12"><img src="/fetch_external_media/vitalsign.svg" title="vital sign">${patient_data["vital_sign"]}</div>
+            <div class="patient_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
+            <div class="patient_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${patient_data["level_of_injury"]}</div>
             </div>
         </div>`;
 
@@ -1574,4 +990,33 @@ function parse_mhc_settings(settings_obj) {
     }
     mhc_dss_biased_suggestion = biased_agent_suggestion;
 
+}
+
+function get_level_of_injury_color(level) {
+    level_of_injury = localStorage.getItem("level_of_injury");
+    if(level == "low") {
+        if(level_of_injury == "high") {
+            return "#DC143C" //red
+        }else{
+            return "#1E90FF" //blue
+        }
+    }else if(level == "middle"){
+        return "#FFD700" //yellow
+    }else if(level == "high"){
+        if(level_of_injury == "high"){
+            return "#1E90FF" //blue
+        }else{
+            return "#DC143C" //red
+        }
+    }
+}
+
+function get_difficulty_color(level) {
+    if(level == "low") {
+        return "#1E90FF" //blue
+    }else if(level == "middle"){
+        return "#FFD700" //yellow
+    }else if(level == "high"){
+        return "#DC143C" //red
+    }
 }
