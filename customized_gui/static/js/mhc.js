@@ -916,7 +916,7 @@ function gen_patient_card_for_explanation(patient_data) {
     //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
     difficulty_to_reach_color = get_difficulty_color(patient_data["difficulty_to_reach"])
     difficulty_to_rescue_color = get_difficulty_color(patient_data["difficulty_to_rescue"])
-    level_of_injury_color = get_injury_color(patient_data["level_of_injury"])
+    level_of_injury_color = get_level_of_injury_color(patient_data["level_of_injury"])
     patient_card_html = `
     <div id="${patient_data.obj_id}patientCardBody" class="patient_card_body">
         <div id="patient_identification" class="row">
