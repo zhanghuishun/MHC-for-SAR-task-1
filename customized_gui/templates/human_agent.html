@@ -63,10 +63,6 @@
             Total Time: <span id="timer_value">0 seconds</span>
         </div>
         <div class="statistics_divider">|</div>
-        <div class="infoPiece black">
-           Your moral values: <span id="moral_value">None</span>
-        </div>
-        <div class="statistics_divider">|</div>
         <button class="btn btn-dark" id="moral_value_button" onclick="showMoralValues()" data-toggle="collapse"
         data-target="#sideBar" aria-expanded="false" aria-controls="sideBar">Moral Value</button>
         <button class="btn btn-dark" id="explanation_button" onclick="showDialog(); changeStatement()">Explanation</button>
@@ -144,7 +140,9 @@
                 <span>This is a patient's data</span>
             </div>
         </div>
-
+        <div class="moral-value-selected" id="moral_value_selected">
+            <div>click the "Moral Value" button to set your moral values</div>
+        </div>
         <!-- Chat -->
         <div class="collapse" id="chat">
             <div class="container-fluid">

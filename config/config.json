@@ -9,9 +9,9 @@
           {"second": 127},
           {"second": 128},
 
-          {"second": 260},
-          {"second": 261},
-          {"second": 262}
+          {"second": 265},
+          {"second": 266},
+          {"second": 267}
         ],
         "max_victims": 10,
         "victims_file": "victim_generator/victim_data.csv"

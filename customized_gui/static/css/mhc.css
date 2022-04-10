@@ -574,21 +574,26 @@ input:checked + .slider:before {
     background-color: white !important;
 }
 
-.sidebarClass {
-    position: fixed;
-    right: -60%;
-    width: 40%;
-    z-index: 500;
-    transition: width 1s;
-}
-
 #moral_values_select {
     display: none;
 	position: fixed;
 	top: 0;
-	left: 0;
+	right: 0;
 	width: 50%;
 	height: 100%;
 	overflow: auto;
 	z-index: 998;
+}
+
+.moral-value-selected {
+    position: fixed;	        
+    bottom: 20px;		
+    left: 20px;
+  }
+
+.image-frame {
+    width: 200px;
+    height: 40px;
+    border: 1px solid black;
+    position: relative;
 }

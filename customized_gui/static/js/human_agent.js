@@ -39,11 +39,15 @@ var moral_dict = {}
 //get values in copy list
 function submitMoralValue() {
     var list = document.getElementById("copy-list").getElementsByTagName("li");
-    var your_moral_value = document.getElementById("moral_value");
+    var your_moral_value = document.getElementById("moral_value_selected");
     if(list.length < 5) alert("miss moral value");
     else {
         //change "your moral value"
-        your_moral_value.innerHTML = list[0].innerText+">"+list[1].innerText+">"+list[2].innerText+">"+list[3].innerText+">"+list[4].innerText
+        your_moral_value.innerHTML = "Your moral values:";
+        for(let i = 0; i < list.length; i++){
+            your_moral_value.innerHTML += "<div class=\"image-frame\"> <img src=\"/static/images/"+list[i].innerText+".png\">"
+        }
+        //your_moral_value.innerHTML = list[0].innerText+">"+list[1].innerText+">"+list[2].innerText+">"+list[3].innerText+">"+list[4].innerText
         moral_dict = {};
         moral_dict['very_high'] = list[0].innerText;
         moral_dict['high'] = list[1].innerText;
