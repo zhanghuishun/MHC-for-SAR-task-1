@@ -15,14 +15,14 @@ html, .content-row {
     overflow: hidden;
 }
 
-/* Patients */
+/* Victims */
 
-#patient-cards {
+#victim-cards {
     width: 60%;
     padding-left: 1%;
 }
 
-.patientcard {
+.victimcard {
     margin-left: 0.5%;
     margin-top: 0.5%;
     width: 32%;
@@ -33,11 +33,11 @@ html, .content-row {
     overflow: hidden;
 }
 
-.patientcard .card-header {
+.victimcard .card-header {
     margin-top: 0px;
 }
 
-.patientcard-placeholder {
+.victimcard-placeholder {
     border-radius: .25rem;
     margin-left: 0.5%;
     margin-top: 0.5%;
@@ -48,7 +48,7 @@ html, .content-row {
     border: 2px dashed #82817f;
 }
 
-#patient_identification .patient_photo {
+#victim_identification .victim_photo {
     width: 180%;
     height: auto;
     border-radius: 50%;
@@ -57,14 +57,14 @@ html, .content-row {
     margin: 5px 0 0 5px;
 }
 
-#patient_identification h2.patient_name {
+#victim_identification h2.victim_name {
     margin: 0;
     padding-left: 25%;
     text-transform: uppercase;
     font-size: 16px !important;
 }
 
-#patient_identification .patient_identification_right img {
+#victim_identification .victim_identification_right img {
     position: absolute;
     bottom: -12px;
     width: 50%;
@@ -73,44 +73,44 @@ html, .content-row {
     display: none;
 }
 
-.patient_card_inner_divider hr {
+.victim_card_inner_divider hr {
     border-top: 4px solid black;
     margin-top: 0.75rem;
 }
 
-.patient_property {
+.victim_property {
     margin-bottom: 20px;
     padding-right: 0;
 }
 
-.patient_property img {
+.victim_property img {
     width: 35px;
     height: auto;
     margin-right: 20px;
 }
 
-.patient_extra_info_collapse .card-body {
+.victim_extra_info_collapse .card-body {
     padding-top: 0;
 }
 
-.patient_identification_right button {
+.victim_identification_right button {
     display: block;
     margin-top: 10px;
 }
 
-.patient_name_wrapper .patient_number {
+.victim_name_wrapper .victim_number {
     margin-top: 5px;
     padding-left:25%;
     text-transform: uppercase;
     font-size: 14px;
 }
 
-.patientcard  .patient_card_body {
+.victimcard  .victim_card_body {
     overflow: hidden;
     height: 100%;
 }
 
-/* dropzones for patients */
+/* dropzones for victims */
 
 #ward_dropzone {
     position: absolute;
@@ -184,7 +184,7 @@ html, .content-row {
     opacity: 1;
 }
 
-/* Visualize sickness of patients */
+/* Visualize sickness of victims */
 .mhc-healthbar-border {
     border: 2px solid grey;
     margin-top: 2px;
@@ -229,7 +229,7 @@ html, .content-row {
     margin: -8px 7px 0 7px;
     font-weight: 100;
 }
-#statusPatients {
+#statusVictims {
     color: black;
 }
 .statistic_spacer {
@@ -291,7 +291,7 @@ html, .content-row {
     height: 50px;
 }
 
-.patientData{
+.victimData{
     z-index: 10000;
     width: 40%;
     position: absolute;
@@ -302,7 +302,7 @@ html, .content-row {
 
 /* Decision support predictions */
 
-.mhc_show_explanations .patient_card_body {
+.mhc_show_explanations .victim_card_body {
     width: 40%;
     float:left
 }
@@ -362,14 +362,14 @@ html, .content-row {
     background: #cbcbcb;
 }
 
-.mhc-healthcircle-patientCard {
+.mhc-healthcircle-victimCard {
     height: 40px;
     width: 40px;
     border-radius: 50%;
     background-color: red;
 }
 
-.mhc-healthcircle-border-patientCard {
+.mhc-healthcircle-border-victimCard {
     padding-top: 20%;
     display: block;
     padding-left: 30%;
@@ -447,7 +447,7 @@ html, .content-row {
     margin: -75% 0 0 -75%;
 }
 
-/* Agent triage decision preview in patient cards in overview */
+/* Agent triage decision preview in victim cards in overview */
 .agent_triage_decision_preview {
     position: absolute;
     bottom: 0;
@@ -566,11 +566,11 @@ input:checked + .slider:before {
     width: 100px;
 }
 
-.patientcard-robot {
+.victimcard-robot {
     background-color: #d0e7ef !important;
 }
 
-.patientcard-human {
+.victimcard-human {
     background-color: white !important;
 }
 

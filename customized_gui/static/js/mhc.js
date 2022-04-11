@@ -10,287 +10,72 @@ wardFull = false
 waitingBeds = 0;
 wardBeds = 0;
 TotalBeds = []
-oldPatients = []
-onScreenPatients = []
-deadPatients = []
-healedPatients = []
+oldVictims = []
+onScreenVictims = []
+deadVictims = []
+healedVictims = []
 
-// which patient cards are being shown at the moment
-patient_cards_open = [];
-homePatients = 0
+// which victim cards are being shown at the moment
+victim_cards_open = [];
+homeVictims = 0
 blockedButtons = true
 newHealed=false;
 
-$(document).ready(function() {
-//    patientCardUtilities()
-})
-
-// function patientCardUtilities() {
-//     $("#patient-cards").sortable({
-//         placeholder: "patientcard-placeholder",
-//         cursor: "move",
-//         revert: true,
-//         // started sorting, block revert
-//         start: function(event, ui) {
-//             //            console.log("start sort:, adding block-revert");
-//             ui.item.addClass("block-revert");
-//             var patient_id = ui.item.attr("data-agentID");
-//             data = {
-//                 "current_tick": current_tick,
-//                 "tps": tps,
-//                 "agentID": patient_id,
-//                 "tdp": mhc_settings['tdp'],
-//                 "start_timestamp": mhc_settings['start_timestamp']
-//             }
-//             setTimeout(function() {
-//                 post_mhc_message("pickupPatient", data);
-//             }, 30);
-
-//         },
-//         // moved out, activate revert
-//         out: function(event, ui) {
-//             //            console.log("out:, removing block-revert");
-//             ui.item.removeClass("block-revert");
-//         },
-//         // moved into sorting list, block double revert
-//         over: function(event, ui) {
-//             //            console.log("in:, adding block-revert");
-//             ui.item.addClass("block-revert");
-//         }
-//     });
-
-//     // we also want to drag patient cards to drop zones
-//     $(".patientcard").draggable({
-//         connectToSortable: "#patient-cards",
-//         revert: function() {
-//             console.log("checking revert");
-//             // send a message to the MHC visualizer to make a screenshot
-
-//             // prevent double revert animation when moving within sorting
-//             if ($(this).hasClass('block-revert')) {
-//                 console.log("revert blocked")
-//                 $(this).removeClass('block-revert');
-//                 var patient_id = this.attr("data-agentID");
-//                 data = {
-//                     "agentID": patient_id,
-//                     "tdp": mhc_settings['tdp'],
-//                     "start_timestamp": mhc_settings['start_timestamp']
-//                 }
-//                 // not used anymore
-//                 post_mhc_message("returnPatient", data);
-//                 return false;
-//             }
-
-//             // revert to the original position
-//             if ($(this).hasClass('drag-revert') && !leftButtonDown) {
-//                 console.log("reverting");
-//                 var patient_id = this.attr("data-agentID");
-//                 data = {
-//                     "agentID": patient_id,
-//                     "tdp": mhc_settings['tdp'],
-//                     "start_timestamp": mhc_settings['start_timestamp']
-//                 }
-//                 // not used anymore
-//                 post_mhc_message("returnPatient", data);
-//                 return true;
-//             }
-//         },
-//         scroll: false,
-//         scrollSensitivity: 400
-//     });
-
-//     // keep track of the left mouse button state
-//     var leftButtonDown;
-//     $(document).mousedown(function(e) {
-//         if (e.which === 1) leftButtonDown = true;
-//     });
-//     $(document).mouseup(function(e) {
-//         if (e.which === 1) leftButtonDown = false;
-//     });
-
-//     // specify drop zones for the patient cards
-//     $(".droppable").droppable({
-//         tolerance: "pointer",
-//         drop: function(event, ui) {
-//             // make sure the user intended to drop it here
-//             if (leftButtonDown) return false;
-
-//             // get the patient and target location
-//             var patient = ui.draggable.find('.patient_name').text();
-//             var patient_id = ui.draggable.attr("data-agentID");
-//             var target = $(this).attr("data-destination");
-//             if ((target == "IC" && !ICFull) || (target == "ziekenboeg" && !wardFull))
-//                 if (confirm('Weet je zeker dat je ' + patient + ' naar ' + target + ' wilt sturen?')) {
-//                     // do stuff with our patient, e.g. send the input to MATRX
-//                     console.log("User wants to send", ui.draggable.find('.patient_name').text(), ' with ID ' + patient_id + " to ", target)
-
-//                     // stop reverting
-//                     ui.draggable.removeClass('drag-revert');
-
-//                     // remove the patient card
-//                     ui.draggable.fadeOut(300, function() {
-//                         $(this).remove();
-//                     });
-//                     sendPatientToDestination(target, lv_agent_id, patient_id)
-
-//                 }
-//         }
-//     });
-// }
-
-
-
-// function sendPatientToDestination(target, lv_agent_id, patient_id) {
-//     // send a message to MATRX with the results of the triage decision
-//     type = "send_message"
-//     data = {
-//         "content": {
-//             "type": "triage_decision",
-//             "decision": target,
-//             "triaged_by": "human"
-//         },
-//         "sender": lv_agent_id,
-//         "receiver": patient_id
-//     }
-//     send_matrx_message(type, data);
-// }
-
-// function reassignPatient(target, lv_agent_id,patient_id){
-//     type = "send_message"
-//     data = {
-//         "content": {
-//             "type": "reassign",
-//             "assigned_to": target
-//         },
-//         "sender": lv_agent_id,
-//         "receiver": patient_id
-//     }
-//     send_matrx_message(type, data);
-//     }
-
-// function setDropZones() {
-//     $("#home_dropzone").css('left', $("#home_sign_219").position().left - 50);
-//     $("#home_dropzone").css('top', $("#home_sign_219").position().top);
-//     $("#ward_dropzone").css('left', $("#ward_sign_217").position().left - 40);
-//     $("#ward_dropzone").css('top', $("#ward_sign_217").position().top);
-//     $("#IC_dropzone").css('left', $("#IC_sign_218").position().left - 50);
-//     $("#IC_dropzone").css('top', $("#IC_sign_218").position().top);
-// }
 
 
 /*
- * Add patients with pop-ups
- * @Param patients: a list of patients IDs currently present in the world
+ * Add victims with pop-ups
+ * @Param victims: a list of victims IDs currently present in the world
  */
-function extend_update(patients) {
+function extend_update(victims) {
     worldObjects = Object.keys(lv_state)
-    for (var ind in patients) {
-        // update the triage countdown
-        // if (lv_state[patients[ind]].hasOwnProperty("countdown")) {
-        //     var countdown = Math.round(lv_state[patients[ind]]['countdown']);
-        //     if (countdown < 0) { countdown = 0};
-        //     var elem = $("#"+patients[ind]+"patientCardBody #timer .mhc-healthbar");
-        //     if (elem.length != 0) {
-        //         $("#"+patients[ind]+"patientCardBody #timer .countdown_text")[0].innerHTML = countdown + " sec";
-        //         elem[0].style.width = (countdown / lv_state[patients[ind]]['original_countdown'] * 100) + "%";
-        //         if(mhc_settings['tdp'] == 'tdp_dynamic_task_allocation')
-        //          {
-        //             if ($("#"+patients[ind]+"patientCardBody input")[0].checked)
-        //                 {$("#"+patients[ind]+"patientCardBody #infoButton").hide();
-        //                 $("#"+patients[ind]+"patientCardBody .agent_triage_decision_preview").show()
-
-        //                 }
-        //             else{
-        //             $("#"+patients[ind]+"patientCardBody #infoButton").show()
-        //             $("#"+patients[ind]+"patientCardBody .agent_triage_decision_preview").hide()
-        //             }
-        //             }
-
-        //     }
-        // }
-        // remove any triaged patients that are still on screen
-    }
-    //Check if a new patient has been added and add the patient card
-    if (patients.filter(value => oldPatients.includes(value)) != patients.length && worldObjects.length > 0 && patients.length > 0) {
-        if (patients.filter(value => !onScreenPatients.includes(value)).length > 0) {
+    
+    //Check if a new victim has been added and add the victim card
+    if (victims.filter(value => oldVictims.includes(value)) != victims.length && worldObjects.length > 0 && victims.length > 0) {
+        if (victims.filter(value => !onScreenVictims.includes(value)).length > 0) {
             if (!open) {
-                patientID = patients.filter(value => !onScreenPatients.includes(value))[0]
-                patient = lv_state[patientID]
-                //popupPatient(patient);
+                victimID = victims.filter(value => !onScreenVictims.includes(value))[0]
+                victim = lv_state[victimID]
+                //popupVictim(victim);
                 open = true
-                patientCard = '<div class="card patientcard drag-revert" data-agentID="' + patient.obj_id + '" id="' + patient.obj_id + 'patientCard" >'
-                patientCard += gen_patient_card_complete(patient);
-                patientCard += '</div>'
+                victimCard = '<div class="card victimcard drag-revert" data-agentID="' + victim.obj_id + '" id="' + victim.obj_id + 'victimCard" >'
+                victimCard += gen_victim_card_complete(victim);
+                victimCard += '</div>'
 
-                // note that we opened this patient card
-                patient_cards_open.push(patient.obj_id);
+                // note that we opened this victim card
+                victim_cards_open.push(victim.obj_id);
 
-                $('#patient-cards').append(patientCard);
-                newBody = $("#" + patient.obj_id + "patientCardBody")
+                $('#victim-cards').append(victimCard);
+                newBody = $("#" + victim.obj_id + "victimCardBody")
                 opacity = 0.9
                 // newBody.css('background-color', 'rgba(0, 0, 255, 0.9)');
                 fade_out_background(newBody[0].parentElement, 100, 236, 236, 138, opacity);
-                //patientCardUtilities()
+                //victimCardUtilities()
                 open = false;
-                //Show the info next to the patient if they have left the waiting room
-                $("#" + patientID).hover(function() {
+                //Show the info next to the victim if they have left the waiting room
+                $("#" + victimID).hover(function() {
                         if (lv_state[$(this)[0].id]["medical_care"] != "eerste hulp") {
-                            $("#patient_Data").show()
-                            $("#patient_Data").html(lv_state[$(this)[0].id]['patient_introduction_text'])
+                            $("#victim_Data").show()
+                            $("#victim_Data").html(lv_state[$(this)[0].id]['victim_introduction_text'])
                         }
                     },
                     function() {
-                        $("#patient_Data").hide();
+                        $("#victim_Data").hide();
 
                     }
                 )
-                onScreenPatients.push(patientID)
+                onScreenVictims.push(victimID)
             }
-            // waiting = 0;
-            // ward = 0;
-            // ic = 0;
-            // //show the correct info in the counters + pop up buttons
-            // for (var ind in patients) {
-            //     if (lv_state[patients[ind]]["medical_care"] == "eerste hulp") waiting += 1
-            //     if (lv_state[patients[ind]]["medical_care"] == "ziekenboeg") ward += 1
-            //     if (lv_state[patients[ind]]["medical_care"] == "IC") ic += 1
-            // }
-            // $("#myWard").html(ward)
-            // $("#myIC").html(ic)
-            // if (ward == wardBeds) {
-            //     wardFull = true
-            // } else {
-            //     wardFull = false
-            //     if (!blockedButtons) {
-            //         $("#send_to_ward").removeClass("not-visible")
-            //         $("#send_to_ward").addClass("visible")
-            //     }
-            // }
-            // $("#myIC").html(ic)
-            // if (ic == ICBeds) {
-            //     ICFull = true
-            // } else {
-            //     ICFull = false
-            //     if (!blockedButtons) {
-            //         $("#send_to_IC").removeClass("not-visible")
-            //         $("#send_to_IC").addClass("visible")
-            //     }
-            // }
-            // $("#waitingStatus").html(waiting)
-            // $("#wardStatus").html(ward)
-            // $("#ICStatus").html(ic)
-            // $("#cured").html(healedPatients.length)
-            // $("#dead").html(deadPatients.length)
         }
-        oldPatients = patients;
+        oldVictims = victims;
 
     }
 }
 
 
-function popupPatientStatus(data) {
-    //gen_patient_popup(patientID)
-    $("#dialog-update").html(gen_patient_status_popUp(data["patient_id"], data["result"], data["time"], data["choice"]));
+function popupVictimStatus(data) {
+    //gen_victim_popup(victimID)
+    $("#dialog-update").html(gen_victim_status_popUp(data["victim_id"], data["result"], data["time"], data["choice"]));
     $("#dialog-update").dialog({
         resizable: true,
         position: {
@@ -307,14 +92,14 @@ function popupPatientStatus(data) {
         close: function() {
             open = false;
             $('#container').removeClass("blurred")
-            $('#patient-cards').removeClass("blurred")
+            $('#victim-cards').removeClass("blurred")
         },
         width: '30%',
         modal: true,
         open: function(event, ui) {
             $('#dialog-confirm').parent('.ui-dialog').css('zIndex', 10000)
             $('#container').addClass("blurred")
-            $('#patient-cards').addClass("blurred")
+            $('#victim-cards').addClass("blurred")
         },
         buttons: [],
     });
@@ -326,7 +111,7 @@ function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-function popupPatient(patientID) {
+function popupVictim(victimID) {
     // check if we are displaying a decision support triage window or a regular one
     var classes = "source_dialog";
     var width = "70%";
@@ -343,7 +128,7 @@ function popupPatient(patientID) {
 
     // supervised autonomy requires a simpler popup with less options
     if (mhc_settings['tdp'] == 'tdp_supervised_autonomy') {
-        $("#dialog-confirm").html(gen_patient_popup(patientID));
+        $("#dialog-confirm").html(gen_victim_popup(victimID));
         $("#dialog-confirm").dialog({
             resizable: true,
             position: {
@@ -375,7 +160,7 @@ function popupPatient(patientID) {
 
 
 
-    $("#dialog-confirm").html(gen_patient_popup(patientID));
+    $("#dialog-confirm").html(gen_victim_popup(victimID));
     $("#dialog-confirm").dialog({
         resizable: true,
         position: {
@@ -393,7 +178,7 @@ function popupPatient(patientID) {
             open = false;
             blockedButtons = true;
             $('#container').removeClass("blurred")
-            $('#patient-cards').removeClass("blurred")
+            $('#victim-cards').removeClass("blurred")
         },
         width: width,
         modal: true,
@@ -404,7 +189,7 @@ function popupPatient(patientID) {
             $("#send_to_home").hide()
             $('#dialog-confirm').parent('.ui-dialog').css('zIndex', 10000)
             $('#container').addClass("blurred")
-            $('#patient-cards').addClass("blurred")
+            $('#victim-cards').addClass("blurred")
             var seconds = 7
             $("#Timer").html("Lees de bovenstaande tekst")
             int = setInterval(function() {
@@ -465,14 +250,14 @@ function popupPatient(patientID) {
 
                 // check if we need to add a foil explanation
                 if(mhc_settings['tdp'] == 'tdp_decision_support_explained') {
-                    var currPatient = lv_state[patientID];
-                    if (currPatient['IC_foil'] != 'None') {
+                    var currVictim = lv_state[victimID];
+                    if (currVictim['IC_foil'] != 'None') {
                         large_dialog = true;
                         are_you_sure_text = `<div class="dss_agent_foil_question">${are_you_sure_text}</div>`;
                         are_you_sure_text += `
                             <div class="dss_agent_foil_explanation">
                                 <div id="agent_predictions">
-                                    ${currPatient['IC_foil']}
+                                    ${currVictim['IC_foil']}
                                 </div>
                             </div>
                             <img class="tdp_dss_robot foil_explanation_bot" src="/fetch_external_media/dss_robot.png">
@@ -495,27 +280,27 @@ function popupPatient(patientID) {
                     buttons: {
                         "Ja": function() {
                             // do the triage decision
-                            //makeScreenshot(patientID);
+                            //makeScreenshot(victimID);
                              data = {
                             "current_tick": current_tick,
                             "tps": tps,
-                            "agentID": patientID,
+                            "agentID": victimID,
                             "tdp": mhc_settings['tdp'],
                             "start_timestamp": mhc_settings['start_timestamp']
                                 }
                            var confirm_confirm = $(this);
                            var resp = $.ajax({
                                 method: "POST",
-                                url: mhc_url + ":" + port_mhc + "/" + "pickupPatient",
+                                url: mhc_url + ":" + port_mhc + "/" + "pickupVictim",
                                 contentType: "application/json; charset=utf-8",
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 success: function(response) {
-                                   sendPatientToDestination("IC", lv_agent_id, patientID)
-                                    $("#" + patientID + "patientCard").remove();
-                                    patient_cards_open.pop(patientID)
+                                   sendVictimToDestination("IC", lv_agent_id, victimID)
+                                    $("#" + victimID + "victimCard").remove();
+                                    victim_cards_open.pop(victimID)
                                     $('#container').removeClass("blurred")
-                                    $('#patient-cards').removeClass("blurred")
+                                    $('#victim-cards').removeClass("blurred")
                                     open = false;
 
                                     // close the second confirmation dialog
@@ -527,11 +312,11 @@ function popupPatient(patientID) {
                             });
 
                             /*sleep(500).then(() => {
-                                sendPatientToDestination("IC", lv_agent_id, patientID)
-                                $("#" + patientID + "patientCard").remove();
-                                patient_cards_open.pop(patientID)
+                                sendVictimToDestination("IC", lv_agent_id, victimID)
+                                $("#" + victimID + "victimCard").remove();
+                                victim_cards_open.pop(victimID)
                                 $('#container').removeClass("blurred")
-                                $('#patient-cards').removeClass("blurred")
+                                $('#victim-cards').removeClass("blurred")
                                 open = false;
                                 var confirm_confirm = $(this);
                                 // close the second confirmation dialog
@@ -560,14 +345,14 @@ function popupPatient(patientID) {
 
                 // check if we need to add a foil explanation
                 if(mhc_settings['tdp'] == 'tdp_decision_support_explained') {
-                    var currPatient = lv_state[patientID];
-                    if (currPatient['Ziekenboeg_foil'] != 'None') {
+                    var currVictim = lv_state[victimID];
+                    if (currVictim['Ziekenboeg_foil'] != 'None') {
                         large_dialog = true;
                         are_you_sure_text = `<div class="dss_agent_foil_question">${are_you_sure_text}</div>`;
                         are_you_sure_text += `
                             <div class="dss_agent_foil_explanation">
-                                <div id="agent_predictions">
-                                    ${currPatient['Ziekenboeg_foil']}
+                                <div id="agent_prediction s">
+                                    ${currVictim['Ziekenboeg_foil']}
                                 </div>
                             </div>
                             <img class="tdp_dss_robot foil_explanation_bot" src="/fetch_external_media/dss_robot.png">
@@ -590,28 +375,28 @@ function popupPatient(patientID) {
                     buttons: {
                         "Ja": function() {
                             // do the triage decision
-                            //makeScreenshot(patientID);
+                            //makeScreenshot(victimID);
 
                             data = {
                             "current_tick": current_tick,
                             "tps": tps,
-                            "agentID": patientID,
+                            "agentID": victimID,
                             "tdp": mhc_settings['tdp'],
                             "start_timestamp": mhc_settings['start_timestamp']
                                 }
                             var confirm_confirm = $(this);
                             var resp = $.ajax({
                                 method: "POST",
-                                url: mhc_url + ":" + port_mhc + "/" + "pickupPatient",
+                                url: mhc_url + ":" + port_mhc + "/" + "pickupVictim",
                                 contentType: "application/json; charset=utf-8",
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 success: function(response) {
-                                   sendPatientToDestination("ziekenboeg", lv_agent_id, patientID)
-                                    $("#" + patientID + "patientCard").remove();
-                                    patient_cards_open.pop(patientID)
+                                   sendVictimToDestination("ziekenboeg", lv_agent_id, victimID)
+                                    $("#" + victimID + "victimCard").remove();
+                                    victim_cards_open.pop(victimID)
                                     $('#container').removeClass("blurred")
-                                    $('#patient-cards').removeClass("blurred")
+                                    $('#victim-cards').removeClass("blurred")
                                     open = false;
 
                                     // close the second confirmation dialog
@@ -622,11 +407,11 @@ function popupPatient(patientID) {
                                 }
                             });
                             /*sleep(500).then(() => {
-                                sendPatientToDestination("ziekenboeg", lv_agent_id, patientID)
-                                $("#" + patientID + "patientCard").remove();
-                                patient_cards_open.pop(patientID)
+                                sendVictimToDestination("ziekenboeg", lv_agent_id, victimID)
+                                $("#" + victimID + "victimCard").remove();
+                                victim_cards_open.pop(victimID)
                                 $('#container').removeClass("blurred")
-                                $('#patient-cards').removeClass("blurred")
+                                $('#victim-cards').removeClass("blurred")
                                 open = false;
                                 var confirm_confirm = $(this);
                                 // close the second confirmation dialog
@@ -655,14 +440,14 @@ function popupPatient(patientID) {
 
                 // check if we need to add a foil explanation
                 if(mhc_settings['tdp'] == 'tdp_decision_support_explained') {
-                    var currPatient = lv_state[patientID];
-                    if (currPatient['Huis_foil'] != 'None') {
+                    var currVictim = lv_state[victimID];
+                    if (currVictim['Huis_foil'] != 'None') {
                         large_dialog = true;
                         are_you_sure_text = `<div class="dss_agent_foil_question">${are_you_sure_text}</div>`;
                         are_you_sure_text += `
                             <div class="dss_agent_foil_explanation">
                                 <div id="agent_predictions">
-                                    ${currPatient['Huis_foil']}
+                                    ${currVictim['Huis_foil']}
                                 </div>
                             </div>
                             <img class="tdp_dss_robot foil_explanation_bot" src="/fetch_external_media/dss_robot.png">
@@ -689,27 +474,27 @@ function popupPatient(patientID) {
                             data = {
                             "current_tick": current_tick,
                             "tps": tps,
-                            "agentID": patientID,
+                            "agentID": victimID,
                             "tdp": mhc_settings['tdp'],
                             "start_timestamp": mhc_settings['start_timestamp']
                                 }
                           var confirm_confirm = $(this);
                            var resp = $.ajax({
                                 method: "POST",
-                                url: mhc_url + ":" + port_mhc + "/" + "pickupPatient",
+                                url: mhc_url + ":" + port_mhc + "/" + "pickupVictim",
                                 contentType: "application/json; charset=utf-8",
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 success: function(response) {
-                                   sendPatientToDestination("huis", lv_agent_id, patientID)
-                                   if (onScreenPatients.includes(patientID)) {
-                                       homePatients += 1;
-                                       $("#myHome").html(homePatients)
+                                   sendVictimToDestination("huis", lv_agent_id, victimID)
+                                   if (onScreenVictims.includes(victimID)) {
+                                       homeVictims += 1;
+                                       $("#myHome").html(homeVictims)
                                        }
-                                   $("#" + patientID + "patientCard").remove();
-                                   patient_cards_open.pop(patientID)
+                                   $("#" + victimID + "victimCard").remove();
+                                   victim_cards_open.pop(victimID)
                                     $('#container').removeClass("blurred")
-                                    $('#patient-cards').removeClass("blurred")
+                                    $('#victim-cards').removeClass("blurred")
                                     open = false;
 
                                      // close the second confirmation dialog
@@ -721,15 +506,15 @@ function popupPatient(patientID) {
                             });
 
                             /*sleep(500).then(() => {
-                                sendPatientToDestination("huis", lv_agent_id, patientID)
-                                if (onScreenPatients.includes(patientID)) {
-                                    homePatients += 1;
-                                    $("#myHome").html(homePatients)
+                                sendVictimToDestination("huis", lv_agent_id, victimID)
+                                if (onScreenVictims.includes(victimID)) {
+                                    homeVictims += 1;
+                                    $("#myHome").html(homeVictims)
                                 }
-                                $("#" + patientID + "patientCard").remove();
-                                patient_cards_open.pop(patientID)
+                                $("#" + victimID + "victimCard").remove();
+                                victim_cards_open.pop(victimID)
                                 $('#container').removeClass("blurred")
-                                $('#patient-cards').removeClass("blurred")
+                                $('#victim-cards').removeClass("blurred")
                                 open = false;
                                 var confirm_confirm = $(this);
                                 // close the second confirmation dialog
@@ -752,31 +537,31 @@ function popupPatient(patientID) {
 }
 
 //NOT USED ANYMORE
-function makeScreenshot(patientID) {
+function makeScreenshot(victimID) {
     data = {
         "current_tick": current_tick,
         "tps": tps,
-        "agentID": patientID,
+        "agentID": victimID,
         "tdp": mhc_settings['tdp'],
         "start_timestamp": mhc_settings['start_timestamp']
     }
 
    var resp = $.ajax({
         method: "POST",
-        url: mhc_url + ":" + port_mhc + "/" + "pickupPatient",
+        url: mhc_url + ":" + port_mhc + "/" + "pickupVictim",
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
         data: JSON.stringify(data),
         success: function(response) {
-           sendPatientToDestination("huis", lv_agent_id, patientID)
-           if (onScreenPatients.includes(patientID)) {
-               homePatients += 1;
-               $("#myHome").html(homePatients)
+           sendVictimToDestination("huis", lv_agent_id, victimID)
+           if (onScreenVictims.includes(victimID)) {
+               homeVictims += 1;
+               $("#myHome").html(homeVictims)
                }
-           $("#" + patientID + "patientCard").remove();
-           patient_cards_open.pop(patientID)
+           $("#" + victimID + "victimCard").remove();
+           victim_cards_open.pop(victimID)
             $('#container').removeClass("blurred")
-            $('#patient-cards').removeClass("blurred")
+            $('#victim-cards').removeClass("blurred")
             open = false;
             var confirm_confirm = $(this);
              // close the second confirmation dialog
@@ -865,94 +650,94 @@ function send_matrx_message(type, data) {
 
 
 /*
- * Return a patient card filled with the data of the patient
+ * Return a victim card filled with the data of the victim
  */
-function gen_patient_card_complete(patient_data) {
-    patientPhoto = '/fetch_external_media/' + patient_data["victim_photo"]
-    //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
-    difficulty_to_reach_color = get_difficulty_color(patient_data["difficulty_to_reach"])
-    difficulty_to_rescue_color = get_difficulty_color(patient_data["difficulty_to_rescue"])
-    level_of_injury_color = get_level_of_injury_color(patient_data["level_of_injury"])
-    patient_card_html = `
-    <div id="${patient_data.obj_id}patientCardBody" class="patient_card_body">
-        <div id="patient_identification" class="row">
+function gen_victim_card_complete(victim_data) {
+    victimPhoto = '/fetch_external_media/' + victim_data["victim_photo"]
+    //"/fetch_external_media/victims/victim_"+(victim_data['number']+1)+".jpg"
+    difficulty_to_reach_color = get_difficulty_color(victim_data["difficulty_to_reach"])
+    difficulty_to_rescue_color = get_difficulty_color(victim_data["difficulty_to_rescue"])
+    level_of_injury_color = get_level_of_injury_color(victim_data["level_of_injury"])
+    victim_card_html = `
+    <div id="${victim_data.obj_id}victimCardBody" class="victim_card_body">
+        <div id="victim_identification" class="row">
             <div class="col-3">
-                <img src=${patientPhoto} class="patient_photo">
+                <img src=${victimPhoto} class="victim_photo">
             </div>
             <div class="col-6">
-                <div class="patient_name_wrapper">
-                    <div class="patient_number">Victim ${patient_data['number']}</div>
-                    <h2 class="patient_name">${patient_data['victim_name']}</h2>
+                <div class="victim_name_wrapper">
+                    <div class="victim_number">Victim ${victim_data['number']}</div>
+                    <h2 class="victim_name">${victim_data['victim_name']}</h2>
                  </div>
         </div>
             </div>
             `
-    patient_card_html += `
-        <div class="patient_card_inner_divider"><hr></div>
+    victim_card_html += `
+        <div class="victim_card_inner_divider"><hr></div>
 
-        <div class="collapse patient_extra_info_collapse" id="collapse_${patient_data.obj_id}">
+        <div class="collapse victim_extra_info_collapse" id="collapse_${victim_data.obj_id}">
             <div class="card-body">
-                ${patient_data['patient_introduction_text']}
+                ${victim_data['victim_introduction_text']}
             </div>
         </div>
 
-        <div class="patient_properties container">
+        <div class="victim_properties container">
             <div class="row">
-            <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
-            <div class="patient_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
-            <div class="patient_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
-            <div class="patient_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${patient_data["level_of_injury"]}</div>
+            <div class="victim_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${victim_data["gender"]}</div>
+            <div class="victim_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${victim_data["difficulty_to_reach"]}</div>
+            <div class="victim_property col-6"><img src="/fetch_external_media/age.svg" title="age">${victim_data["age"]}</div>
+            <div class="victim_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${victim_data["difficulty_to_rescue"]}</div>
+            <div class="victim_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${victim_data["level_of_injury"]}</div>
             </div>
         </div>`;
 
-    patient_card_html += `</div>`;
-    return patient_card_html;
+    victim_card_html += `</div>`;
+    return victim_card_html;
 }
 
-function gen_patient_card_for_explanation(patient_data, number) {
-    patient_data = JSON.parse(patient_data)
-    patientPhoto = '/fetch_external_media/' + patient_data["image"]
-    //"/fetch_external_media/patients/patient_"+(patient_data['number']+1)+".jpg"
-    difficulty_to_reach_color = get_difficulty_color(patient_data["difficulty_to_reach"])
-    difficulty_to_rescue_color = get_difficulty_color(patient_data["difficulty_to_rescue"])
-    level_of_injury_color = get_level_of_injury_color(patient_data["level_of_injury"])
-    gender_color = get_gender_color(patient_data["gender"])
-    age_color = get_age_color(patient_data["age"])
-    patient_card_html = `
-    <div id="${patient_data.obj_id}patientCardBody" class="patient_card_body">
-        <div id="patient_identification" class="row">
+function gen_victim_card_for_explanation(victim_data, number) {
+    victim_data = JSON.parse(victim_data)
+    victimPhoto = '/fetch_external_media/' + victim_data["image"]
+    //"/fetch_external_media/victims/victim_"+(victim_data['number']+1)+".jpg"
+    difficulty_to_reach_color = get_difficulty_color(victim_data["difficulty_to_reach"])
+    difficulty_to_rescue_color = get_difficulty_color(victim_data["difficulty_to_rescue"])
+    level_of_injury_color = get_level_of_injury_color(victim_data["level_of_injury"])
+    gender_color = get_gender_color(victim_data["gender"])
+    age_color = get_age_color(victim_data["age"])
+    victim_card_html = `
+    <div id="${victim_data.obj_id}victimCardBody" class="victim_card_body">
+        <div id="victim_identification" class="row">
             <div class="col-3">
-                <img src=${patientPhoto} class="patient_photo">
+                <img src=${victimPhoto} class="victim_photo">
             </div>
             <div class="col-6">
-                <div class="patient_name_wrapper">
-                    <h2 class="patient_name">${number}</h2>
+                <div class="victim_name_wrapper">
+                    <h2 class="victim_name">${number}</h2>
                  </div>
         </div>
             </div>
             `
-    patient_card_html += `
-        <div class="patient_card_inner_divider"><hr></div>
+    victim_card_html += `
+        <div class="victim_card_inner_divider"><hr></div>
 
-        <div class="collapse patient_extra_info_collapse" id="collapse_${patient_data.obj_id}">
+        <div class="collapse victim_extra_info_collapse" id="collapse_${victim_data.obj_id}">
             <div class="card-body">
-                ${patient_data['patient_introduction_text']}
+                ${victim_data['victim_introduction_text']}
             </div>
         </div>
 
-        <div class="patient_properties container">
+        <div class="victim_properties container">
             <div class="row">
-            <div class="patient_property col-6" style="color:${gender_color}"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
-            <div class="patient_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
-            <div class="patient_property col-6" style="color:${age_color}"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
-            <div class="patient_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
-            <div class="patient_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${patient_data["level_of_injury"]}</div>
+            <div class="victim_property col-6" style="color:${gender_color}"><img src="/fetch_external_media/gender.svg" title="gender">${victim_data["gender"]}</div>
+            <div class="victim_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${victim_data["difficulty_to_reach"]}</div>
+            <div class="victim_property col-6" style="color:${age_color}"><img src="/fetch_external_media/age.svg" title="age">${victim_data["age"]}</div>
+            <div class="victim_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${victim_data["difficulty_to_rescue"]}</div>
+            <div class="victim_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${victim_data["level_of_injury"]}</div>
             </div>
         </div>`;
 
-    patient_card_html += `</div>`;
-    return patient_card_html;
+    victim_card_html += `</div>`;
+    return victim_card_html;
 }
 
 /*
@@ -961,15 +746,15 @@ function gen_patient_card_for_explanation(patient_data, number) {
  */
 function parse_mhc_settings(settings_obj) {
 
-    // hide the your vs robot patients
-    if (!settings_obj['visualize_your_vs_robot_patients']) {
-        var my_patients = $('#myPatients');
-        my_patients.next().hide();
-        my_patients.hide();
+    // hide the your vs robot victims
+    if (!settings_obj['visualize_your_vs_robot_victims']) {
+        var my_victims = $('#myVictims');
+        my_victims.next().hide();
+        my_victims.hide();
 
-        var robot_patients = $('#robotPatients');
-        robot_patients.next().hide();
-        robot_patients.hide();
+        var robot_victims = $('#robotVictims');
+        robot_victims.next().hide();
+        robot_victims.hide();
     }
 
     // fetch whether to show the agent (Decision support) predictions or not
