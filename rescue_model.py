@@ -61,6 +61,56 @@ class RescueModel(metaclass=Singleton):
 
         return {"value1": "error", "value2": "error"}
     @classmethod
+    # return two permutated characteristics that can make robot to rescue the other victim
+    def get_explanation_info_1(cls):
+        moral_values = list(cls.moralValues.values())
+        victim_num = cls.victim_data.shape[0]
+        # permutate from high to low
+        score_difference = 0
+        result_values = moral_values
+        result = {"value1": "error", "value2": "error"}
+        for k in range(0, victim_num):
+            for l in range(k+1, victim_num):
+                victimA = cls.victim_data.iloc[k]
+                victimB = cls.victim_data.iloc[l]
+                prior_victim = cls.get_prior_victim(victimA, victimB)
+                print(prior_victim)
+                if(prior_victim == "equal"): continue
+                for i in range(len(moral_values)-1, 0, -1):
+                    temp_values = moral_values.copy()
+                    j = i - 1
+                    print(i, j)
+                    temp_values[i], temp_values[j] = temp_values[j], temp_values[i]
+                    new_victimA_score = cls.get_rescue_score(temp_values, victimA)
+                    old_victimA_score = cls.get_rescue_score(result_values, victimA)
+                    new_victimB_score = cls.get_rescue_score(temp_values, victimB)
+                    old_victimB_score = cls.get_rescue_score(result_values, victimB)
+                    old_difference = old_victimA_score-old_victimB_score
+                    new_difference = new_victimA_score-new_victimB_score
+                    if(old_difference>0 and new_difference<0):
+                        if(old_difference-new_difference > score_difference):
+                            score_difference = old_difference-new_difference
+                            print(score_difference)
+                            result = {"prior_victim": prior_victim,"victimA": victimA.to_json(),"victimB": victimB.to_json(),"value1": moral_values[i], "value2": moral_values[j]}
+        return result
+        # for i in range(len(moral_values)-1, -1, -1):
+        #     temp_values = moral_values
+        #     for j in range(i-1, -1, -1):
+        #         temp_values[i], temp_values[j] = temp_values[j], temp_values[i]
+        #         for k in range(0, victim_num):
+        #             for l in range(k+1, victim_num):
+        #                 victimA = cls.victim_data.iloc[k]
+        #                 victimB = cls.victim_data.iloc[l]
+        #                 prior_victim = cls.get_prior_victim(victimA, victimB)
+        #                 if(prior_victim == "equal"): continue
+        #                 victimA_score = cls.get_rescue_score(temp_values, victimA)
+        #                 victimB_score = cls.get_rescue_score(temp_values, victimB)
+        #                 if (victimA_score > victimB_score and prior_victim == "victimB") or \
+        #                         (victimA_score < victimB_score and prior_victim == "victimA"):
+        #                     return {"prior_victim": prior_victim,"victimA": victimA.to_json(),"victimB": victimB.to_json(),"value1": moral_values[j], "value2": moral_values[i]}
+
+        # return {"value1": "error", "value2": "error"}
+    @classmethod
     #score range from -1 to 1
     def get_rescue_score(cls, moralvalues, victim):
         #percent from high to low: 30 25 20 15 10

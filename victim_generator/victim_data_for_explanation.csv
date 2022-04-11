@@ -9,3 +9,8 @@ index;name;gender;age;difficulty_to_reach;difficulty_to_rescue;location;level_of
 7;Tiemen;Man;39;high;low;[23, 12];middle;victims/Tiemen.png
 8;Ludo;Man;17;high;middle;[23, 24];high;victims/Ludo.png
 9;Nienke;Woman;77;middle;high;[23, 15];middle;victims/Nienke.png
+10;Raymon;Man;35;low;low;[22, 3];high;victims/Raymon.png
+11;Izaak;Man;40;low;high;[12, 24];high;victims/Izaak.png
+12;Emine;Woman;35;low;middle;[12, 5];middle;victims/Emine.png
+13;Manfred;Man;89;low;middle;[11, 14];high;victims/Manfred.png
+14;Freek;Man;75;middle;middle;[22, 13];middle;victims/Freek.png

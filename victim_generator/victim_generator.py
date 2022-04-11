@@ -40,13 +40,13 @@ for n in range(n_victims):
     age = random.randrange(min_age, max_age)    
 
     #generate location according to distance
-    if difficulties_to_reach == "low":
+    if difficulty_to_reach == "low":
         start_index = 0
         end_index = 11
-    if difficulties_to_reach == "middle":
+    if difficulty_to_reach == "middle":
         start_index = 12
         end_index = 23
-    if difficulties_to_reach == "high":
+    if difficulty_to_reach == "high":
         start_index = 24
         end_index = 35
     while(True):
@@ -61,7 +61,7 @@ for n in range(n_victims):
         name = random.choice(names_male)
     else:
         name = random.choice(names_female)
-    victim_data.append([n, name, gender, age, difficulty_to_reach, difficulty_to_rescue, location, injuries])
+    victim_data.append([n, name, gender, age, difficulty_to_reach, difficulty_to_rescue, location, injury])
 
 victim_data = pd.DataFrame(victim_data, columns=["index", "name", "gender", "age", "difficulty_to_reach", "difficulty_to_rescue", "location",
                                                    "level_of_injury"])

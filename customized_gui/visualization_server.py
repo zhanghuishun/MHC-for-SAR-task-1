@@ -330,7 +330,7 @@ def set_moral_value():
     #pass moral values to RescueModel singleton
     RescueModel.set_moral_values(data)
 
-    info = RescueModel.get_explanation_info()
+    info = RescueModel.get_explanation_info_1()
     response = app.response_class(
         response=json.dumps({
             "info": info
