@@ -47,7 +47,11 @@ function submitMoralValue() {
         for(let i = 0; i < list.length; i++){
             //check level of injury
             if(list[i].innerText == "low level of injury") {localStorage.setItem("level_of_injury","low");}
-            if(list[i].innerText == "high level of injury") {localStorage.setItem("level_of_injury","high");}
+            else if(list[i].innerText == "high level of injury") {localStorage.setItem("level_of_injury","high");}
+            else if(list[i].innerText == "female preferred") {localStorage.setItem("gender","female");}
+            else if(list[i].innerText == "male preferred") {localStorage.setItem("gender","male");}
+            else if(list[i].innerText == "older preferred") {localStorage.setItem("age","old");}
+            else if(list[i].innerText == "younger preferred") {localStorage.setItem("age","young");}
             //add values to selected moral values
             your_moral_value.innerHTML += "<div class=\"image-frame\"> <img src=\"/static/images/"+list[i].innerText+".png\">"
         }

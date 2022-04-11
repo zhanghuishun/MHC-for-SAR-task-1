@@ -917,6 +917,8 @@ function gen_patient_card_for_explanation(patient_data, number) {
     difficulty_to_reach_color = get_difficulty_color(patient_data["difficulty_to_reach"])
     difficulty_to_rescue_color = get_difficulty_color(patient_data["difficulty_to_rescue"])
     level_of_injury_color = get_level_of_injury_color(patient_data["level_of_injury"])
+    gender_color = get_gender_color(patient_data["gender"])
+    age_color = get_age_color(patient_data["age"])
     patient_card_html = `
     <div id="${patient_data.obj_id}patientCardBody" class="patient_card_body">
         <div id="patient_identification" class="row">
@@ -941,9 +943,9 @@ function gen_patient_card_for_explanation(patient_data, number) {
 
         <div class="patient_properties container">
             <div class="row">
-            <div class="patient_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
+            <div class="patient_property col-6" style="color:${gender_color}"><img src="/fetch_external_media/gender.svg" title="gender">${patient_data["gender"]}</div>
             <div class="patient_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${patient_data["difficulty_to_reach"]}</div>
-            <div class="patient_property col-6"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
+            <div class="patient_property col-6" style="color:${age_color}"><img src="/fetch_external_media/age.svg" title="age">${patient_data["age"]}</div>
             <div class="patient_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${patient_data["difficulty_to_rescue"]}</div>
             <div class="patient_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${patient_data["level_of_injury"]}</div>
             </div>
@@ -991,20 +993,20 @@ function parse_mhc_settings(settings_obj) {
     mhc_dss_biased_suggestion = biased_agent_suggestion;
 
 }
-
+//color: green < blue < yellow < orange < red
 function get_level_of_injury_color(level) {
     level_of_injury = localStorage.getItem("level_of_injury");
     if(level == "low") {
         if(level_of_injury == "high") {
             return "#DC143C" //red
         }else{
-            return "#1E90FF" //blue
+            return "#3CB371" //green
         }
     }else if(level == "middle"){
         return "#FFD700" //yellow
     }else if(level == "high"){
         if(level_of_injury == "high"){
-            return "#1E90FF" //blue
+            return "#3CB371" //green
         }else{
             return "#DC143C" //red
         }
@@ -1013,10 +1015,43 @@ function get_level_of_injury_color(level) {
 
 function get_difficulty_color(level) {
     if(level == "low") {
-        return "#1E90FF" //blue
+        return "#3CB371" //green
     }else if(level == "middle"){
         return "#FFD700" //yellow
     }else if(level == "high"){
         return "#DC143C" //red
+    }
+}
+
+function get_gender_color(level) {
+    gender = localStorage.getItem("gender");
+    if(level == "Man"){
+        if(gender == "female"){
+            return "#DC143C"//red
+        }else return "#3CB371"//green
+    }else if (level == "Woman"){
+        if(gender == "female"){
+            return "#3CB371"//green
+        }else return "#DC143C"//red
+    }
+}
+
+function get_age_color(level) {
+    age = localStorage.getItem("age");
+    level = parseInt(level);
+    if(level > 0 && level <= 20){
+        return age == "old"?"#DC143C":"#3CB371";
+    }
+    else if(level > 20 && level <= 40){
+        return age == "old"?"#FF8C00":"#1E90FF";
+    }
+    if(level > 40 && level <= 60){
+        return "#FFD700";
+    }
+    if(level > 60 && level <= 80){
+        return age == "old"?"#1E90FF":"#FF8C00";
+    }
+    if(level > 80){
+        return age == "old"?"#3CB371":"#DC143C";
     }
 }
