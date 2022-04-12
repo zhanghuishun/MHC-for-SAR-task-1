@@ -26,8 +26,11 @@ function checkArrowKey(e) {
     if(data == ' '){
         start_button = document.getElementById("start_button");
         pause_button = document.getElementById("pause_button");
-        button = start_button.display === 'none'?pause_button:start_button;
-        button.click();
+        if(start_button.classList.contains("hidden")){
+            pause_button.click();
+        }else{
+            start_button.click();
+        }
     }
     send_userinput_to_MATRX(data);
 }
