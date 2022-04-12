@@ -22,7 +22,13 @@ function checkArrowKey(e) {
     console.log("Userinput:", e);
 
     data = [e.key];
-
+    //press "space" to control start or pause
+    if(data == ' '){
+        start_button = document.getElementById("start_button");
+        pause_button = document.getElementById("pause_button");
+        button = start_button.display === 'none'?pause_button:start_button;
+        button.click();
+    }
     send_userinput_to_MATRX(data);
 }
 

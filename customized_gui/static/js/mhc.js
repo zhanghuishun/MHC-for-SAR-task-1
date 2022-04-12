@@ -702,8 +702,6 @@ function gen_victim_card_for_explanation(victim_data, number) {
     difficulty_to_reach_color = get_difficulty_color(victim_data["difficulty_to_reach"])
     difficulty_to_rescue_color = get_difficulty_color(victim_data["difficulty_to_rescue"])
     level_of_injury_color = get_level_of_injury_color(victim_data["level_of_injury"])
-    gender_color = get_gender_color(victim_data["gender"])
-    age_color = get_age_color(victim_data["age"])
     victim_card_html = `
     <div id="${victim_data.obj_id}victimCardBody" class="victim_card_body">
         <div id="victim_identification" class="row">
@@ -728,9 +726,9 @@ function gen_victim_card_for_explanation(victim_data, number) {
 
         <div class="victim_properties container">
             <div class="row">
-            <div class="victim_property col-6" style="color:${gender_color}"><img src="/fetch_external_media/gender.svg" title="gender">${victim_data["gender"]}</div>
+            <div class="victim_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${victim_data["gender"]}</div>
             <div class="victim_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${victim_data["difficulty_to_reach"]}</div>
-            <div class="victim_property col-6" style="color:${age_color}"><img src="/fetch_external_media/age.svg" title="age">${victim_data["age"]}</div>
+            <div class="victim_property col-6"><img src="/fetch_external_media/age.svg" title="age">${victim_data["age"]}</div>
             <div class="victim_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${victim_data["difficulty_to_rescue"]}</div>
             <div class="victim_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${victim_data["level_of_injury"]}</div>
             </div>
