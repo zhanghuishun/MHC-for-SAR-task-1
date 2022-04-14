@@ -34,27 +34,64 @@ class RescueModel(metaclass=Singleton):
         for value in cls.moralValues.values():
             category = cls.moral_category_dict[value]
             if(category == "age"):
-                return cls.get_priority_by_age(value, victims_info)
+                victim_priority_by_age = cls.get_priority_by_age_or_gender(value, victims_info)
+                if(victim_priority_by_age is None):
+                    continue
+                return victim_priority_by_age
+            elif(category == "gender"):
+                victim_priority_by_gender = cls.get_priority_by_age_or_gender(value, victims_info)
+                if(victim_priority_by_gender is None):
+                    continue
+                return victim_priority_by_gender
+            else:
+                victim_priority_by_level = cls.get_priority_by_level(value, victims_info)
+                if(victim_priority_by_level is None):
+                    continue
+                return victim_priority_by_level
             #for victim_info in victims_info:
-        return None        
+        return None
     
+    #get the only man/woman or the only youngest or oldest victim
     @classmethod
-    def get_priority_by_age(cls, moralvalue, victims_info):
-        age_id_dict = OrderedDict()
-        idx = 0 if moralvalue == "younger preferred" else -1
-        #return the first value in a orderedDict, return None if there are two smallest
+    def get_priority_by_age_or_gender(cls, moralvalue, victims_info):
+        value_id_dict = OrderedDict()
+        idx = 0 if (moralvalue == "younger preferred" or moralvalue == "male preferred") else -1
+        category = cls.moral_category_dict[moralvalue]
+        #return the first value in a orderedDict, return None if there are two extremum
         for victim_info in victims_info:
-            print(type(victim_info))
-            print(victim_info)
-            if(victim_info['age'] not in age_id_dict):
-                age_id_dict[victim_info['age']] = victim_info['obj_id']
-            elif(victim_info['age'] == list(age_id_dict.keys())[idx]):
+            if(victim_info[category] not in value_id_dict):
+                value_id_dict[victim_info[category]] = victim_info['obj_id']
+            elif(victim_info[category] == list(value_id_dict.keys())[idx]):
                 return None
-        print(list(age_id_dict.values())[idx])
-        return list(age_id_dict.values())[idx]
-    
-        
-    #def get_priority_by_gender(cls, moralvalue, victims_info):
+        return list(value_id_dict.values())[idx]
+
+    #get the only victim by the other three characteristics, ordereddict (h)igh < (l)ow < (m)iddle
+    # if priority_level is high, we only can omit low and vice versa
+    @classmethod
+    def get_priority_by_level(cls, moralvalue, victims_info):
+        idx = 0
+        priority_level = moralvalue.split(" ")[0]
+        opposite_level = "low" if moralvalue.split(" ")[0] == "high" else "high"
+        value_id_dict = OrderedDict()
+        category = cls.moral_category_dict[moralvalue]
+        #return the first value in a orderedDict, return None if there are two extremum
+        for victim_info in victims_info:
+            if(victim_info[category] == opposite_level):
+                continue
+            if(victim_info[category] not in value_id_dict):
+                value_id_dict[victim_info[category]] = victim_info['obj_id']
+            #cannot have two or more values in priority_level
+            elif(victim_info[category] == list(value_id_dict.keys())[idx]):
+                return None
+        keys = list(value_id_dict.keys())
+        if(len(keys) == 0):
+            return None
+        #if there is only one value in priority level, or there is no priority level but a middle
+        if(keys[idx] == priority_level or (keys[idx] == "middle" and len(keys) == 1)):
+            return list(value_id_dict.values())[idx]  
+        else:
+           return None
+
 
     @classmethod
     def get_prior_victim(cls, victimA, victimB):
