@@ -6,6 +6,7 @@ from matrx.agents import AgentBrain
 from rescue_model import RescueModel
 from agent_actions import Rescue, UnloadVictim, Reach
 from myUtils import Utils
+import json
 class RescueAgent(AgentBrain):
 
     def __init__(self, config):
@@ -62,19 +63,8 @@ class RescueAgent(AgentBrain):
 
         if state['World']['nr_ticks'] >= self.ready_time_ticks and state[self.agent_id]["victim_loaded_id"] == None and len(self.all_victims_id) > 0:
             # select the most priority victim by calculating rescue score
-            most_priority_victim_id =self.all_victims_id[0]
-            highest_rescue_score = -1
-            for victim_id in self.all_victims_id:
-                if victim_id in self.victim_rescue_score.keys():
-                    temp_score = self.victim_rescue_score[victim_id]
-                else:
-                    temp_victim = state[victim_id]
-                    temp_score = RescueModel.get_rescue_score(list(RescueModel.moralValues.values()), temp_victim)
-                    self.victim_rescue_score[victim_id] = temp_score
-                
-                if temp_score > highest_rescue_score:
-                    most_priority_victim_id = victim_id
-                    highest_rescue_score = temp_score
+            victims_info = state[{'name': "victim"}] if type(state[{'name': "victim"}]) is list else [state[{'name': "victim"}]]
+            most_priority_victim_id = RescueModel.get_most_priority_victim_id(victims_info)
             # move to the most priority victim
             victim_location = state[most_priority_victim_id]["location"]
             assert isinstance(victim_location, tuple)

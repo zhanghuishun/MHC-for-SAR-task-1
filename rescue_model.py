@@ -1,6 +1,8 @@
 import ast
+from collections import OrderedDict
 import pandas as pd
 import os
+import json
 class Singleton(type):
     _instances = {}
     def __call__(cls, *args, **kwargs):
@@ -12,7 +14,7 @@ class Singleton(type):
 class RescueModel(metaclass=Singleton):
     #{"very_high":"older preferred","high":"male preferred","middle":"high level of injury","low":"difficulty","very_low":"distance"}
     moralValues = dict()
-    moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high level of injury": "level of injury", "low level of injury": "level of injury", "difficulty to rescue": "difficulty to rescue", "difficulty to reach": "difficulty to reach"}
+    moral_category_dict = {"older preferred" : "age", "younger preferred": "age", "male preferred": "gender", "female preferred": "gender", "high level of injury": "level_of_injury", "low level of injury": "level_of_injury", "low difficulty to rescue": "difficulty_to_rescue","high difficulty to rescue": "difficulty_to_rescue", "low difficulty to reach": "difficulty_to_reach", "high difficulty to reach": "difficulty_to_reach"}
     victims_data_file = os.path.join(os.path.realpath("victim_generator/victim_data_for_explanation.csv"))
     victim_data = pd.read_csv(victims_data_file, sep=';')
     
@@ -23,6 +25,37 @@ class RescueModel(metaclass=Singleton):
     @classmethod
     def set_moral_values(cls, moralValues):
         cls.moralValues = ast.literal_eval(moralValues) 
+    
+    @classmethod
+    def get_most_priority_victim_id(cls, victims_info):
+        priority_victim_id = None
+        if(victims_info == None):
+            raise RuntimeError("no victim currently")
+        for value in cls.moralValues.values():
+            category = cls.moral_category_dict[value]
+            if(category == "age"):
+                return cls.get_priority_by_age(value, victims_info)
+            #for victim_info in victims_info:
+        return None        
+    
+    @classmethod
+    def get_priority_by_age(cls, moralvalue, victims_info):
+        age_id_dict = OrderedDict()
+        idx = 0 if moralvalue == "younger preferred" else -1
+        #return the first value in a orderedDict, return None if there are two smallest
+        for victim_info in victims_info:
+            print(type(victim_info))
+            print(victim_info)
+            if(victim_info['age'] not in age_id_dict):
+                age_id_dict[victim_info['age']] = victim_info['obj_id']
+            elif(victim_info['age'] == list(age_id_dict.keys())[idx]):
+                return None
+        print(list(age_id_dict.values())[idx])
+        return list(age_id_dict.values())[idx]
+    
+        
+    #def get_priority_by_gender(cls, moralvalue, victims_info):
+
     @classmethod
     def get_prior_victim(cls, victimA, victimB):
         if(len(cls.moralValues) < 5):
