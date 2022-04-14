@@ -57,7 +57,7 @@ function initialize_grid() {
 
 
 // MHC EDIT
-patient_keys = [];
+victim_keys = [];
 
 
 /**
@@ -91,7 +91,7 @@ function draw(state, world_settings, new_messages, accessible_chatrooms, new_tic
     saved_objs = {};
 
     // MHC EDIT
-    patient_keys = [];
+    victim_keys = [];
 
     // Loop through the IDs of the objects we received in the MATRX state
     var obj_ids = Object.keys(state);
@@ -106,9 +106,9 @@ function draw(state, world_settings, new_messages, accessible_chatrooms, new_tic
         // fetch object from the MATRX state
         obj = state[objID];
 
-        // MHC EDIT, keep track of patients
+        // MHC EDIT, keep track of victims
         if (obj.hasOwnProperty('class_inheritance') && obj['class_inheritance'].includes("Victim")) {
-            patient_keys.push(objID);
+            victim_keys.push(objID);
         }
 
         // MHC edit: parse MHC frontend settings
@@ -251,7 +251,7 @@ function draw(state, world_settings, new_messages, accessible_chatrooms, new_tic
         console.log("Removing element:", objID);
         remove_element(objID);
         try{
-            $("#" + objID + "patientCard").remove();} catch(error){console.log(error);}
+            $("#" + objID + "victimCard").remove();} catch(error){console.log(error);}
     });
 
     // (re)populate the dropdown menu with links to all agents
@@ -270,7 +270,7 @@ function draw(state, world_settings, new_messages, accessible_chatrooms, new_tic
     // MHC edit
     if (lv_agent_type == "human-agent") {
         // fix everything for the popups etc
-        extend_update(patient_keys);
+        extend_update(victim_keys);
 
         // update the timer
         $("#timer_value").text(Math.round(world_settings['tick_duration'] * current_tick) + " seconds");
@@ -590,7 +590,7 @@ function gen_image(obj_vis_settings, obj_element) {
             healthcircle.style.backgroundColor = "red"
 
             if (health == 0) {
-                // add a red circle when the patient has died
+                // add a red circle when the victim has died
                 var death_ring = document.createElement("img");
                 death_ring.setAttribute("src", "/fetch_external_media/red_circle.png");
                 death_ring.classList = "mhc_death_ring";
@@ -605,7 +605,7 @@ function gen_image(obj_vis_settings, obj_element) {
                 healthcircle.style.backgroundColor = "green";
 
                 if (health == 100 ) {
-                    // add a green circle when the patient has recovered
+                    // add a green circle when the victim has recovered
                     var recovery_ring = document.createElement("img");
                     recovery_ring.setAttribute("src", "/fetch_external_media/green_circle.png");
                     recovery_ring.classList = "mhc_recovery_ring";
@@ -620,7 +620,7 @@ function gen_image(obj_vis_settings, obj_element) {
             fade_out_effect(obj_element, 100);
         }
 
-        // append the health to our patient
+        // append the health to our victim
         obj_element.append(healthcircle_border);
 
         //old health bar code
@@ -640,7 +640,7 @@ function gen_image(obj_vis_settings, obj_element) {
             fade_out_effect(obj_element);
         }
 
-        // append the healthbar to our patient
+        // append the healthbar to our victim
         obj_element.append(healthbar_border);*/
     }
 
