@@ -587,13 +587,24 @@ input:checked + .slider:before {
 
 .moral-value-selected {
     position: fixed;	        
-    bottom: 20px;		
+    top: 400px;		
     left: 20px;
   }
-
+.moral-value-selected-background {
+    position: fixed;	        
+    top: 400px;		
+    left: 20px;
+}
 .image-frame {
     width: 200px;
     height: 40px;
     border: 1px solid black;
     position: relative;
 }
+
+.explanations {
+    position: fixed;	        
+    top: 400px;		
+    left: 250px;
+}
+
