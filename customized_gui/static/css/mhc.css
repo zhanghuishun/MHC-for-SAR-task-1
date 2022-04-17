@@ -590,6 +590,12 @@ input:checked + .slider:before {
     top: 400px;		
     left: 20px;
   }
+#moral_value_rankings {
+    border:1px solid rgb(0, 0, 0); 
+    height:200px; 
+    width:200px;
+    word-wrap:break-word
+}
 .moral-value-selected-background {
     position: fixed;	        
     top: 400px;		
@@ -607,4 +613,6 @@ input:checked + .slider:before {
     top: 400px;		
     left: 250px;
 }
-
+#statement {
+    border:1px solid rgb(0, 0, 0); height:120px; width:500px;word-wrap:break-word
+}

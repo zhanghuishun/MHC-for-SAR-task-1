@@ -107,8 +107,6 @@ class RescueModel(metaclass=Singleton):
             #cannot have two or more values in priority_level
             elif(victim_info[category] == list(value_id_dict.keys())[idx]):
                 return None
-        if(moralvalue == "low difficulty to rescue"):
-            print(value_id_dict)
         keys = list(value_id_dict.keys())
         if(len(keys) == 0):
             return None
@@ -127,19 +125,19 @@ class RescueModel(metaclass=Singleton):
     def get_explanations(cls, victims_info):
         res_dict = {}
         victim_name, category = cls.get_most_priority_victim_name(cls.moralValues.values(), victims_info)
-        print(victim_name, category)
         if victim_name is not None:
             res_dict['prior_victim'] = victim_name
-            res_dict['category'] = category
+            res_dict['category'] = category.replace('_', ' ')
         #change ranking to get another prior victim
         moral_values = list(cls.moralValues.values())
-        for i in range(len(moral_values)-1, -1, -1):
-            temp_values = moral_values
-            for j in range(i-1, -1, -1):
-                temp_victim_name, temp_category = cls.get_most_priority_victim_name(cls.moralValues.values(), victims_info)
-                if(temp_victim_name != victim_name):
-                    res_dict['the_other_victim'] = temp_victim_name
-                    res_dict['value1'] = moral_values[j]
-                    res_dict['value2'] = moral_values[i]
-        print(json.dumps(res_dict))
+        for i in range(0, len(moral_values)-1):
+            temp_values = moral_values.copy()
+            j = i + 1
+            temp_values[i], temp_values[j] = temp_values[j], temp_values[i]
+            temp_victim_name, temp_category = cls.get_most_priority_victim_name(temp_values, victims_info)
+            if(temp_victim_name != victim_name):
+                res_dict['the_other_victim'] = temp_victim_name
+                res_dict['value1'] = moral_values[j]
+                res_dict['value2'] = moral_values[i]
+                break
         return res_dict

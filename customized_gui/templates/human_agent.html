@@ -63,10 +63,8 @@
             Total Time: <span id="timer_value">0 seconds</span>
         </div>
         <div class="statistics_divider">|</div>
-        <div class="statistics_divider">|</div>
         <button class="btn btn-dark" id="moral_value_button" onclick="showMoralValues()" data-toggle="collapse"
         data-target="#sideBar" aria-expanded="false" aria-controls="sideBar">Moral Value</button>
-        <button class="btn btn-dark" id="explanation_button" onclick="showDialog(); changeStatement()">Explanation</button>
         
     </div>
     <div class="row content-row">
@@ -131,9 +129,11 @@
             </div>
         </div>
         <div class="moral-value-selected" id="moral_value_selected">
-            <div>click the "Moral Value" button to set your moral values</div>
+            <h3>Your Moral Values</h3>
+            <div id="moral_value_rankings">click the "Moral Value" button to set your moral values</div>
         </div>
-        <div class="explanations">
+        <div class="explanations" id="robot_explanation">
+            <h3>Robot Explanation</h3>
             <div id="statement"></div>
         </div>
         <!-- Chat -->

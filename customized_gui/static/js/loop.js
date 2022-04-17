@@ -335,10 +335,10 @@ function change_explanation(lv_state){
             //change explanation on front end
             var statement = document.getElementById("statement");
             if(result['prior_victim'] != null){
-                statement.innerHTML = "Robot: Based on your value elicitation, I will rescue " + result['prior_victim'] + " because of his/her "+ result['category'];
+                statement.innerHTML = "Based on your value elicitation, I will rescue " + result['prior_victim'] + " because of the "+ result['category']+".";
             }
             if(result['value1'] != null){
-                statement.innerHTML += "\n And if you prioritized " + value1 + " over " + value2 + ", my decision would have been rescuing " + the_other_victim + " rather than " + prior_victim + ".";
+                statement.innerHTML += " And if you prioritized " + result['value1'] + " over " + result['value2'] + ", my decision would have been rescuing " + result['the_other_victim'] + " rather than " + result['prior_victim'] + ".";
             }
         });
     }

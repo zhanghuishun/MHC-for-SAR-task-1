@@ -6,6 +6,13 @@ $(document).ready(function() {
     document.onkeydown = checkArrowKey;
 });
 
+window.onload = function() {
+    var expl_type = localStorage.getItem("expl_type");
+    if(expl_type == "without") {
+        var robot_explanation = this.document.getElementById("robot_explanation");
+        robot_explanation.style.display = 'none';
+    }
+}
 
 /**
  * Catch user pressed keys with arrow keys
@@ -48,11 +55,11 @@ var moral_dict = {}
 //get values in copy list
 function submitMoralValue() {
     var list = document.getElementById("copy-list").getElementsByTagName("li");
-    var your_moral_value = document.getElementById("moral_value_selected");
+    var your_moral_value = document.getElementById("moral_value_rankings");
     if(list.length < 5) alert("miss moral value");
     else {
         //change "your moral value"
-        your_moral_value.innerHTML = "Your moral values:";
+        your_moral_value.innerHTML = "";
         for(let i = 0; i < list.length; i++){
             //check level of injury
             if(list[i].innerText == "low level of injury") {localStorage.setItem("level_of_injury","low");}
@@ -94,15 +101,3 @@ function closeMoralValues(){
     var show = $("#moral_values_select").css("display");
     $("#moral_values_select").css("display",show =="none"?"block":"none");
 }
-
-
-window.addEventListener('storage', function(e){
-    if(e.newValue == "without"){
-        var explanation_button = this.document.getElementById("explanation_button");
-        explanation_button.style.display = 'none';
-    }
-    else if(e.newValue == "combination"){
-        var explanation_button = this.document.getElementById("explanation_button");
-        explanation_button.style.display = 'block';
-    }
-});
