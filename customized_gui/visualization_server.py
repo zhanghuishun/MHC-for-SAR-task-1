@@ -6,7 +6,7 @@ from urllib import response
 import pyautogui
 import os
 import csv
-from flask import Flask, render_template, request, jsonify, send_from_directory, json, Response
+from flask import Flask, render_template, request, jsonify, send_from_directory, json, Response,redirect
 from tempfile import NamedTemporaryFile
 import shutil
 import random
@@ -329,17 +329,26 @@ def set_moral_value():
     data = request.json
     #pass moral values to RescueModel singleton
     RescueModel.set_moral_values(data)
-
-    info = RescueModel.get_explanation_info_1()
+    #info = RescueModel.get_explanation_info_1()
     response = app.response_class(
         response=json.dumps({
-            "info": info
+            "success": "success"
         }),
         status=200,
         mimetype='application/json'
     )
     return response
-
+@app.route('/post_explanations', methods=['POST'])
+def post_explanations():
+    data = request.json
+    data = json.loads(data)
+    info = RescueModel.get_explanations(data)
+    response = app.response_class(
+        response=json.dumps(info),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 #########################################################################
 # Visualization Flask methods
 #########################################################################

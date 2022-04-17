@@ -1,7 +1,7 @@
 index;name;gender;age;difficulty_to_reach;difficulty_to_rescue;location_column;location_row;level_of_injury;image
 0;Pleun;Man;15;middle;middle;12;15;low;victims/Pleun.png
-1;Marielle;Woman;18;middle;high;22;15;high;victims/Marielle.png
-2;Franciska;Woman;60;low;low;22;4;low;victims/Franciska.png
+1;Marielle;Woman;18;middle;low;22;15;high;victims/Marielle.png
+2;Franciska;Woman;60;low;high;22;4;low;victims/Franciska.png
 3;Aalt;Man;67;high;middle;22;21;middle;victims/Aalt.png
 4;Lucy;Woman;60;low;high;12;5;middle;victims/Lucy.png
 5;Wilhelmus;Man;19;middle;high;22;16;middle;victims/Wilhelmus.png

@@ -630,7 +630,10 @@ function post_mhc_message(type, data, f) {
                            f(response)
                        }
 
-        }
+        },
+        error: (error) => {
+            console.log(JSON.stringify(error));
+}
     });
 }
 

@@ -257,7 +257,7 @@ function request_new_frame() {
     //    setTimeout(world_loop, wait);
 }
 
-
+var victim_num_last_tick = 0
 /*
  * Fetch an update from the MATRX API
  */
@@ -308,12 +308,41 @@ function get_MATRX_update() {
                 lv_matrx_paused = matrx_paused;
                 sync_play_button(lv_matrx_paused);
             }
+            if(localStorage.getItem("expl_type") == "combination")
+                change_explanation(lv_state);
         },
     });
 
     return lv_update_request;
 }
 
+function change_explanation(lv_state){
+    victims_info = [];
+    for(var name in lv_state){
+        if(JSON.stringify(name).slice(1, -1).split('_')[0] == "victim"){
+            victims_info.push(JSON.stringify(name).slice(1, -1));
+        } 
+    }
+    if(victims_info.length > 1 && victims_info.length != victim_num_last_tick){
+        victim_num_last_tick = victims_info.length;
+        victims_data = [];
+        console.log("get in");
+        for(let i = 0; i < victims_info.length; i++){
+            victims_data.push(lv_state[victims_info[i]]);
+        }
+        console.log(victims_data);
+        post_mhc_message("post_explanations", JSON.stringify(victims_data), function(result){
+            //change explanation on front end
+            var statement = document.getElementById("statement");
+            if(result['prior_victim'] != null){
+                statement.innerHTML = "Robot: Based on your value elicitation, I will rescue " + result['prior_victim'] + " because of his/her "+ result['category'];
+            }
+            if(result['value1'] != null){
+                statement.innerHTML += "\n And if you prioritized " + value1 + " over " + value2 + ", my decision would have been rescuing " + the_other_victim + " rather than " + prior_victim + ".";
+            }
+        });
+    }
+}
 
 /*
  * Send the object "data" to MATRX as JSON data. The agent ID is automatically appended.

@@ -63,6 +63,7 @@
             Total Time: <span id="timer_value">0 seconds</span>
         </div>
         <div class="statistics_divider">|</div>
+        <div class="statistics_divider">|</div>
         <button class="btn btn-dark" id="moral_value_button" onclick="showMoralValues()" data-toggle="collapse"
         data-target="#sideBar" aria-expanded="false" aria-controls="sideBar">Moral Value</button>
         <button class="btn btn-dark" id="explanation_button" onclick="showDialog(); changeStatement()">Explanation</button>
@@ -105,21 +106,6 @@
 				</ul>
 			</div>
 		</div>
-        <div class="dialog">
-            <div class="content">
-              <div class="upper">
-                <a class="close" href="javascript:closeDialog();">&times;</a>
-
-                  <div id="cards">
-                    
-                  </div>
-              </div>
-              <div class="statement" id="statement">
-                  default
-              </div>
-            </div>
-          
-          </div>
         <div id="victim-cards"></div>
 
         <!-- Grid -->
@@ -148,7 +134,7 @@
             <div>click the "Moral Value" button to set your moral values</div>
         </div>
         <div class="explanations">
-            <div>click the "Moral Value" button to set your moral values</div>
+            <div id="statement"></div>
         </div>
         <!-- Chat -->
         <div class="collapse" id="chat">

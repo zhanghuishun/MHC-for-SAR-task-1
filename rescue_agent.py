@@ -62,8 +62,9 @@ class RescueAgent(AgentBrain):
         self.state_tracker.update(state)
 
         if state['World']['nr_ticks'] >= self.ready_time_ticks and state[self.agent_id]["victim_loaded_id"] == None and len(self.all_victims_id) > 0:
-            # select the most priority victim by calculating rescue score
+            
             victims_info = state[{'name': "victim"}] if type(state[{'name': "victim"}]) is list else [state[{'name': "victim"}]]
+            # select the most priority victim by moral values ranking
             most_priority_victim_id = RescueModel.get_most_priority_victim_id(victims_info)
             # move to the most priority victim
             victim_location = state[most_priority_victim_id]["location"]
