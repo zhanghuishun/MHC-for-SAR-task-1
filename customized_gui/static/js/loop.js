@@ -6,8 +6,20 @@
  * such that no variables are accidently created in both files, leading to unexpected behaviours.
  */
 
-
-
+const config = {
+    "time":{
+        "pause_time": [
+          {"second": 124},//after the first round
+          {"second": 160},//after rescuing the first victim in the second round
+          {"second": 268},//before reaching victims in the third round
+          {"second": 500},//end
+        ],
+        "explanation_hide_time": {
+          "second" : 264//before reaching victims in the third round
+        }
+      }
+}
+var pause_idx = 0;
 // vars that will be passed to the visualizer file
 var lv_state = {}, // the latest MATRX state
     lv_world_settings = null,
@@ -310,6 +322,24 @@ function get_MATRX_update() {
             }
             if(localStorage.getItem("expl_type") == "combination")
                 change_explanation(lv_state);
+            // pause control
+            var second = parseFloat(lv_state['World']['tick_duration']) * parseInt(lv_state['World']['nr_ticks']);
+            pause_times = config['time']['pause_time'];
+            current_pause_time = pause_times[pause_idx]['second'];
+            console.log(current_pause_time);
+            if(second == current_pause_time){
+                pause_idx = pause_idx + 1;
+                pause_button = document.getElementById("pause_button");
+                if(!pause_button.classList.contains("hidden"))
+                    pause_button.click();
+            }
+            if(second == config['time']['explanation_hide_time']['second']){
+                var robot_explanation = document.getElementById("robot_explanation");
+                if(robot_explanation.style.display === '')
+                    {
+                    robot_explanation.style.display = 'none';}
+            }
+
         },
     });
 
@@ -335,10 +365,10 @@ function change_explanation(lv_state){
             //change explanation on front end
             var statement = document.getElementById("statement");
             if(result['prior_victim'] != null){
-                statement.innerHTML = "Based on your value elicitation, I will rescue " + result['prior_victim'] + " because of the "+ result['category']+".";
+                statement.innerHTML = "Based on your value elicitation, I will rescue <b>" + result['prior_victim'] + "</b> because of the <b>"+ result['category']+"</b>.";
             }
             if(result['value1'] != null){
-                statement.innerHTML += " And if you prioritized " + result['value1'] + " over " + result['value2'] + ", my decision would have been rescuing " + result['the_other_victim'] + " rather than " + result['prior_victim'] + ".";
+                statement.innerHTML += " And if you prioritized <i>" + result['value1'] + "</i> over <i>" + result['value2'] + "</i>, my decision would have been rescuing " + result['the_other_victim'] + " rather than " + result['prior_victim'] + ".";
             }
         });
     }

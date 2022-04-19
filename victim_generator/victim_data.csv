@@ -2,9 +2,9 @@ index;name;gender;age;difficulty_to_reach;difficulty_to_rescue;location_column;l
 0;Pleun;Man;15;middle;middle;12;15;low;victims/Pleun.png
 1;Marielle;Woman;18;middle;low;22;15;high;victims/Marielle.png
 2;Franciska;Woman;60;low;high;22;4;low;victims/Franciska.png
-3;Aalt;Man;67;high;middle;22;21;middle;victims/Aalt.png
-4;Lucy;Woman;60;low;high;12;5;middle;victims/Lucy.png
-5;Wilhelmus;Man;19;middle;high;22;16;middle;victims/Wilhelmus.png
+3;Aalt;Man;67;high;low;22;21;middle;victims/Aalt.png
+4;Lucy;Woman;60;low;high;25;6;middle;victims/Lucy.png
+5;Wilhelmus;Man;19;middle;middle;22;16;low;victims/Wilhelmus.png
 6;Robbie;Man;82;low;low;22;4;middle;victims/Robbie.png
 7;Lena;Woman;69;high;high;23;22;middle;victims/Lena.png
 8;Simone;Woman;66;high;low;12;24;high;victims/Simone.png
