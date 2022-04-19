@@ -356,7 +356,6 @@ function change_explanation(lv_state){
     if(victims_info.length > 1 && victims_info.length != victim_num_last_tick){
         victim_num_last_tick = victims_info.length;
         victims_data = [];
-        console.log("get in");
         for(let i = 0; i < victims_info.length; i++){
             victims_data.push(lv_state[victims_info[i]]);
         }
@@ -365,10 +364,19 @@ function change_explanation(lv_state){
             //change explanation on front end
             var statement = document.getElementById("statement");
             if(result['prior_victim'] != null){
-                statement.innerHTML = "Based on your value elicitation, I will rescue <b>" + result['prior_victim'] + "</b> because of the <b>"+ result['category']+"</b>.";
+                statement.innerHTML = 
+                `<div>
+                    Based on your value elicitation, I will rescue 
+                    <img src="/fetch_external_media/victims/${result['prior_victim']}.png" width="20" height="20"></img> ${result['prior_victim']} 
+                    because of the <b>${result['category']}</b>.
+                </div>`
             }
             if(result['value1'] != null){
-                statement.innerHTML += " And if you prioritized <i>" + result['value1'] + "</i> over <i>" + result['value2'] + "</i>, my decision would have been rescuing " + result['the_other_victim'] + " rather than " + result['prior_victim'] + ".";
+                statement.innerHTML += 
+                `<div>
+                And if you prioritized <img src="/static/images/${result['value1']}.png" width="100" height="20"></img> over <img src="/static/images/${result['value2']}.png" width="100" height="20"></img>, 
+                my decision would have been rescuing <img src="/fetch_external_media/victims/${result['the_other_victim']}.png" width="20" height="20"></img> ${result['the_other_victim']} rather than <img src="/fetch_external_media/victims/${result['prior_victim']}.png" width="20" height="20"></img> ${result['prior_victim']}.
+                </div>`
             }
         });
     }
