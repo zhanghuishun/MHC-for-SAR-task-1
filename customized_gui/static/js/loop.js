@@ -16,6 +16,9 @@ const config = {
         ],
         "explanation_hide_time": {
           "second" : 264//before reaching victims in the third round
+        },
+        "explanation_show_time": {
+            "second": 269//after answering the questions about projection level
         }
       }
 }
@@ -335,9 +338,15 @@ function get_MATRX_update() {
             }
             if(second == config['time']['explanation_hide_time']['second']){
                 var robot_explanation = document.getElementById("robot_explanation");
-                if(robot_explanation.style.display === '')
-                    {
-                    robot_explanation.style.display = 'none';}
+                if(robot_explanation.style.display === ''){
+                    robot_explanation.style.display = 'none';
+                }
+            }
+            if(second == config['time']['explanation_show_time']['second']){
+                var robot_explanation = document.getElementById("robot_explanation");
+                if(robot_explanation.style.display === 'none'){
+                    robot_explanation.style.removeProperty("display");
+                }
             }
 
         },
@@ -359,7 +368,6 @@ function change_explanation(lv_state){
         for(let i = 0; i < victims_info.length; i++){
             victims_data.push(lv_state[victims_info[i]]);
         }
-        console.log(victims_data);
         post_mhc_message("post_explanations", JSON.stringify(victims_data), function(result){
             //change explanation on front end
             var statement = document.getElementById("statement");
