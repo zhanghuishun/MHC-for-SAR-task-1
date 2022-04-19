@@ -686,11 +686,11 @@ function gen_victim_card_complete(victim_data) {
 
         <div class="victim_properties container">
             <div class="row">
-            <div class="victim_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${victim_data["gender"]}</div>
-            <div class="victim_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${victim_data["difficulty_to_reach"]}</div>
-            <div class="victim_property col-6"><img src="/fetch_external_media/age.svg" title="age">${victim_data["age"]}</div>
-            <div class="victim_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${victim_data["difficulty_to_rescue"]}</div>
-            <div class="victim_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${victim_data["level_of_injury"]}</div>
+            <div class="victim_property col-6"><img src="/fetch_external_media/gender.svg">${victim_data["gender"]}</div>
+            <div class="victim_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/difficulty_to_reach.svg" >${victim_data["difficulty_to_reach"]}</div>
+            <div class="victim_property col-6"><img src="/fetch_external_media/age.svg">${victim_data["age"]}</div>
+            <div class="victim_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty_to_rescue.svg">${victim_data["difficulty_to_rescue"]}</div>
+            <div class="victim_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/level_of_injury.svg">${victim_data["level_of_injury"]}</div>
             </div>
         </div>`;
 
@@ -698,48 +698,6 @@ function gen_victim_card_complete(victim_data) {
     return victim_card_html;
 }
 
-function gen_victim_card_for_explanation(victim_data, number) {
-    victim_data = JSON.parse(victim_data)
-    victimPhoto = '/fetch_external_media/' + victim_data["image"]
-    //"/fetch_external_media/victims/victim_"+(victim_data['number']+1)+".jpg"
-    difficulty_to_reach_color = get_difficulty_color(victim_data["difficulty_to_reach"])
-    difficulty_to_rescue_color = get_difficulty_color(victim_data["difficulty_to_rescue"])
-    level_of_injury_color = get_level_of_injury_color(victim_data["level_of_injury"])
-    victim_card_html = `
-    <div id="${victim_data.obj_id}victimCardBody" class="victim_card_body">
-        <div id="victim_identification" class="row">
-            <div class="col-3">
-                <img src=${victimPhoto} class="victim_photo">
-            </div>
-            <div class="col-6">
-                <div class="victim_name_wrapper">
-                    <h2 class="victim_name">${number}</h2>
-                 </div>
-        </div>
-            </div>
-            `
-    victim_card_html += `
-        <div class="victim_card_inner_divider"><hr></div>
-
-        <div class="collapse victim_extra_info_collapse" id="collapse_${victim_data.obj_id}">
-            <div class="card-body">
-                ${victim_data['victim_introduction_text']}
-            </div>
-        </div>
-
-        <div class="victim_properties container">
-            <div class="row">
-            <div class="victim_property col-6"><img src="/fetch_external_media/gender.svg" title="gender">${victim_data["gender"]}</div>
-            <div class="victim_property col-6" style="color:${difficulty_to_reach_color}"><img src="/fetch_external_media/distance.svg" title="distance">${victim_data["difficulty_to_reach"]}</div>
-            <div class="victim_property col-6"><img src="/fetch_external_media/age.svg" title="age">${victim_data["age"]}</div>
-            <div class="victim_property col-6" style="color:${difficulty_to_rescue_color}"><img src="/fetch_external_media/difficulty.svg" title="difficulty">${victim_data["difficulty_to_rescue"]}</div>
-            <div class="victim_property col-12" style="color:${level_of_injury_color}"><img src="/fetch_external_media/injury.svg" title="level of injury">${victim_data["level_of_injury"]}</div>
-            </div>
-        </div>`;
-
-    victim_card_html += `</div>`;
-    return victim_card_html;
-}
 
 /*
  * Parse the settings object

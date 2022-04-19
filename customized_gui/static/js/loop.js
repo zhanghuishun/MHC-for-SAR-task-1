@@ -22,6 +22,18 @@ const config = {
         }
       }
 }
+img_dict = {
+    "male preferred":"gender",
+    "female preferred":"gender",
+    "older preferred":"age",
+    "younger preferred":"age",
+    "low difficulty to rescue":"rescue",
+    "high difficulty to rescue":"rescue",
+    "low difficulty to reach":"reach",
+    "high difficulty to reach":"reach",
+    "low level of injury":"injury",
+    "high level of injury":"injury",
+}
 var pause_idx = 0;
 // vars that will be passed to the visualizer file
 var lv_state = {}, // the latest MATRX state
@@ -355,6 +367,7 @@ function get_MATRX_update() {
     return lv_update_request;
 }
 
+
 function change_explanation(lv_state){
     victims_info = [];
     for(var name in lv_state){
@@ -375,15 +388,15 @@ function change_explanation(lv_state){
                 statement.innerHTML = 
                 `<div>
                     Based on your value elicitation, I will rescue 
-                    <img src="/fetch_external_media/victims/${result['prior_victim']}.png" width="20" height="20"></img> ${result['prior_victim']} 
-                    because of the <b>${result['category']}</b>.
+                    <img src="/fetch_external_media/victims/${result['prior_victim']}.png" width="25" height="25"></img> ${result['prior_victim']} 
+                    because of the <img src="/fetch_external_media/${result['category']}.svg" width="25" height="25"></img>.
                 </div>`
             }
             if(result['value1'] != null){
                 statement.innerHTML += 
                 `<div>
-                And if you prioritized <img src="/static/images/${result['value1']}.png" width="100" height="20"></img> over <img src="/static/images/${result['value2']}.png" width="100" height="20"></img>, 
-                my decision would have been rescuing <img src="/fetch_external_media/victims/${result['the_other_victim']}.png" width="20" height="20"></img> ${result['the_other_victim']} rather than <img src="/fetch_external_media/victims/${result['prior_victim']}.png" width="20" height="20"></img> ${result['prior_victim']}.
+                And if you prioritized <img src="/fetch_external_media/${result['value1']}.svg" width="25" height="25"></img> over <img src="/fetch_external_media/${result['value2']}.svg" width="25" height="25"></img>, 
+                my decision would have been rescuing <img src="/fetch_external_media/victims/${result['the_other_victim']}.png" width="25" height="25"></img> ${result['the_other_victim']} rather than <img src="/fetch_external_media/victims/${result['prior_victim']}.png" width="25" height="25"></img> ${result['prior_victim']}.
                 </div>`
             }
         });

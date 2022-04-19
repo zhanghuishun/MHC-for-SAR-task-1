@@ -127,7 +127,7 @@ class RescueModel(metaclass=Singleton):
         victim_name, category = cls.get_most_priority_victim_name(cls.moralValues.values(), victims_info)
         if victim_name is not None:
             res_dict['prior_victim'] = victim_name
-            res_dict['category'] = category.replace('_', ' ')
+            res_dict['category'] = category
         #change ranking to get another prior victim
         moral_values = list(cls.moralValues.values())
         for i in range(0, len(moral_values)-1):
@@ -137,7 +137,7 @@ class RescueModel(metaclass=Singleton):
             temp_victim_name, temp_category = cls.get_most_priority_victim_name(temp_values, victims_info)
             if(temp_victim_name != victim_name):
                 res_dict['the_other_victim'] = temp_victim_name
-                res_dict['value1'] = moral_values[j]
-                res_dict['value2'] = moral_values[i]
+                res_dict['value1'] = cls.moral_category_dict[moral_values[j]]
+                res_dict['value2'] = cls.moral_category_dict[moral_values[i]]
                 break
         return res_dict
