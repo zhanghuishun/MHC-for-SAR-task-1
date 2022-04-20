@@ -131,13 +131,16 @@ class RescueModel(metaclass=Singleton):
         #change ranking to get another prior victim
         moral_values = list(cls.moralValues.values())
         #for i in range(0, len(moral_values)-1):
-        temp_values = moral_values.copy()
         i = 0
-        j = i + 1
-        temp_values[i], temp_values[j] = temp_values[j], temp_values[i]
-        temp_victim_name, temp_category = cls.get_most_priority_victim_name(temp_values, victims_info)
-        if(temp_victim_name != victim_name):
-            res_dict['the_other_victim'] = temp_victim_name
-            res_dict['value1'] = cls.moral_category_dict[moral_values[j]]
-            res_dict['value2'] = cls.moral_category_dict[moral_values[i]]
+        for j in range(1, len(moral_values)):
+            temp_values = moral_values.copy()
+            temp_values[i], temp_values[j] = temp_values[j], temp_values[i]
+            temp_victim_name, temp_category = cls.get_most_priority_victim_name(temp_values, victims_info)
+            if(temp_victim_name == victim_name):
+                continue
+            else:
+                res_dict['the_other_victim'] = temp_victim_name
+                res_dict['value1'] = cls.moral_category_dict[moral_values[i]]
+                res_dict['value2'] = cls.moral_category_dict[moral_values[j]]
+                break
         return res_dict

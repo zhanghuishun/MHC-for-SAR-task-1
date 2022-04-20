@@ -395,7 +395,7 @@ function change_explanation(lv_state){
             if(result['value1'] != null){
                 statement.innerHTML += 
                 `<div>
-                And if you prioritized <img src="/fetch_external_media/${result['value1']}.svg" width="25" height="25"></img> over <img src="/fetch_external_media/${result['value2']}.svg" width="25" height="25"></img>, 
+                And if you swap <img src="/fetch_external_media/${result['value1']}.svg" width="25" height="25"></img> and <img src="/fetch_external_media/${result['value2']}.svg" width="25" height="25"></img>, 
                 my decision would have been rescuing <img src="/fetch_external_media/victims/${result['the_other_victim']}.png" width="25" height="25"></img> ${result['the_other_victim']} rather than <img src="/fetch_external_media/victims/${result['prior_victim']}.png" width="25" height="25"></img> ${result['prior_victim']}.
                 </div>`
             }
