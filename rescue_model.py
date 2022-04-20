@@ -89,32 +89,32 @@ class RescueModel(metaclass=Singleton):
                 return None
         return list(value_id_dict.values())[idx]
 
-    #get the only victim by the other three characteristics, ordereddict (h)igh < (l)ow < (m)iddle
     # if priority_level is high, we only can omit low and vice versa
     @classmethod
     def get_priority_by_level(cls, moralvalue, victims_info):
-        idx = 0
         priority_level = moralvalue.split(" ")[0]
         opposite_level = "low" if priority_level == "high" else "high"
-        value_id_dict = SortedDict()
+        level_id_dict = {}
+        level_num_dict = {}
         category = cls.moral_category_dict[moralvalue]
-        #return the first value in a orderedDict, return None if there are two extremum
         for victim_info in victims_info:
             if(victim_info[category] == opposite_level):
                 continue
-            if(victim_info[category] not in value_id_dict):
-                value_id_dict[victim_info[category]] = victim_info['obj_id']
-            #cannot have two or more values in priority_level
-            elif(victim_info[category] == list(value_id_dict.keys())[idx]):
+            elif(victim_info[category] not in level_id_dict):
+                level_id_dict[victim_info[category]] = victim_info['obj_id']
+                level_num_dict[victim_info[category]] = 1
+            #duplicate priority level keys
+            elif(victim_info[category] == priority_level):
                 return None
-        keys = list(value_id_dict.keys())
-        if(len(keys) == 0):
-            return None
-        #if there is only one value in priority level, or there is no priority level but a middle
-        if(keys[idx] == priority_level or (keys[idx] == "middle" and len(keys) == 1)):
-            return list(value_id_dict.values())[idx]  
-        else:
-           return None
+            #duplicate middle keys
+            else:
+                level_num_dict[victim_info[category]] = level_num_dict[victim_info[category]] + 1
+        if(priority_level in level_num_dict and level_num_dict[priority_level] == 1):
+            return level_id_dict[priority_level]
+        elif(priority_level not in level_num_dict and "middle" in level_num_dict and level_num_dict["middle"] == 1):
+            return level_id_dict["middle"]
+        return None
+
     @classmethod
     def get_name_by_id(cls, id, victim_info):
         for victim in victim_info:
@@ -130,14 +130,14 @@ class RescueModel(metaclass=Singleton):
             res_dict['category'] = category
         #change ranking to get another prior victim
         moral_values = list(cls.moralValues.values())
-        for i in range(0, len(moral_values)-1):
-            temp_values = moral_values.copy()
-            j = i + 1
-            temp_values[i], temp_values[j] = temp_values[j], temp_values[i]
-            temp_victim_name, temp_category = cls.get_most_priority_victim_name(temp_values, victims_info)
-            if(temp_victim_name != victim_name):
-                res_dict['the_other_victim'] = temp_victim_name
-                res_dict['value1'] = cls.moral_category_dict[moral_values[j]]
-                res_dict['value2'] = cls.moral_category_dict[moral_values[i]]
-                break
+        #for i in range(0, len(moral_values)-1):
+        temp_values = moral_values.copy()
+        i = 0
+        j = i + 1
+        temp_values[i], temp_values[j] = temp_values[j], temp_values[i]
+        temp_victim_name, temp_category = cls.get_most_priority_victim_name(temp_values, victims_info)
+        if(temp_victim_name != victim_name):
+            res_dict['the_other_victim'] = temp_victim_name
+            res_dict['value1'] = cls.moral_category_dict[moral_values[j]]
+            res_dict['value2'] = cls.moral_category_dict[moral_values[i]]
         return res_dict
