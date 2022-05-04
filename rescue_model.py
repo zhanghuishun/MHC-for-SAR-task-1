@@ -1,4 +1,5 @@
 import ast
+from unicodedata import category
 import pandas as pd
 import os
 import json
@@ -29,49 +30,49 @@ class RescueModel(metaclass=Singleton):
     @classmethod
     def get_most_priority_victim_name(cls, moral_values, victims_info):
         priority_victim_id = None
+        possible_victims_info = victims_info
         if(victims_info == None):
             raise RuntimeError("no victim currently")
         for value in moral_values:
             category = cls.moral_category_dict[value]
-            if(category == "age"):
-                victim_priority_by_age = cls.get_priority_by_age_or_gender(value, victims_info)
-                if(victim_priority_by_age is None):
+            if(category == "age" or category == "gender"):
+                info = cls.get_priority_by_age_or_gender(value, possible_victims_info)
+                if(len(info) != 1):
+                    possible_victims_info = info
                     continue
-                return cls.get_name_by_id(victim_priority_by_age, victims_info), category
-            elif(category == "gender"):
-                victim_priority_by_gender = cls.get_priority_by_age_or_gender(value, victims_info)
-                if(victim_priority_by_gender is None):
-                    continue
-                return cls.get_name_by_id(victim_priority_by_gender, victims_info), category
+                return cls.get_name_by_info(info, possible_victims_info), category
             else:
-                victim_priority_by_level = cls.get_priority_by_level(value, victims_info)
-                if(victim_priority_by_level is None):
+                info = cls.get_priority_by_level(value, possible_victims_info)
+                if(info == None):
                     continue
-                return cls.get_name_by_id(victim_priority_by_level, victims_info), category
+                if(len(info) != 1):
+                    possible_victims_info = info
+                    continue
+                return cls.get_name_by_info(info, possible_victims_info), category
             #for victim_info in victims_info:
         return None, None
     @classmethod
     def get_most_priority_victim_id(cls, victims_info):
         priority_victim_id = None
+        possible_victims_info = victims_info
         if(victims_info == None):
             raise RuntimeError("no victim currently")
         for value in cls.moralValues.values():
             category = cls.moral_category_dict[value]
-            if(category == "age"):
-                victim_priority_by_age = cls.get_priority_by_age_or_gender(value, victims_info)
-                if(victim_priority_by_age is None):
+            if(category == "age" or category == "gender"):
+                info = cls.get_priority_by_age_or_gender(value, possible_victims_info)
+                if(len(info) != 1):
+                    possible_victims_info = info
                     continue
-                return victim_priority_by_age
-            elif(category == "gender"):
-                victim_priority_by_gender = cls.get_priority_by_age_or_gender(value, victims_info)
-                if(victim_priority_by_gender is None):
-                    continue
-                return victim_priority_by_gender
+                return info[0]['obj_id']
             else:
-                victim_priority_by_level = cls.get_priority_by_level(value, victims_info)
-                if(victim_priority_by_level is None):
+                info = cls.get_priority_by_level(value, possible_victims_info)
+                if(info == None):
                     continue
-                return victim_priority_by_level
+                if(len(info) != 1):
+                    possible_victims_info = info
+                    continue
+                return info[0]['obj_id']
             #for victim_info in victims_info:
         return None
 
@@ -84,9 +85,9 @@ class RescueModel(metaclass=Singleton):
         #return the first value in a orderedDict, return None if there are two extremum
         for victim_info in victims_info:
             if(victim_info[category] not in value_id_dict):
-                value_id_dict[victim_info[category]] = victim_info['obj_id']
+                value_id_dict[victim_info[category]] = [victim_info]
             elif(victim_info[category] == list(value_id_dict.keys())[idx]):
-                return None
+                value_id_dict[victim_info[category]].append(victim_info)
         return list(value_id_dict.values())[idx]
 
     # if priority_level is high, we only can omit low and vice versa
@@ -101,24 +102,21 @@ class RescueModel(metaclass=Singleton):
             if(victim_info[category] == opposite_level):
                 continue
             elif(victim_info[category] not in level_id_dict):
-                level_id_dict[victim_info[category]] = victim_info['obj_id']
+                level_id_dict[victim_info[category]] = [victim_info]
                 level_num_dict[victim_info[category]] = 1
-            #duplicate priority level keys
-            elif(victim_info[category] == priority_level):
-                return None
-            #duplicate middle keys
+            #duplicate keys
             else:
-                level_num_dict[victim_info[category]] = level_num_dict[victim_info[category]] + 1
-        if(priority_level in level_num_dict and level_num_dict[priority_level] == 1):
+                level_id_dict[victim_info[category]].append(victim_info)
+                level_num_dict[victim_info[category]] += 1       
+        if(priority_level in level_num_dict):
             return level_id_dict[priority_level]
-        elif(priority_level not in level_num_dict and "middle" in level_num_dict and level_num_dict["middle"] == 1):
-            return level_id_dict["middle"]
-        return None
+        else:
+            return None if "middle" not in level_id_dict else level_id_dict["middle"]
 
     @classmethod
-    def get_name_by_id(cls, id, victim_info):
+    def get_name_by_info(cls, info, victim_info):
         for victim in victim_info:
-            if victim['obj_id'] == id:
+            if victim['obj_id'] == info[0]['obj_id']:
                 return victim['victim_name']
         return None
     @classmethod
