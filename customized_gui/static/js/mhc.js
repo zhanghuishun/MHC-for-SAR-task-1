@@ -669,14 +669,12 @@ function gen_victim_card_complete(victim_data) {
             </div>
             <div class="col-6">
                 <div class="victim_name_wrapper">
-                    <div class="victim_number">Victim ${victim_data['number']}</div>
                     <h2 class="victim_name">${victim_data['victim_name']}</h2>
                  </div>
         </div>
             </div>
             `
     victim_card_html += `
-        <div class="victim_card_inner_divider"><hr></div>
 
         <div class="collapse victim_extra_info_collapse" id="collapse_${victim_data.obj_id}">
             <div class="card-body">
