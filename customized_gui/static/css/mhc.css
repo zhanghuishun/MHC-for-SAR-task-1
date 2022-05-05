@@ -1,10 +1,12 @@
 #container {
-    width: 40%;
+    width: 48%;
     display: inline-block;
 }
 
 .grid-container {
-    position: relative;
+    position: fixed;
+    top: 100px;
+    right: 5px;
 }
 
 #grid {
@@ -25,8 +27,8 @@ html, .content-row {
 .victimcard {
     margin-left: 0.5%;
     margin-top: 0.5%;
-    width: 32%;
-    height: 36% !important;
+    width: 300px;
+    height: 300px !important;
     float: left;
     z-index: 90;
     max-height: 40vh !important;
@@ -292,10 +294,9 @@ html, .content-row {
 
 .victimData{
     z-index: 10000;
-    width: 40%;
-    position: absolute;
-    left: -10%;
-    top: 5%;
+    position: fixed;
+    right: 550px;
+    top: 150px;
     background:white;
 }
 
@@ -586,7 +587,7 @@ input:checked + .slider:before {
 
 .moral-value-selected {
     position: fixed;	        
-    top: 500px;		
+    top: 400px;		
     left: 20px;
   }
 #moral_value_rankings {
@@ -609,7 +610,7 @@ input:checked + .slider:before {
 
 .explanations {
     position: fixed;	        
-    top: 500px;		
+    top: 400px;		
     left: 250px;
 }
 #statement {

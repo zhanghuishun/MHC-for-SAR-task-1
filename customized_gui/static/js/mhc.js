@@ -20,7 +20,7 @@ victim_cards_open = [];
 homeVictims = 0
 blockedButtons = true
 newHealed=false;
-
+name_id_dict = {}
 
 
 /*
@@ -29,35 +29,42 @@ newHealed=false;
  */
 function extend_update(victims) {
     worldObjects = Object.keys(lv_state)
-    
+    console.log(lv_state)
     //Check if a new victim has been added and add the victim card
     if (victims.filter(value => oldVictims.includes(value)) != victims.length && worldObjects.length > 0 && victims.length > 0) {
         if (victims.filter(value => !onScreenVictims.includes(value)).length > 0) {
             if (!open) {
                 victimID = victims.filter(value => !onScreenVictims.includes(value))[0]
                 victim = lv_state[victimID]
+                name_id_dict[victim['victim_name']] = victimID
                 //popupVictim(victim);
                 open = true
-                victimCard = '<div class="card victimcard drag-revert" data-agentID="' + victim.obj_id + '" id="' + victim.obj_id + 'victimCard" >'
-                victimCard += gen_victim_card_complete(victim);
-                victimCard += '</div>'
+                // victimCard = '<div class="card victimcard drag-revert" data-agentID="' + victim.obj_id + '" id="' + victim.obj_id + 'victimCard" >'
+                // victimCard += gen_victim_card_complete(victim);
+                // victimCard += '</div>'
 
-                // note that we opened this victim card
-                victim_cards_open.push(victim.obj_id);
+                // // note that we opened this victim card
+                // victim_cards_open.push(victim.obj_id);
 
-                $('#victim-cards').append(victimCard);
-                newBody = $("#" + victim.obj_id + "victimCardBody")
-                opacity = 0.9
-                // newBody.css('background-color', 'rgba(0, 0, 255, 0.9)');
-                fade_out_background(newBody[0].parentElement, 100, 236, 236, 138, opacity);
+                // $('#victim-cards').append(victimCard);
+                // newBody = $("#" + victim.obj_id + "victimCardBody")
+                // opacity = 0.9
+                // // newBody.css('background-color', 'rgba(0, 0, 255, 0.9)');
+                // fade_out_background(newBody[0].parentElement, 100, 236, 236, 138, opacity);
                 //victimCardUtilities()
                 open = false;
-                //Show the info next to the victim if they have left the waiting room
-                $("#" + victimID).hover(function() {
-                        if (lv_state[$(this)[0].id]["medical_care"] != "eerste hulp") {
+                //Show the info next to the victim
+                $('div[id^="victim_"]').hover(function() {
+                            var src = $(this)[0].firstChild.currentSrc
+                            var victim_name = src.split('.')[3].split('/')[3]
+                            console.log(victims)
+                            id = name_id_dict[victim_name]
+                            hover_victim = lv_state[id]
+                            victimCard = '<div id="victim-cards"> <div class="card victimcard drag-revert" data-agentID="' + hover_victim.obj_id + '" id="' + hover_victim.obj_id + 'victimCard" >'
+                            victimCard += gen_victim_card_complete(hover_victim);
+                            victimCard += '</div> </div>'
                             $("#victim_Data").show()
-                            $("#victim_Data").html(lv_state[$(this)[0].id]['victim_introduction_text'])
-                        }
+                            $("#victim_Data").html(victimCard)
                     },
                     function() {
                         $("#victim_Data").hide();
