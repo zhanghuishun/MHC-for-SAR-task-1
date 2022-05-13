@@ -9,16 +9,16 @@
 const config = {
     "time":{
         "pause_time": [
-          {"second": 124},//after the first round
-          {"second": 160},//after rescuing the first victim in the second round
-          {"second": 268},//before reaching victims in the third round
-          {"second": 500},//end
+          {"second": 100},//after the first round
+          {"second": 120},//after rescuing the first victim in the second round
+          {"second": 213},//before reaching victims in the third round
+          {"second": 390},//end
         ],
         "explanation_hide_time": {
-          "second" : 264//before reaching victims in the third round
+          "second" : 209//before reaching victims in the third round
         },
         "explanation_show_time": {
-            "second": 269//after answering the questions about projection level
+            "second": 214//after answering the questions about projection level
         }
       }
 }
@@ -339,27 +339,28 @@ function get_MATRX_update() {
                 change_explanation(lv_state);
             // pause control
             var second = parseFloat(lv_state['World']['tick_duration']) * parseInt(lv_state['World']['nr_ticks']);
+            console.log(second);
+            console.log(parseInt(second));
             pause_times = config['time']['pause_time'];
             current_pause_time = pause_times[pause_idx]['second'];
-            console.log(current_pause_time);
-            if(second == current_pause_time){
+            if(parseInt(second) == current_pause_time){ 
                 pause_idx = pause_idx + 1;
                 pause_button = document.getElementById("pause_button");
                 if(!pause_button.classList.contains("hidden"))
                     pause_button.click();
             }
-            if(second == config['time']['explanation_hide_time']['second']){
-                var robot_explanation = document.getElementById("robot_explanation");
-                if(robot_explanation.style.display === ''){
-                    robot_explanation.style.display = 'none';
-                }
-            }
-            if(second == config['time']['explanation_show_time']['second']){
-                var robot_explanation = document.getElementById("robot_explanation");
-                if(robot_explanation.style.display === 'none'){
-                    robot_explanation.style.removeProperty("display");
-                }
-            }
+            // if(parseInt(second) == config['time']['explanation_hide_time']['second']){
+            //     var robot_explanation = document.getElementById("robot_explanation");
+            //     if(robot_explanation.style.display === ''){
+            //         robot_explanation.style.display = 'none';
+            //     }
+            // }
+            // if(parseInt(second) == config['time']['explanation_show_time']['second']){
+            //     var robot_explanation = document.getElementById("robot_explanation");
+            //     if(robot_explanation.style.display === 'none'){
+            //         robot_explanation.style.removeProperty("display");
+            //     }
+            // }
 
         },
     });
